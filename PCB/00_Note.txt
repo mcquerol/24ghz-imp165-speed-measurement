@@ -1,0 +1,61 @@
+17.03.2021, S. Bannwarth
+------------------------
+
++++++++++++++++++++++++ PRODUCTION ++++++++++++++++++++
+
+If your PCB goes to production, do the following:
+
+1. Copy the complete "work" in this folder and new name "YYMMDD_projectname_XvX"
+This is year, month, day, project name and Version of the Board.
+
+2. Comment in "VersionList.txt" the specialities of this version (e.g. intial, A-sample, new connector I2,...)
+
+3. Store also a ZIP File of "10_KiCad_WCP" in the new Directory "YYMMDD_projectname_XvX"
+
+
++++++++++++++++++++++++ HINTS ++++++++++++++++++++++++++++++++++
+Here are some notes, how to organize your project.
+
+10_Report
++++++++++
+Put your Schematic Report here, including all the design decisions and final parameters
+
+20_SubCirxuit_XXX
+++++++++++++++++
+For each subcircuit your are designing, make a copy of this folder. Store your design, your calculations and simulations here.
+
+
+30_DataSheets
++++++++++++
+Save the datasheets of all used components here.
+
+
+40_ProjectLib
++++++++++++++
+Save KiCad specific footprints, symbols, components for this project here.
+
+
+
+50_BOM
+++++++++++++++++++++++++
+From the BOM exported form your project, derive this BOM (BOM_KiCad_WCP_Order.xlsx) which you are going to order.
+Take the following into account:
+- numver of Boards you are producing
+- spare parts
+- mechanical parts (e.g. distance bolts, screw nuts,....)
+- orders from vendors, bills, etc.
+
+
+60_Gerber
+++++++++++
+Save in this folder the Gerber Files, once you are going to production.
+
+
+70_ReleaseNote
++++++++++++++++
+Write a release note to your design:
+- Board version number (which is also printed on the silk screen of you PCB!!!)
+- Whats special at this version
+- What has changed compared to the previous version
+
+
