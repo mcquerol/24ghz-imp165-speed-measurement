@@ -1,0 +1,1667 @@
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"statemachine.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.idle,"ax",%progbits
+  20              		.align	2
+  21              		.global	idle
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	idle, %function
+  25              	idle:
+  26              	.LFB64:
+  27              		.file 1 "statemachine.c"
+   1:statemachine.c **** #include "statemachine.h"
+   2:statemachine.c **** 
+   3:statemachine.c **** uint8 count; // number of samples read
+   4:statemachine.c **** uint16 sample[1024]; //sample array to store adc data
+   5:statemachine.c **** STATE_t state = STATE_IDLE; //state type global variable (idle default)
+   6:statemachine.c **** uint32 OutPut; // ADC output is 32 bit
+   7:statemachine.c **** uint16 OutPut_mv; // ADC 32 bit output is cast to 16 bit
+   8:statemachine.c **** uint8 high, low; // UART can only send 8 bits at a time so 16 bit is split into low byte and high b
+   9:statemachine.c **** uint8 ch;  // store the char sent by MATLAB through UART
+  10:statemachine.c **** 
+  11:statemachine.c **** int charS = 0;
+  12:statemachine.c **** int charO = 0;
+  13:statemachine.c **** 
+  14:statemachine.c **** /* stateMachine function
+  15:statemachine.c **** * sets global counter variable to 0
+  16:statemachine.c **** * input parameters : STATE_t state
+  17:statemachine.c **** * return : NONE
+  18:statemachine.c **** */
+  19:statemachine.c **** void stateMachine(STATE_t state)
+  20:statemachine.c **** {
+  21:statemachine.c ****     switch(state)
+  22:statemachine.c ****         {
+  23:statemachine.c ****             case STATE_SAMPLING:
+  24:statemachine.c ****                 LED_yellow_Write(1);
+  25:statemachine.c ****                 sampling();
+  26:statemachine.c ****                 LED_yellow_Write(0);
+  27:statemachine.c ****                 break;
+  28:statemachine.c ****             case STATE_UART_TRANSFER:
+  29:statemachine.c ****                 LED_green_Write(1);
+  30:statemachine.c ****                 uartTransfer();
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 2
+
+
+  31:statemachine.c ****                 LED_green_Write(0);
+  32:statemachine.c ****                 break;
+  33:statemachine.c ****             case STATE_IDLE:
+  34:statemachine.c ****                 LED_red_Write(1);
+  35:statemachine.c ****                 idle(); // default state is the STATE_IDLE
+  36:statemachine.c ****                 LED_red_Write(0);
+  37:statemachine.c ****                 break;
+  38:statemachine.c ****         } 
+  39:statemachine.c **** }
+  40:statemachine.c **** 
+  41:statemachine.c **** /* idle function
+  42:statemachine.c **** * sets global counter variable to 0
+  43:statemachine.c **** * caused by STATE_IDLE
+  44:statemachine.c **** * input parameters : NONE
+  45:statemachine.c **** * return : NONE
+  46:statemachine.c **** */
+  47:statemachine.c **** void idle()
+  48:statemachine.c **** {
+  28              		.loc 1 48 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  49:statemachine.c ****     //UART_PutString("IDLE\n");
+  50:statemachine.c ****     count = 0;
+  33              		.loc 1 50 0
+  34 0000 0022     		movs	r2, #0
+  35 0002 014B     		ldr	r3, .L2
+  36 0004 1A70     		strb	r2, [r3]
+  37 0006 7047     		bx	lr
+  38              	.L3:
+  39              		.align	2
+  40              	.L2:
+  41 0008 00000000 		.word	count
+  42              		.cfi_endproc
+  43              	.LFE64:
+  44              		.size	idle, .-idle
+  45              		.section	.text.sampling,"ax",%progbits
+  46              		.align	2
+  47              		.global	sampling
+  48              		.thumb
+  49              		.thumb_func
+  50              		.type	sampling, %function
+  51              	sampling:
+  52              	.LFB65:
+  51:statemachine.c ****     
+  52:statemachine.c **** }
+  53:statemachine.c **** 
+  54:statemachine.c **** /* sampling function
+  55:statemachine.c **** * copies adc value into the sample array while uart char is not 's'
+  56:statemachine.c **** * caused by STATE_IDLE
+  57:statemachine.c **** * input parameters : NONE
+  58:statemachine.c **** * return : NONE
+  59:statemachine.c **** */
+  60:statemachine.c **** void sampling()
+  61:statemachine.c **** {
+  53              		.loc 1 61 0
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 3
+
+
+  54              		.cfi_startproc
+  55              		@ args = 0, pretend = 0, frame = 0
+  56              		@ frame_needed = 0, uses_anonymous_args = 0
+  57 0000 10B5     		push	{r4, lr}
+  58              		.cfi_def_cfa_offset 8
+  59              		.cfi_offset 4, -8
+  60              		.cfi_offset 14, -4
+  61              	.LVL0:
+  62              	.LBB2:
+  62:statemachine.c ****    //UART_PutString("SAMPLING\n");
+  63:statemachine.c ****    for (int count_sample=0;count_sample<1024;count_sample++)
+  63              		.loc 1 63 0
+  64 0002 0024     		movs	r4, #0
+  65 0004 0FE0     		b	.L5
+  66              	.LVL1:
+  67              	.L6:
+  64:statemachine.c ****    {
+  65:statemachine.c ****        OutPut = ADC_Read32();
+  68              		.loc 1 65 0 discriminator 3
+  69 0006 FFF7FEFF 		bl	ADC_Read32
+  70              	.LVL2:
+  71 000a 0E4B     		ldr	r3, .L9
+  72 000c 1860     		str	r0, [r3]
+  66:statemachine.c ****        OutPut_mv = (uint16_t)OutPut;
+  73              		.loc 1 66 0 discriminator 3
+  74 000e 80B2     		uxth	r0, r0
+  75 0010 0D4B     		ldr	r3, .L9+4
+  76 0012 1880     		strh	r0, [r3]	@ movhi
+  67:statemachine.c ****        high = (OutPut_mv>>8) & 0xFF;
+  77              		.loc 1 67 0 discriminator 3
+  78 0014 020A     		lsrs	r2, r0, #8
+  79 0016 0D4B     		ldr	r3, .L9+8
+  80 0018 1A70     		strb	r2, [r3]
+  68:statemachine.c ****        low = OutPut_mv & 0xFF;
+  81              		.loc 1 68 0 discriminator 3
+  82 001a 0D4B     		ldr	r3, .L9+12
+  83 001c 1870     		strb	r0, [r3]
+  69:statemachine.c ****        sample[count_sample]=OutPut_mv;//low;
+  84              		.loc 1 69 0 discriminator 3
+  85 001e 0D4B     		ldr	r3, .L9+16
+  86 0020 23F81400 		strh	r0, [r3, r4, lsl #1]	@ movhi
+  63:statemachine.c ****    {
+  87              		.loc 1 63 0 discriminator 3
+  88 0024 0134     		adds	r4, r4, #1
+  89              	.LVL3:
+  90              	.L5:
+  63:statemachine.c ****    {
+  91              		.loc 1 63 0 is_stmt 0 discriminator 1
+  92 0026 B4F5806F 		cmp	r4, #1024
+  93 002a ECDB     		blt	.L6
+  94              	.LBE2:
+  70:statemachine.c ****    }
+  71:statemachine.c ****     ch = UART_GetChar();
+  95              		.loc 1 71 0 is_stmt 1
+  96 002c FFF7FEFF 		bl	UART_GetChar
+  97              	.LVL4:
+  98 0030 094B     		ldr	r3, .L9+20
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 4
+
+
+  99 0032 1870     		strb	r0, [r3]
+  72:statemachine.c ****     if (charS == 1) //check for s character
+ 100              		.loc 1 72 0
+ 101 0034 094B     		ldr	r3, .L9+24
+ 102 0036 1B68     		ldr	r3, [r3]
+ 103 0038 012B     		cmp	r3, #1
+ 104 003a 02D1     		bne	.L4
+  73:statemachine.c ****    {
+  74:statemachine.c ****         state = STATE_UART_TRANSFER;
+ 105              		.loc 1 74 0
+ 106 003c 0222     		movs	r2, #2
+ 107 003e 074B     		ldr	r3, .L9+24
+ 108 0040 1A71     		strb	r2, [r3, #4]
+ 109              	.L4:
+ 110 0042 10BD     		pop	{r4, pc}
+ 111              	.LVL5:
+ 112              	.L10:
+ 113              		.align	2
+ 114              	.L9:
+ 115 0044 00000000 		.word	OutPut
+ 116 0048 00000000 		.word	OutPut_mv
+ 117 004c 00000000 		.word	high
+ 118 0050 00000000 		.word	low
+ 119 0054 00000000 		.word	sample
+ 120 0058 00000000 		.word	ch
+ 121 005c 00000000 		.word	.LANCHOR0
+ 122              		.cfi_endproc
+ 123              	.LFE65:
+ 124              		.size	sampling, .-sampling
+ 125              		.section	.text.uartTransfer,"ax",%progbits
+ 126              		.align	2
+ 127              		.global	uartTransfer
+ 128              		.thumb
+ 129              		.thumb_func
+ 130              		.type	uartTransfer, %function
+ 131              	uartTransfer:
+ 132              	.LFB66:
+  75:statemachine.c ****    }
+  76:statemachine.c ****     
+  77:statemachine.c ****     
+  78:statemachine.c **** }
+  79:statemachine.c **** 
+  80:statemachine.c **** /* uart_transfer function
+  81:statemachine.c **** * checks if 'o' is recieved by matlab and checks the number of samples accordingy
+  82:statemachine.c **** * caused by STATE_UART_TRANSFER
+  83:statemachine.c **** * input parameters : NONE
+  84:statemachine.c **** * return : NONE
+  85:statemachine.c **** */
+  86:statemachine.c **** void uartTransfer()
+  87:statemachine.c **** {
+ 133              		.loc 1 87 0
+ 134              		.cfi_startproc
+ 135              		@ args = 0, pretend = 0, frame = 0
+ 136              		@ frame_needed = 0, uses_anonymous_args = 0
+ 137 0000 38B5     		push	{r3, r4, r5, lr}
+ 138              		.cfi_def_cfa_offset 16
+ 139              		.cfi_offset 3, -16
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 5
+
+
+ 140              		.cfi_offset 4, -12
+ 141              		.cfi_offset 5, -8
+ 142              		.cfi_offset 14, -4
+ 143              	.LVL6:
+ 144              	.LBB3:
+  88:statemachine.c ****     //UART_PutString("UART TRANSFER\n");
+  89:statemachine.c ****     for (int count_send=0;count_send<1024;count_send++)
+ 145              		.loc 1 89 0
+ 146 0002 0024     		movs	r4, #0
+ 147 0004 0AE0     		b	.L12
+ 148              	.LVL7:
+ 149              	.L13:
+ 150              	.LBB4:
+  90:statemachine.c ****     {
+  91:statemachine.c ****        uint8 low = (sample[count_send]) & 0xFF;
+ 151              		.loc 1 91 0 discriminator 3
+ 152 0006 114D     		ldr	r5, .L17
+ 153              	.LVL8:
+  92:statemachine.c ****        UART_PutChar(low);
+ 154              		.loc 1 92 0 discriminator 3
+ 155 0008 15F81400 		ldrb	r0, [r5, r4, lsl #1]	@ zero_extendqisi2
+ 156 000c FFF7FEFF 		bl	UART_PutChar
+ 157              	.LVL9:
+  93:statemachine.c ****        uint8 high =((sample[count_send]>>8) & 0xFF);
+ 158              		.loc 1 93 0 discriminator 3
+ 159 0010 35F81400 		ldrh	r0, [r5, r4, lsl #1]
+ 160              	.LVL10:
+  94:statemachine.c ****        UART_PutChar(high);
+ 161              		.loc 1 94 0 discriminator 3
+ 162 0014 000A     		lsrs	r0, r0, #8
+ 163              	.LVL11:
+ 164 0016 FFF7FEFF 		bl	UART_PutChar
+ 165              	.LVL12:
+ 166              	.LBE4:
+  89:statemachine.c ****     {
+ 167              		.loc 1 89 0 discriminator 3
+ 168 001a 0134     		adds	r4, r4, #1
+ 169              	.LVL13:
+ 170              	.L12:
+  89:statemachine.c ****     {
+ 171              		.loc 1 89 0 is_stmt 0 discriminator 1
+ 172 001c B4F5806F 		cmp	r4, #1024
+ 173 0020 F1DB     		blt	.L13
+ 174              	.LBE3:
+  95:statemachine.c ****     }
+  96:statemachine.c **** 
+  97:statemachine.c ****     count++;
+ 175              		.loc 1 97 0 is_stmt 1
+ 176 0022 0B4A     		ldr	r2, .L17+4
+ 177 0024 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 178 0026 0133     		adds	r3, r3, #1
+ 179 0028 DBB2     		uxtb	r3, r3
+ 180 002a 1370     		strb	r3, [r2]
+  98:statemachine.c ****     
+  99:statemachine.c ****     if(charO == 1)
+ 181              		.loc 1 99 0
+ 182 002c 094A     		ldr	r2, .L17+8
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 6
+
+
+ 183 002e 9268     		ldr	r2, [r2, #8]
+ 184 0030 012A     		cmp	r2, #1
+ 185 0032 09D1     		bne	.L11
+ 100:statemachine.c ****     {
+ 101:statemachine.c ****         if(count < 10)
+ 186              		.loc 1 101 0
+ 187 0034 092B     		cmp	r3, #9
+ 188 0036 02D8     		bhi	.L15
+ 102:statemachine.c ****         {
+ 103:statemachine.c ****             state = STATE_SAMPLING;
+ 189              		.loc 1 103 0
+ 190 0038 064B     		ldr	r3, .L17+8
+ 191 003a 1A71     		strb	r2, [r3, #4]
+ 104:statemachine.c ****             return;
+ 192              		.loc 1 104 0
+ 193 003c 38BD     		pop	{r3, r4, r5, pc}
+ 194              	.LVL14:
+ 195              	.L15:
+ 105:statemachine.c ****         }
+ 106:statemachine.c ****         else if(count == 10 || count > 10)
+ 196              		.loc 1 106 0
+ 197 003e 092B     		cmp	r3, #9
+ 198 0040 02D9     		bls	.L11
+ 107:statemachine.c ****         {
+ 108:statemachine.c ****             state = STATE_IDLE;
+ 199              		.loc 1 108 0
+ 200 0042 0022     		movs	r2, #0
+ 201 0044 034B     		ldr	r3, .L17+8
+ 202 0046 1A71     		strb	r2, [r3, #4]
+ 203              	.L11:
+ 204 0048 38BD     		pop	{r3, r4, r5, pc}
+ 205              	.LVL15:
+ 206              	.L18:
+ 207 004a 00BF     		.align	2
+ 208              	.L17:
+ 209 004c 00000000 		.word	sample
+ 210 0050 00000000 		.word	count
+ 211 0054 00000000 		.word	.LANCHOR0
+ 212              		.cfi_endproc
+ 213              	.LFE66:
+ 214              		.size	uartTransfer, .-uartTransfer
+ 215              		.section	.text.stateMachine,"ax",%progbits
+ 216              		.align	2
+ 217              		.global	stateMachine
+ 218              		.thumb
+ 219              		.thumb_func
+ 220              		.type	stateMachine, %function
+ 221              	stateMachine:
+ 222              	.LFB63:
+  20:statemachine.c ****     switch(state)
+ 223              		.loc 1 20 0
+ 224              		.cfi_startproc
+ 225              		@ args = 0, pretend = 0, frame = 0
+ 226              		@ frame_needed = 0, uses_anonymous_args = 0
+ 227              	.LVL16:
+ 228 0000 08B5     		push	{r3, lr}
+ 229              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 7
+
+
+ 230              		.cfi_offset 3, -8
+ 231              		.cfi_offset 14, -4
+  21:statemachine.c ****         {
+ 232              		.loc 1 21 0
+ 233 0002 0128     		cmp	r0, #1
+ 234 0004 03D0     		beq	.L21
+ 235 0006 A0B1     		cbz	r0, .L22
+ 236 0008 0228     		cmp	r0, #2
+ 237 000a 09D0     		beq	.L23
+ 238 000c 08BD     		pop	{r3, pc}
+ 239              	.L21:
+  24:statemachine.c ****                 sampling();
+ 240              		.loc 1 24 0
+ 241 000e 0120     		movs	r0, #1
+ 242              	.LVL17:
+ 243 0010 FFF7FEFF 		bl	LED_yellow_Write
+ 244              	.LVL18:
+  25:statemachine.c ****                 LED_yellow_Write(0);
+ 245              		.loc 1 25 0
+ 246 0014 FFF7FEFF 		bl	sampling
+ 247              	.LVL19:
+  26:statemachine.c ****                 break;
+ 248              		.loc 1 26 0
+ 249 0018 0020     		movs	r0, #0
+ 250 001a FFF7FEFF 		bl	LED_yellow_Write
+ 251              	.LVL20:
+  27:statemachine.c ****             case STATE_UART_TRANSFER:
+ 252              		.loc 1 27 0
+ 253 001e 08BD     		pop	{r3, pc}
+ 254              	.LVL21:
+ 255              	.L23:
+  29:statemachine.c ****                 uartTransfer();
+ 256              		.loc 1 29 0
+ 257 0020 0120     		movs	r0, #1
+ 258              	.LVL22:
+ 259 0022 FFF7FEFF 		bl	LED_green_Write
+ 260              	.LVL23:
+  30:statemachine.c ****                 LED_green_Write(0);
+ 261              		.loc 1 30 0
+ 262 0026 FFF7FEFF 		bl	uartTransfer
+ 263              	.LVL24:
+  31:statemachine.c ****                 break;
+ 264              		.loc 1 31 0
+ 265 002a 0020     		movs	r0, #0
+ 266 002c FFF7FEFF 		bl	LED_green_Write
+ 267              	.LVL25:
+  32:statemachine.c ****             case STATE_IDLE:
+ 268              		.loc 1 32 0
+ 269 0030 08BD     		pop	{r3, pc}
+ 270              	.LVL26:
+ 271              	.L22:
+  34:statemachine.c ****                 idle(); // default state is the STATE_IDLE
+ 272              		.loc 1 34 0
+ 273 0032 0120     		movs	r0, #1
+ 274              	.LVL27:
+ 275 0034 FFF7FEFF 		bl	LED_red_Write
+ 276              	.LVL28:
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 8
+
+
+  35:statemachine.c ****                 LED_red_Write(0);
+ 277              		.loc 1 35 0
+ 278 0038 FFF7FEFF 		bl	idle
+ 279              	.LVL29:
+  36:statemachine.c ****                 break;
+ 280              		.loc 1 36 0
+ 281 003c 0020     		movs	r0, #0
+ 282 003e FFF7FEFF 		bl	LED_red_Write
+ 283              	.LVL30:
+ 284 0042 08BD     		pop	{r3, pc}
+ 285              		.cfi_endproc
+ 286              	.LFE63:
+ 287              		.size	stateMachine, .-stateMachine
+ 288              		.global	charO
+ 289              		.global	charS
+ 290              		.comm	ch,1,1
+ 291              		.comm	low,1,1
+ 292              		.comm	high,1,1
+ 293              		.comm	OutPut_mv,2,2
+ 294              		.comm	OutPut,4,4
+ 295              		.global	state
+ 296              		.comm	sample,2048,4
+ 297              		.comm	count,1,1
+ 298              		.bss
+ 299              		.align	2
+ 300              		.set	.LANCHOR0,. + 0
+ 301              		.type	charS, %object
+ 302              		.size	charS, 4
+ 303              	charS:
+ 304 0000 00000000 		.space	4
+ 305              		.type	state, %object
+ 306              		.size	state, 1
+ 307              	state:
+ 308 0004 00       		.space	1
+ 309 0005 000000   		.space	3
+ 310              		.type	charO, %object
+ 311              		.size	charO, 4
+ 312              	charO:
+ 313 0008 00000000 		.space	4
+ 314              		.text
+ 315              	.Letext0:
+ 316              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 317              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 318              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 319              		.file 5 "statemachine.h"
+ 320              		.file 6 "Generated_Source\\PSoC5/core_cm3.h"
+ 321              		.file 7 "Generated_Source\\PSoC5/ADC.h"
+ 322              		.file 8 "Generated_Source\\PSoC5/UART.h"
+ 323              		.file 9 "Generated_Source\\PSoC5/LED_yellow.h"
+ 324              		.file 10 "Generated_Source\\PSoC5/LED_green.h"
+ 325              		.file 11 "Generated_Source\\PSoC5/LED_red.h"
+ 326              		.section	.debug_info,"",%progbits
+ 327              	.Ldebug_info0:
+ 328 0000 8A030000 		.4byte	0x38a
+ 329 0004 0400     		.2byte	0x4
+ 330 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 331 000a 04       		.byte	0x4
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 9
+
+
+ 332 000b 01       		.uleb128 0x1
+ 333 000c BD000000 		.4byte	.LASF45
+ 334 0010 0C       		.byte	0xc
+ 335 0011 17000000 		.4byte	.LASF46
+ 336 0015 5B000000 		.4byte	.LASF47
+ 337 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 338 001d 00000000 		.4byte	0
+ 339 0021 00000000 		.4byte	.Ldebug_line0
+ 340 0025 02       		.uleb128 0x2
+ 341 0026 01       		.byte	0x1
+ 342 0027 06       		.byte	0x6
+ 343 0028 A9020000 		.4byte	.LASF0
+ 344 002c 02       		.uleb128 0x2
+ 345 002d 01       		.byte	0x1
+ 346 002e 08       		.byte	0x8
+ 347 002f AF000000 		.4byte	.LASF1
+ 348 0033 02       		.uleb128 0x2
+ 349 0034 02       		.byte	0x2
+ 350 0035 05       		.byte	0x5
+ 351 0036 B9010000 		.4byte	.LASF2
+ 352 003a 03       		.uleb128 0x3
+ 353 003b 94010000 		.4byte	.LASF4
+ 354 003f 02       		.byte	0x2
+ 355 0040 2B       		.byte	0x2b
+ 356 0041 45000000 		.4byte	0x45
+ 357 0045 02       		.uleb128 0x2
+ 358 0046 02       		.byte	0x2
+ 359 0047 07       		.byte	0x7
+ 360 0048 74010000 		.4byte	.LASF3
+ 361 004c 03       		.uleb128 0x3
+ 362 004d 3C000000 		.4byte	.LASF5
+ 363 0051 02       		.byte	0x2
+ 364 0052 3F       		.byte	0x3f
+ 365 0053 57000000 		.4byte	0x57
+ 366 0057 02       		.uleb128 0x2
+ 367 0058 04       		.byte	0x4
+ 368 0059 05       		.byte	0x5
+ 369 005a 94020000 		.4byte	.LASF6
+ 370 005e 02       		.uleb128 0x2
+ 371 005f 04       		.byte	0x4
+ 372 0060 07       		.byte	0x7
+ 373 0061 D7010000 		.4byte	.LASF7
+ 374 0065 02       		.uleb128 0x2
+ 375 0066 08       		.byte	0x8
+ 376 0067 05       		.byte	0x5
+ 377 0068 5D020000 		.4byte	.LASF8
+ 378 006c 02       		.uleb128 0x2
+ 379 006d 08       		.byte	0x8
+ 380 006e 07       		.byte	0x7
+ 381 006f F6010000 		.4byte	.LASF9
+ 382 0073 04       		.uleb128 0x4
+ 383 0074 04       		.byte	0x4
+ 384 0075 05       		.byte	0x5
+ 385 0076 696E7400 		.ascii	"int\000"
+ 386 007a 02       		.uleb128 0x2
+ 387 007b 04       		.byte	0x4
+ 388 007c 07       		.byte	0x7
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 10
+
+
+ 389 007d E9010000 		.4byte	.LASF10
+ 390 0081 03       		.uleb128 0x3
+ 391 0082 7E020000 		.4byte	.LASF11
+ 392 0086 03       		.byte	0x3
+ 393 0087 24       		.byte	0x24
+ 394 0088 3A000000 		.4byte	0x3a
+ 395 008c 03       		.uleb128 0x3
+ 396 008d 34020000 		.4byte	.LASF12
+ 397 0091 03       		.byte	0x3
+ 398 0092 2C       		.byte	0x2c
+ 399 0093 4C000000 		.4byte	0x4c
+ 400 0097 05       		.uleb128 0x5
+ 401 0098 95000000 		.4byte	.LASF13
+ 402 009c 04       		.byte	0x4
+ 403 009d E801     		.2byte	0x1e8
+ 404 009f 2C000000 		.4byte	0x2c
+ 405 00a3 05       		.uleb128 0x5
+ 406 00a4 C3010000 		.4byte	.LASF14
+ 407 00a8 04       		.byte	0x4
+ 408 00a9 E901     		.2byte	0x1e9
+ 409 00ab 45000000 		.4byte	0x45
+ 410 00af 05       		.uleb128 0x5
+ 411 00b0 CA010000 		.4byte	.LASF15
+ 412 00b4 04       		.byte	0x4
+ 413 00b5 EA01     		.2byte	0x1ea
+ 414 00b7 5E000000 		.4byte	0x5e
+ 415 00bb 02       		.uleb128 0x2
+ 416 00bc 04       		.byte	0x4
+ 417 00bd 04       		.byte	0x4
+ 418 00be 8F000000 		.4byte	.LASF16
+ 419 00c2 02       		.uleb128 0x2
+ 420 00c3 08       		.byte	0x8
+ 421 00c4 04       		.byte	0x4
+ 422 00c5 54000000 		.4byte	.LASF17
+ 423 00c9 02       		.uleb128 0x2
+ 424 00ca 01       		.byte	0x1
+ 425 00cb 08       		.byte	0x8
+ 426 00cc 6B020000 		.4byte	.LASF18
+ 427 00d0 02       		.uleb128 0x2
+ 428 00d1 08       		.byte	0x8
+ 429 00d2 04       		.byte	0x4
+ 430 00d3 9D020000 		.4byte	.LASF19
+ 431 00d7 02       		.uleb128 0x2
+ 432 00d8 04       		.byte	0x4
+ 433 00d9 07       		.byte	0x7
+ 434 00da 54020000 		.4byte	.LASF20
+ 435 00de 06       		.uleb128 0x6
+ 436 00df 01       		.byte	0x1
+ 437 00e0 2C000000 		.4byte	0x2c
+ 438 00e4 05       		.byte	0x5
+ 439 00e5 09       		.byte	0x9
+ 440 00e6 FD000000 		.4byte	0xfd
+ 441 00ea 07       		.uleb128 0x7
+ 442 00eb 4B010000 		.4byte	.LASF21
+ 443 00ef 00       		.byte	0
+ 444 00f0 07       		.uleb128 0x7
+ 445 00f1 0D020000 		.4byte	.LASF22
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 11
+
+
+ 446 00f5 01       		.byte	0x1
+ 447 00f6 07       		.uleb128 0x7
+ 448 00f7 9B000000 		.4byte	.LASF23
+ 449 00fb 02       		.byte	0x2
+ 450 00fc 00       		.byte	0
+ 451 00fd 03       		.uleb128 0x3
+ 452 00fe 76020000 		.4byte	.LASF24
+ 453 0102 05       		.byte	0x5
+ 454 0103 0F       		.byte	0xf
+ 455 0104 DE000000 		.4byte	0xde
+ 456 0108 08       		.uleb128 0x8
+ 457 0109 32000000 		.4byte	.LASF48
+ 458 010d 01       		.byte	0x1
+ 459 010e 2F       		.byte	0x2f
+ 460 010f 00000000 		.4byte	.LFB64
+ 461 0113 0C000000 		.4byte	.LFE64-.LFB64
+ 462 0117 01       		.uleb128 0x1
+ 463 0118 9C       		.byte	0x9c
+ 464 0119 09       		.uleb128 0x9
+ 465 011a 6B010000 		.4byte	.LASF25
+ 466 011e 01       		.byte	0x1
+ 467 011f 3C       		.byte	0x3c
+ 468 0120 00000000 		.4byte	.LFB65
+ 469 0124 60000000 		.4byte	.LFE65-.LFB65
+ 470 0128 01       		.uleb128 0x1
+ 471 0129 9C       		.byte	0x9c
+ 472 012a 5E010000 		.4byte	0x15e
+ 473 012e 0A       		.uleb128 0xa
+ 474 012f 02000000 		.4byte	.LBB2
+ 475 0133 2A000000 		.4byte	.LBE2-.LBB2
+ 476 0137 54010000 		.4byte	0x154
+ 477 013b 0B       		.uleb128 0xb
+ 478 013c AC010000 		.4byte	.LASF27
+ 479 0140 01       		.byte	0x1
+ 480 0141 3F       		.byte	0x3f
+ 481 0142 73000000 		.4byte	0x73
+ 482 0146 00000000 		.4byte	.LLST0
+ 483 014a 0C       		.uleb128 0xc
+ 484 014b 0A000000 		.4byte	.LVL2
+ 485 014f 4B030000 		.4byte	0x34b
+ 486 0153 00       		.byte	0
+ 487 0154 0C       		.uleb128 0xc
+ 488 0155 30000000 		.4byte	.LVL4
+ 489 0159 56030000 		.4byte	0x356
+ 490 015d 00       		.byte	0
+ 491 015e 09       		.uleb128 0x9
+ 492 015f 87020000 		.4byte	.LASF26
+ 493 0163 01       		.byte	0x1
+ 494 0164 56       		.byte	0x56
+ 495 0165 00000000 		.4byte	.LFB66
+ 496 0169 58000000 		.4byte	.LFE66-.LFB66
+ 497 016d 01       		.uleb128 0x1
+ 498 016e 9C       		.byte	0x9c
+ 499 016f C7010000 		.4byte	0x1c7
+ 500 0173 0D       		.uleb128 0xd
+ 501 0174 02000000 		.4byte	.LBB3
+ 502 0178 20000000 		.4byte	.LBE3-.LBB3
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 12
+
+
+ 503 017c 0B       		.uleb128 0xb
+ 504 017d 56010000 		.4byte	.LASF28
+ 505 0181 01       		.byte	0x1
+ 506 0182 59       		.byte	0x59
+ 507 0183 73000000 		.4byte	0x73
+ 508 0187 1F000000 		.4byte	.LLST1
+ 509 018b 0D       		.uleb128 0xd
+ 510 018c 06000000 		.4byte	.LBB4
+ 511 0190 14000000 		.4byte	.LBE4-.LBB4
+ 512 0194 0E       		.uleb128 0xe
+ 513 0195 6C6F7700 		.ascii	"low\000"
+ 514 0199 01       		.byte	0x1
+ 515 019a 5B       		.byte	0x5b
+ 516 019b 97000000 		.4byte	0x97
+ 517 019f 3E000000 		.4byte	.LLST2
+ 518 01a3 0B       		.uleb128 0xb
+ 519 01a4 37000000 		.4byte	.LASF29
+ 520 01a8 01       		.byte	0x1
+ 521 01a9 5D       		.byte	0x5d
+ 522 01aa 97000000 		.4byte	0x97
+ 523 01ae 57000000 		.4byte	.LLST3
+ 524 01b2 0C       		.uleb128 0xc
+ 525 01b3 10000000 		.4byte	.LVL9
+ 526 01b7 61030000 		.4byte	0x361
+ 527 01bb 0C       		.uleb128 0xc
+ 528 01bc 1A000000 		.4byte	.LVL12
+ 529 01c0 61030000 		.4byte	0x361
+ 530 01c4 00       		.byte	0
+ 531 01c5 00       		.byte	0
+ 532 01c6 00       		.byte	0
+ 533 01c7 09       		.uleb128 0x9
+ 534 01c8 9F010000 		.4byte	.LASF30
+ 535 01cc 01       		.byte	0x1
+ 536 01cd 13       		.byte	0x13
+ 537 01ce 00000000 		.4byte	.LFB63
+ 538 01d2 44000000 		.4byte	.LFE63-.LFB63
+ 539 01d6 01       		.uleb128 0x1
+ 540 01d7 9C       		.byte	0x9c
+ 541 01d8 75020000 		.4byte	0x275
+ 542 01dc 0F       		.uleb128 0xf
+ 543 01dd 2C000000 		.4byte	.LASF34
+ 544 01e1 01       		.byte	0x1
+ 545 01e2 13       		.byte	0x13
+ 546 01e3 FD000000 		.4byte	0xfd
+ 547 01e7 88000000 		.4byte	.LLST4
+ 548 01eb 10       		.uleb128 0x10
+ 549 01ec 14000000 		.4byte	.LVL18
+ 550 01f0 6C030000 		.4byte	0x36c
+ 551 01f4 FE010000 		.4byte	0x1fe
+ 552 01f8 11       		.uleb128 0x11
+ 553 01f9 01       		.uleb128 0x1
+ 554 01fa 50       		.byte	0x50
+ 555 01fb 01       		.uleb128 0x1
+ 556 01fc 31       		.byte	0x31
+ 557 01fd 00       		.byte	0
+ 558 01fe 0C       		.uleb128 0xc
+ 559 01ff 18000000 		.4byte	.LVL19
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 13
+
+
+ 560 0203 19010000 		.4byte	0x119
+ 561 0207 10       		.uleb128 0x10
+ 562 0208 1E000000 		.4byte	.LVL20
+ 563 020c 6C030000 		.4byte	0x36c
+ 564 0210 1A020000 		.4byte	0x21a
+ 565 0214 11       		.uleb128 0x11
+ 566 0215 01       		.uleb128 0x1
+ 567 0216 50       		.byte	0x50
+ 568 0217 01       		.uleb128 0x1
+ 569 0218 30       		.byte	0x30
+ 570 0219 00       		.byte	0
+ 571 021a 10       		.uleb128 0x10
+ 572 021b 26000000 		.4byte	.LVL23
+ 573 021f 77030000 		.4byte	0x377
+ 574 0223 2D020000 		.4byte	0x22d
+ 575 0227 11       		.uleb128 0x11
+ 576 0228 01       		.uleb128 0x1
+ 577 0229 50       		.byte	0x50
+ 578 022a 01       		.uleb128 0x1
+ 579 022b 31       		.byte	0x31
+ 580 022c 00       		.byte	0
+ 581 022d 0C       		.uleb128 0xc
+ 582 022e 2A000000 		.4byte	.LVL24
+ 583 0232 5E010000 		.4byte	0x15e
+ 584 0236 10       		.uleb128 0x10
+ 585 0237 30000000 		.4byte	.LVL25
+ 586 023b 77030000 		.4byte	0x377
+ 587 023f 49020000 		.4byte	0x249
+ 588 0243 11       		.uleb128 0x11
+ 589 0244 01       		.uleb128 0x1
+ 590 0245 50       		.byte	0x50
+ 591 0246 01       		.uleb128 0x1
+ 592 0247 30       		.byte	0x30
+ 593 0248 00       		.byte	0
+ 594 0249 10       		.uleb128 0x10
+ 595 024a 38000000 		.4byte	.LVL28
+ 596 024e 82030000 		.4byte	0x382
+ 597 0252 5C020000 		.4byte	0x25c
+ 598 0256 11       		.uleb128 0x11
+ 599 0257 01       		.uleb128 0x1
+ 600 0258 50       		.byte	0x50
+ 601 0259 01       		.uleb128 0x1
+ 602 025a 31       		.byte	0x31
+ 603 025b 00       		.byte	0
+ 604 025c 0C       		.uleb128 0xc
+ 605 025d 3C000000 		.4byte	.LVL29
+ 606 0261 08010000 		.4byte	0x108
+ 607 0265 12       		.uleb128 0x12
+ 608 0266 42000000 		.4byte	.LVL30
+ 609 026a 82030000 		.4byte	0x382
+ 610 026e 11       		.uleb128 0x11
+ 611 026f 01       		.uleb128 0x1
+ 612 0270 50       		.byte	0x50
+ 613 0271 01       		.uleb128 0x1
+ 614 0272 30       		.byte	0x30
+ 615 0273 00       		.byte	0
+ 616 0274 00       		.byte	0
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 14
+
+
+ 617 0275 13       		.uleb128 0x13
+ 618 0276 656F6300 		.ascii	"eoc\000"
+ 619 027a 05       		.byte	0x5
+ 620 027b 24       		.byte	0x24
+ 621 027c 97000000 		.4byte	0x97
+ 622 0280 14       		.uleb128 0x14
+ 623 0281 87010000 		.4byte	.LASF31
+ 624 0285 06       		.byte	0x6
+ 625 0286 1207     		.2byte	0x712
+ 626 0288 8C020000 		.4byte	0x28c
+ 627 028c 15       		.uleb128 0x15
+ 628 028d 8C000000 		.4byte	0x8c
+ 629 0291 16       		.uleb128 0x16
+ 630 0292 70020000 		.4byte	.LASF32
+ 631 0296 01       		.byte	0x1
+ 632 0297 03       		.byte	0x3
+ 633 0298 97000000 		.4byte	0x97
+ 634 029c 05       		.uleb128 0x5
+ 635 029d 03       		.byte	0x3
+ 636 029e 00000000 		.4byte	count
+ 637 02a2 17       		.uleb128 0x17
+ 638 02a3 A3000000 		.4byte	0xa3
+ 639 02a7 B3020000 		.4byte	0x2b3
+ 640 02ab 18       		.uleb128 0x18
+ 641 02ac D7000000 		.4byte	0xd7
+ 642 02b0 FF03     		.2byte	0x3ff
+ 643 02b2 00       		.byte	0
+ 644 02b3 16       		.uleb128 0x16
+ 645 02b4 00000000 		.4byte	.LASF33
+ 646 02b8 01       		.byte	0x1
+ 647 02b9 04       		.byte	0x4
+ 648 02ba A2020000 		.4byte	0x2a2
+ 649 02be 05       		.uleb128 0x5
+ 650 02bf 03       		.byte	0x3
+ 651 02c0 00000000 		.4byte	sample
+ 652 02c4 16       		.uleb128 0x16
+ 653 02c5 2C000000 		.4byte	.LASF34
+ 654 02c9 01       		.byte	0x1
+ 655 02ca 05       		.byte	0x5
+ 656 02cb FD000000 		.4byte	0xfd
+ 657 02cf 05       		.uleb128 0x5
+ 658 02d0 03       		.byte	0x3
+ 659 02d1 00000000 		.4byte	state
+ 660 02d5 16       		.uleb128 0x16
+ 661 02d6 2D020000 		.4byte	.LASF35
+ 662 02da 01       		.byte	0x1
+ 663 02db 06       		.byte	0x6
+ 664 02dc AF000000 		.4byte	0xaf
+ 665 02e0 05       		.uleb128 0x5
+ 666 02e1 03       		.byte	0x3
+ 667 02e2 00000000 		.4byte	OutPut
+ 668 02e6 16       		.uleb128 0x16
+ 669 02e7 61010000 		.4byte	.LASF36
+ 670 02eb 01       		.byte	0x1
+ 671 02ec 07       		.byte	0x7
+ 672 02ed A3000000 		.4byte	0xa3
+ 673 02f1 05       		.uleb128 0x5
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 15
+
+
+ 674 02f2 03       		.byte	0x3
+ 675 02f3 00000000 		.4byte	OutPut_mv
+ 676 02f7 16       		.uleb128 0x16
+ 677 02f8 37000000 		.4byte	.LASF29
+ 678 02fc 01       		.byte	0x1
+ 679 02fd 08       		.byte	0x8
+ 680 02fe 97000000 		.4byte	0x97
+ 681 0302 05       		.uleb128 0x5
+ 682 0303 03       		.byte	0x3
+ 683 0304 00000000 		.4byte	high
+ 684 0308 19       		.uleb128 0x19
+ 685 0309 6C6F7700 		.ascii	"low\000"
+ 686 030d 01       		.byte	0x1
+ 687 030e 08       		.byte	0x8
+ 688 030f 97000000 		.4byte	0x97
+ 689 0313 05       		.uleb128 0x5
+ 690 0314 03       		.byte	0x3
+ 691 0315 00000000 		.4byte	low
+ 692 0319 19       		.uleb128 0x19
+ 693 031a 636800   		.ascii	"ch\000"
+ 694 031d 01       		.byte	0x1
+ 695 031e 09       		.byte	0x9
+ 696 031f 97000000 		.4byte	0x97
+ 697 0323 05       		.uleb128 0x5
+ 698 0324 03       		.byte	0x3
+ 699 0325 00000000 		.4byte	ch
+ 700 0329 16       		.uleb128 0x16
+ 701 032a D1010000 		.4byte	.LASF37
+ 702 032e 01       		.byte	0x1
+ 703 032f 0B       		.byte	0xb
+ 704 0330 73000000 		.4byte	0x73
+ 705 0334 05       		.uleb128 0x5
+ 706 0335 03       		.byte	0x3
+ 707 0336 00000000 		.4byte	charS
+ 708 033a 16       		.uleb128 0x16
+ 709 033b 26000000 		.4byte	.LASF38
+ 710 033f 01       		.byte	0x1
+ 711 0340 0C       		.byte	0xc
+ 712 0341 73000000 		.4byte	0x73
+ 713 0345 05       		.uleb128 0x5
+ 714 0346 03       		.byte	0x3
+ 715 0347 00000000 		.4byte	charO
+ 716 034b 1A       		.uleb128 0x1a
+ 717 034c 49020000 		.4byte	.LASF39
+ 718 0350 49020000 		.4byte	.LASF39
+ 719 0354 07       		.byte	0x7
+ 720 0355 56       		.byte	0x56
+ 721 0356 1A       		.uleb128 0x1a
+ 722 0357 B5020000 		.4byte	.LASF40
+ 723 035b B5020000 		.4byte	.LASF40
+ 724 035f 08       		.byte	0x8
+ 725 0360 71       		.byte	0x71
+ 726 0361 1A       		.uleb128 0x1a
+ 727 0362 3C020000 		.4byte	.LASF41
+ 728 0366 3C020000 		.4byte	.LASF41
+ 729 036a 08       		.byte	0x8
+ 730 036b 8A       		.byte	0x8a
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 16
+
+
+ 731 036c 1A       		.uleb128 0x1a
+ 732 036d 1C020000 		.4byte	.LASF42
+ 733 0371 1C020000 		.4byte	.LASF42
+ 734 0375 09       		.byte	0x9
+ 735 0376 26       		.byte	0x26
+ 736 0377 1A       		.uleb128 0x1a
+ 737 0378 07000000 		.4byte	.LASF43
+ 738 037c 07000000 		.4byte	.LASF43
+ 739 0380 0A       		.byte	0xa
+ 740 0381 26       		.byte	0x26
+ 741 0382 1A       		.uleb128 0x1a
+ 742 0383 46000000 		.4byte	.LASF44
+ 743 0387 46000000 		.4byte	.LASF44
+ 744 038b 0B       		.byte	0xb
+ 745 038c 26       		.byte	0x26
+ 746 038d 00       		.byte	0
+ 747              		.section	.debug_abbrev,"",%progbits
+ 748              	.Ldebug_abbrev0:
+ 749 0000 01       		.uleb128 0x1
+ 750 0001 11       		.uleb128 0x11
+ 751 0002 01       		.byte	0x1
+ 752 0003 25       		.uleb128 0x25
+ 753 0004 0E       		.uleb128 0xe
+ 754 0005 13       		.uleb128 0x13
+ 755 0006 0B       		.uleb128 0xb
+ 756 0007 03       		.uleb128 0x3
+ 757 0008 0E       		.uleb128 0xe
+ 758 0009 1B       		.uleb128 0x1b
+ 759 000a 0E       		.uleb128 0xe
+ 760 000b 55       		.uleb128 0x55
+ 761 000c 17       		.uleb128 0x17
+ 762 000d 11       		.uleb128 0x11
+ 763 000e 01       		.uleb128 0x1
+ 764 000f 10       		.uleb128 0x10
+ 765 0010 17       		.uleb128 0x17
+ 766 0011 00       		.byte	0
+ 767 0012 00       		.byte	0
+ 768 0013 02       		.uleb128 0x2
+ 769 0014 24       		.uleb128 0x24
+ 770 0015 00       		.byte	0
+ 771 0016 0B       		.uleb128 0xb
+ 772 0017 0B       		.uleb128 0xb
+ 773 0018 3E       		.uleb128 0x3e
+ 774 0019 0B       		.uleb128 0xb
+ 775 001a 03       		.uleb128 0x3
+ 776 001b 0E       		.uleb128 0xe
+ 777 001c 00       		.byte	0
+ 778 001d 00       		.byte	0
+ 779 001e 03       		.uleb128 0x3
+ 780 001f 16       		.uleb128 0x16
+ 781 0020 00       		.byte	0
+ 782 0021 03       		.uleb128 0x3
+ 783 0022 0E       		.uleb128 0xe
+ 784 0023 3A       		.uleb128 0x3a
+ 785 0024 0B       		.uleb128 0xb
+ 786 0025 3B       		.uleb128 0x3b
+ 787 0026 0B       		.uleb128 0xb
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 17
+
+
+ 788 0027 49       		.uleb128 0x49
+ 789 0028 13       		.uleb128 0x13
+ 790 0029 00       		.byte	0
+ 791 002a 00       		.byte	0
+ 792 002b 04       		.uleb128 0x4
+ 793 002c 24       		.uleb128 0x24
+ 794 002d 00       		.byte	0
+ 795 002e 0B       		.uleb128 0xb
+ 796 002f 0B       		.uleb128 0xb
+ 797 0030 3E       		.uleb128 0x3e
+ 798 0031 0B       		.uleb128 0xb
+ 799 0032 03       		.uleb128 0x3
+ 800 0033 08       		.uleb128 0x8
+ 801 0034 00       		.byte	0
+ 802 0035 00       		.byte	0
+ 803 0036 05       		.uleb128 0x5
+ 804 0037 16       		.uleb128 0x16
+ 805 0038 00       		.byte	0
+ 806 0039 03       		.uleb128 0x3
+ 807 003a 0E       		.uleb128 0xe
+ 808 003b 3A       		.uleb128 0x3a
+ 809 003c 0B       		.uleb128 0xb
+ 810 003d 3B       		.uleb128 0x3b
+ 811 003e 05       		.uleb128 0x5
+ 812 003f 49       		.uleb128 0x49
+ 813 0040 13       		.uleb128 0x13
+ 814 0041 00       		.byte	0
+ 815 0042 00       		.byte	0
+ 816 0043 06       		.uleb128 0x6
+ 817 0044 04       		.uleb128 0x4
+ 818 0045 01       		.byte	0x1
+ 819 0046 0B       		.uleb128 0xb
+ 820 0047 0B       		.uleb128 0xb
+ 821 0048 49       		.uleb128 0x49
+ 822 0049 13       		.uleb128 0x13
+ 823 004a 3A       		.uleb128 0x3a
+ 824 004b 0B       		.uleb128 0xb
+ 825 004c 3B       		.uleb128 0x3b
+ 826 004d 0B       		.uleb128 0xb
+ 827 004e 01       		.uleb128 0x1
+ 828 004f 13       		.uleb128 0x13
+ 829 0050 00       		.byte	0
+ 830 0051 00       		.byte	0
+ 831 0052 07       		.uleb128 0x7
+ 832 0053 28       		.uleb128 0x28
+ 833 0054 00       		.byte	0
+ 834 0055 03       		.uleb128 0x3
+ 835 0056 0E       		.uleb128 0xe
+ 836 0057 1C       		.uleb128 0x1c
+ 837 0058 0B       		.uleb128 0xb
+ 838 0059 00       		.byte	0
+ 839 005a 00       		.byte	0
+ 840 005b 08       		.uleb128 0x8
+ 841 005c 2E       		.uleb128 0x2e
+ 842 005d 00       		.byte	0
+ 843 005e 3F       		.uleb128 0x3f
+ 844 005f 19       		.uleb128 0x19
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 18
+
+
+ 845 0060 03       		.uleb128 0x3
+ 846 0061 0E       		.uleb128 0xe
+ 847 0062 3A       		.uleb128 0x3a
+ 848 0063 0B       		.uleb128 0xb
+ 849 0064 3B       		.uleb128 0x3b
+ 850 0065 0B       		.uleb128 0xb
+ 851 0066 27       		.uleb128 0x27
+ 852 0067 19       		.uleb128 0x19
+ 853 0068 11       		.uleb128 0x11
+ 854 0069 01       		.uleb128 0x1
+ 855 006a 12       		.uleb128 0x12
+ 856 006b 06       		.uleb128 0x6
+ 857 006c 40       		.uleb128 0x40
+ 858 006d 18       		.uleb128 0x18
+ 859 006e 9742     		.uleb128 0x2117
+ 860 0070 19       		.uleb128 0x19
+ 861 0071 00       		.byte	0
+ 862 0072 00       		.byte	0
+ 863 0073 09       		.uleb128 0x9
+ 864 0074 2E       		.uleb128 0x2e
+ 865 0075 01       		.byte	0x1
+ 866 0076 3F       		.uleb128 0x3f
+ 867 0077 19       		.uleb128 0x19
+ 868 0078 03       		.uleb128 0x3
+ 869 0079 0E       		.uleb128 0xe
+ 870 007a 3A       		.uleb128 0x3a
+ 871 007b 0B       		.uleb128 0xb
+ 872 007c 3B       		.uleb128 0x3b
+ 873 007d 0B       		.uleb128 0xb
+ 874 007e 27       		.uleb128 0x27
+ 875 007f 19       		.uleb128 0x19
+ 876 0080 11       		.uleb128 0x11
+ 877 0081 01       		.uleb128 0x1
+ 878 0082 12       		.uleb128 0x12
+ 879 0083 06       		.uleb128 0x6
+ 880 0084 40       		.uleb128 0x40
+ 881 0085 18       		.uleb128 0x18
+ 882 0086 9742     		.uleb128 0x2117
+ 883 0088 19       		.uleb128 0x19
+ 884 0089 01       		.uleb128 0x1
+ 885 008a 13       		.uleb128 0x13
+ 886 008b 00       		.byte	0
+ 887 008c 00       		.byte	0
+ 888 008d 0A       		.uleb128 0xa
+ 889 008e 0B       		.uleb128 0xb
+ 890 008f 01       		.byte	0x1
+ 891 0090 11       		.uleb128 0x11
+ 892 0091 01       		.uleb128 0x1
+ 893 0092 12       		.uleb128 0x12
+ 894 0093 06       		.uleb128 0x6
+ 895 0094 01       		.uleb128 0x1
+ 896 0095 13       		.uleb128 0x13
+ 897 0096 00       		.byte	0
+ 898 0097 00       		.byte	0
+ 899 0098 0B       		.uleb128 0xb
+ 900 0099 34       		.uleb128 0x34
+ 901 009a 00       		.byte	0
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 19
+
+
+ 902 009b 03       		.uleb128 0x3
+ 903 009c 0E       		.uleb128 0xe
+ 904 009d 3A       		.uleb128 0x3a
+ 905 009e 0B       		.uleb128 0xb
+ 906 009f 3B       		.uleb128 0x3b
+ 907 00a0 0B       		.uleb128 0xb
+ 908 00a1 49       		.uleb128 0x49
+ 909 00a2 13       		.uleb128 0x13
+ 910 00a3 02       		.uleb128 0x2
+ 911 00a4 17       		.uleb128 0x17
+ 912 00a5 00       		.byte	0
+ 913 00a6 00       		.byte	0
+ 914 00a7 0C       		.uleb128 0xc
+ 915 00a8 898201   		.uleb128 0x4109
+ 916 00ab 00       		.byte	0
+ 917 00ac 11       		.uleb128 0x11
+ 918 00ad 01       		.uleb128 0x1
+ 919 00ae 31       		.uleb128 0x31
+ 920 00af 13       		.uleb128 0x13
+ 921 00b0 00       		.byte	0
+ 922 00b1 00       		.byte	0
+ 923 00b2 0D       		.uleb128 0xd
+ 924 00b3 0B       		.uleb128 0xb
+ 925 00b4 01       		.byte	0x1
+ 926 00b5 11       		.uleb128 0x11
+ 927 00b6 01       		.uleb128 0x1
+ 928 00b7 12       		.uleb128 0x12
+ 929 00b8 06       		.uleb128 0x6
+ 930 00b9 00       		.byte	0
+ 931 00ba 00       		.byte	0
+ 932 00bb 0E       		.uleb128 0xe
+ 933 00bc 34       		.uleb128 0x34
+ 934 00bd 00       		.byte	0
+ 935 00be 03       		.uleb128 0x3
+ 936 00bf 08       		.uleb128 0x8
+ 937 00c0 3A       		.uleb128 0x3a
+ 938 00c1 0B       		.uleb128 0xb
+ 939 00c2 3B       		.uleb128 0x3b
+ 940 00c3 0B       		.uleb128 0xb
+ 941 00c4 49       		.uleb128 0x49
+ 942 00c5 13       		.uleb128 0x13
+ 943 00c6 02       		.uleb128 0x2
+ 944 00c7 17       		.uleb128 0x17
+ 945 00c8 00       		.byte	0
+ 946 00c9 00       		.byte	0
+ 947 00ca 0F       		.uleb128 0xf
+ 948 00cb 05       		.uleb128 0x5
+ 949 00cc 00       		.byte	0
+ 950 00cd 03       		.uleb128 0x3
+ 951 00ce 0E       		.uleb128 0xe
+ 952 00cf 3A       		.uleb128 0x3a
+ 953 00d0 0B       		.uleb128 0xb
+ 954 00d1 3B       		.uleb128 0x3b
+ 955 00d2 0B       		.uleb128 0xb
+ 956 00d3 49       		.uleb128 0x49
+ 957 00d4 13       		.uleb128 0x13
+ 958 00d5 02       		.uleb128 0x2
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 20
+
+
+ 959 00d6 17       		.uleb128 0x17
+ 960 00d7 00       		.byte	0
+ 961 00d8 00       		.byte	0
+ 962 00d9 10       		.uleb128 0x10
+ 963 00da 898201   		.uleb128 0x4109
+ 964 00dd 01       		.byte	0x1
+ 965 00de 11       		.uleb128 0x11
+ 966 00df 01       		.uleb128 0x1
+ 967 00e0 31       		.uleb128 0x31
+ 968 00e1 13       		.uleb128 0x13
+ 969 00e2 01       		.uleb128 0x1
+ 970 00e3 13       		.uleb128 0x13
+ 971 00e4 00       		.byte	0
+ 972 00e5 00       		.byte	0
+ 973 00e6 11       		.uleb128 0x11
+ 974 00e7 8A8201   		.uleb128 0x410a
+ 975 00ea 00       		.byte	0
+ 976 00eb 02       		.uleb128 0x2
+ 977 00ec 18       		.uleb128 0x18
+ 978 00ed 9142     		.uleb128 0x2111
+ 979 00ef 18       		.uleb128 0x18
+ 980 00f0 00       		.byte	0
+ 981 00f1 00       		.byte	0
+ 982 00f2 12       		.uleb128 0x12
+ 983 00f3 898201   		.uleb128 0x4109
+ 984 00f6 01       		.byte	0x1
+ 985 00f7 11       		.uleb128 0x11
+ 986 00f8 01       		.uleb128 0x1
+ 987 00f9 31       		.uleb128 0x31
+ 988 00fa 13       		.uleb128 0x13
+ 989 00fb 00       		.byte	0
+ 990 00fc 00       		.byte	0
+ 991 00fd 13       		.uleb128 0x13
+ 992 00fe 34       		.uleb128 0x34
+ 993 00ff 00       		.byte	0
+ 994 0100 03       		.uleb128 0x3
+ 995 0101 08       		.uleb128 0x8
+ 996 0102 3A       		.uleb128 0x3a
+ 997 0103 0B       		.uleb128 0xb
+ 998 0104 3B       		.uleb128 0x3b
+ 999 0105 0B       		.uleb128 0xb
+ 1000 0106 49       		.uleb128 0x49
+ 1001 0107 13       		.uleb128 0x13
+ 1002 0108 00       		.byte	0
+ 1003 0109 00       		.byte	0
+ 1004 010a 14       		.uleb128 0x14
+ 1005 010b 34       		.uleb128 0x34
+ 1006 010c 00       		.byte	0
+ 1007 010d 03       		.uleb128 0x3
+ 1008 010e 0E       		.uleb128 0xe
+ 1009 010f 3A       		.uleb128 0x3a
+ 1010 0110 0B       		.uleb128 0xb
+ 1011 0111 3B       		.uleb128 0x3b
+ 1012 0112 05       		.uleb128 0x5
+ 1013 0113 49       		.uleb128 0x49
+ 1014 0114 13       		.uleb128 0x13
+ 1015 0115 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 21
+
+
+ 1016 0116 19       		.uleb128 0x19
+ 1017 0117 3C       		.uleb128 0x3c
+ 1018 0118 19       		.uleb128 0x19
+ 1019 0119 00       		.byte	0
+ 1020 011a 00       		.byte	0
+ 1021 011b 15       		.uleb128 0x15
+ 1022 011c 35       		.uleb128 0x35
+ 1023 011d 00       		.byte	0
+ 1024 011e 49       		.uleb128 0x49
+ 1025 011f 13       		.uleb128 0x13
+ 1026 0120 00       		.byte	0
+ 1027 0121 00       		.byte	0
+ 1028 0122 16       		.uleb128 0x16
+ 1029 0123 34       		.uleb128 0x34
+ 1030 0124 00       		.byte	0
+ 1031 0125 03       		.uleb128 0x3
+ 1032 0126 0E       		.uleb128 0xe
+ 1033 0127 3A       		.uleb128 0x3a
+ 1034 0128 0B       		.uleb128 0xb
+ 1035 0129 3B       		.uleb128 0x3b
+ 1036 012a 0B       		.uleb128 0xb
+ 1037 012b 49       		.uleb128 0x49
+ 1038 012c 13       		.uleb128 0x13
+ 1039 012d 3F       		.uleb128 0x3f
+ 1040 012e 19       		.uleb128 0x19
+ 1041 012f 02       		.uleb128 0x2
+ 1042 0130 18       		.uleb128 0x18
+ 1043 0131 00       		.byte	0
+ 1044 0132 00       		.byte	0
+ 1045 0133 17       		.uleb128 0x17
+ 1046 0134 01       		.uleb128 0x1
+ 1047 0135 01       		.byte	0x1
+ 1048 0136 49       		.uleb128 0x49
+ 1049 0137 13       		.uleb128 0x13
+ 1050 0138 01       		.uleb128 0x1
+ 1051 0139 13       		.uleb128 0x13
+ 1052 013a 00       		.byte	0
+ 1053 013b 00       		.byte	0
+ 1054 013c 18       		.uleb128 0x18
+ 1055 013d 21       		.uleb128 0x21
+ 1056 013e 00       		.byte	0
+ 1057 013f 49       		.uleb128 0x49
+ 1058 0140 13       		.uleb128 0x13
+ 1059 0141 2F       		.uleb128 0x2f
+ 1060 0142 05       		.uleb128 0x5
+ 1061 0143 00       		.byte	0
+ 1062 0144 00       		.byte	0
+ 1063 0145 19       		.uleb128 0x19
+ 1064 0146 34       		.uleb128 0x34
+ 1065 0147 00       		.byte	0
+ 1066 0148 03       		.uleb128 0x3
+ 1067 0149 08       		.uleb128 0x8
+ 1068 014a 3A       		.uleb128 0x3a
+ 1069 014b 0B       		.uleb128 0xb
+ 1070 014c 3B       		.uleb128 0x3b
+ 1071 014d 0B       		.uleb128 0xb
+ 1072 014e 49       		.uleb128 0x49
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 22
+
+
+ 1073 014f 13       		.uleb128 0x13
+ 1074 0150 3F       		.uleb128 0x3f
+ 1075 0151 19       		.uleb128 0x19
+ 1076 0152 02       		.uleb128 0x2
+ 1077 0153 18       		.uleb128 0x18
+ 1078 0154 00       		.byte	0
+ 1079 0155 00       		.byte	0
+ 1080 0156 1A       		.uleb128 0x1a
+ 1081 0157 2E       		.uleb128 0x2e
+ 1082 0158 00       		.byte	0
+ 1083 0159 3F       		.uleb128 0x3f
+ 1084 015a 19       		.uleb128 0x19
+ 1085 015b 3C       		.uleb128 0x3c
+ 1086 015c 19       		.uleb128 0x19
+ 1087 015d 6E       		.uleb128 0x6e
+ 1088 015e 0E       		.uleb128 0xe
+ 1089 015f 03       		.uleb128 0x3
+ 1090 0160 0E       		.uleb128 0xe
+ 1091 0161 3A       		.uleb128 0x3a
+ 1092 0162 0B       		.uleb128 0xb
+ 1093 0163 3B       		.uleb128 0x3b
+ 1094 0164 0B       		.uleb128 0xb
+ 1095 0165 00       		.byte	0
+ 1096 0166 00       		.byte	0
+ 1097 0167 00       		.byte	0
+ 1098              		.section	.debug_loc,"",%progbits
+ 1099              	.Ldebug_loc0:
+ 1100              	.LLST0:
+ 1101 0000 02000000 		.4byte	.LVL0
+ 1102 0004 06000000 		.4byte	.LVL1
+ 1103 0008 0200     		.2byte	0x2
+ 1104 000a 30       		.byte	0x30
+ 1105 000b 9F       		.byte	0x9f
+ 1106 000c 06000000 		.4byte	.LVL1
+ 1107 0010 44000000 		.4byte	.LVL5
+ 1108 0014 0100     		.2byte	0x1
+ 1109 0016 54       		.byte	0x54
+ 1110 0017 00000000 		.4byte	0
+ 1111 001b 00000000 		.4byte	0
+ 1112              	.LLST1:
+ 1113 001f 02000000 		.4byte	.LVL6
+ 1114 0023 06000000 		.4byte	.LVL7
+ 1115 0027 0200     		.2byte	0x2
+ 1116 0029 30       		.byte	0x30
+ 1117 002a 9F       		.byte	0x9f
+ 1118 002b 06000000 		.4byte	.LVL7
+ 1119 002f 4A000000 		.4byte	.LVL15
+ 1120 0033 0100     		.2byte	0x1
+ 1121 0035 54       		.byte	0x54
+ 1122 0036 00000000 		.4byte	0
+ 1123 003a 00000000 		.4byte	0
+ 1124              	.LLST2:
+ 1125 003e 08000000 		.4byte	.LVL8
+ 1126 0042 0F000000 		.4byte	.LVL9-1
+ 1127 0046 0700     		.2byte	0x7
+ 1128 0048 74       		.byte	0x74
+ 1129 0049 00       		.sleb128 0
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 23
+
+
+ 1130 004a 31       		.byte	0x31
+ 1131 004b 24       		.byte	0x24
+ 1132 004c 75       		.byte	0x75
+ 1133 004d 00       		.sleb128 0
+ 1134 004e 22       		.byte	0x22
+ 1135 004f 00000000 		.4byte	0
+ 1136 0053 00000000 		.4byte	0
+ 1137              	.LLST3:
+ 1138 0057 14000000 		.4byte	.LVL10
+ 1139 005b 16000000 		.4byte	.LVL11
+ 1140 005f 0500     		.2byte	0x5
+ 1141 0061 70       		.byte	0x70
+ 1142 0062 00       		.sleb128 0
+ 1143 0063 38       		.byte	0x38
+ 1144 0064 25       		.byte	0x25
+ 1145 0065 9F       		.byte	0x9f
+ 1146 0066 16000000 		.4byte	.LVL11
+ 1147 006a 19000000 		.4byte	.LVL12-1
+ 1148 006e 1000     		.2byte	0x10
+ 1149 0070 74       		.byte	0x74
+ 1150 0071 00       		.sleb128 0
+ 1151 0072 31       		.byte	0x31
+ 1152 0073 24       		.byte	0x24
+ 1153 0074 75       		.byte	0x75
+ 1154 0075 00       		.sleb128 0
+ 1155 0076 22       		.byte	0x22
+ 1156 0077 94       		.byte	0x94
+ 1157 0078 02       		.byte	0x2
+ 1158 0079 0A       		.byte	0xa
+ 1159 007a FFFF     		.2byte	0xffff
+ 1160 007c 1A       		.byte	0x1a
+ 1161 007d 38       		.byte	0x38
+ 1162 007e 25       		.byte	0x25
+ 1163 007f 9F       		.byte	0x9f
+ 1164 0080 00000000 		.4byte	0
+ 1165 0084 00000000 		.4byte	0
+ 1166              	.LLST4:
+ 1167 0088 00000000 		.4byte	.LVL16
+ 1168 008c 10000000 		.4byte	.LVL17
+ 1169 0090 0100     		.2byte	0x1
+ 1170 0092 50       		.byte	0x50
+ 1171 0093 10000000 		.4byte	.LVL17
+ 1172 0097 20000000 		.4byte	.LVL21
+ 1173 009b 0400     		.2byte	0x4
+ 1174 009d F3       		.byte	0xf3
+ 1175 009e 01       		.uleb128 0x1
+ 1176 009f 50       		.byte	0x50
+ 1177 00a0 9F       		.byte	0x9f
+ 1178 00a1 20000000 		.4byte	.LVL21
+ 1179 00a5 22000000 		.4byte	.LVL22
+ 1180 00a9 0100     		.2byte	0x1
+ 1181 00ab 50       		.byte	0x50
+ 1182 00ac 22000000 		.4byte	.LVL22
+ 1183 00b0 32000000 		.4byte	.LVL26
+ 1184 00b4 0400     		.2byte	0x4
+ 1185 00b6 F3       		.byte	0xf3
+ 1186 00b7 01       		.uleb128 0x1
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 24
+
+
+ 1187 00b8 50       		.byte	0x50
+ 1188 00b9 9F       		.byte	0x9f
+ 1189 00ba 32000000 		.4byte	.LVL26
+ 1190 00be 34000000 		.4byte	.LVL27
+ 1191 00c2 0100     		.2byte	0x1
+ 1192 00c4 50       		.byte	0x50
+ 1193 00c5 34000000 		.4byte	.LVL27
+ 1194 00c9 44000000 		.4byte	.LFE63
+ 1195 00cd 0400     		.2byte	0x4
+ 1196 00cf F3       		.byte	0xf3
+ 1197 00d0 01       		.uleb128 0x1
+ 1198 00d1 50       		.byte	0x50
+ 1199 00d2 9F       		.byte	0x9f
+ 1200 00d3 00000000 		.4byte	0
+ 1201 00d7 00000000 		.4byte	0
+ 1202              		.section	.debug_aranges,"",%progbits
+ 1203 0000 34000000 		.4byte	0x34
+ 1204 0004 0200     		.2byte	0x2
+ 1205 0006 00000000 		.4byte	.Ldebug_info0
+ 1206 000a 04       		.byte	0x4
+ 1207 000b 00       		.byte	0
+ 1208 000c 0000     		.2byte	0
+ 1209 000e 0000     		.2byte	0
+ 1210 0010 00000000 		.4byte	.LFB64
+ 1211 0014 0C000000 		.4byte	.LFE64-.LFB64
+ 1212 0018 00000000 		.4byte	.LFB65
+ 1213 001c 60000000 		.4byte	.LFE65-.LFB65
+ 1214 0020 00000000 		.4byte	.LFB66
+ 1215 0024 58000000 		.4byte	.LFE66-.LFB66
+ 1216 0028 00000000 		.4byte	.LFB63
+ 1217 002c 44000000 		.4byte	.LFE63-.LFB63
+ 1218 0030 00000000 		.4byte	0
+ 1219 0034 00000000 		.4byte	0
+ 1220              		.section	.debug_ranges,"",%progbits
+ 1221              	.Ldebug_ranges0:
+ 1222 0000 00000000 		.4byte	.LFB64
+ 1223 0004 0C000000 		.4byte	.LFE64
+ 1224 0008 00000000 		.4byte	.LFB65
+ 1225 000c 60000000 		.4byte	.LFE65
+ 1226 0010 00000000 		.4byte	.LFB66
+ 1227 0014 58000000 		.4byte	.LFE66
+ 1228 0018 00000000 		.4byte	.LFB63
+ 1229 001c 44000000 		.4byte	.LFE63
+ 1230 0020 00000000 		.4byte	0
+ 1231 0024 00000000 		.4byte	0
+ 1232              		.section	.debug_line,"",%progbits
+ 1233              	.Ldebug_line0:
+ 1234 0000 48020000 		.section	.debug_str,"MS",%progbits,1
+ 1234      0200A501 
+ 1234      00000201 
+ 1234      FB0E0D00 
+ 1234      01010101 
+ 1235              	.LASF33:
+ 1236 0000 73616D70 		.ascii	"sample\000"
+ 1236      6C6500
+ 1237              	.LASF43:
+ 1238 0007 4C45445F 		.ascii	"LED_green_Write\000"
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 25
+
+
+ 1238      67726565 
+ 1238      6E5F5772 
+ 1238      69746500 
+ 1239              	.LASF46:
+ 1240 0017 73746174 		.ascii	"statemachine.c\000"
+ 1240      656D6163 
+ 1240      68696E65 
+ 1240      2E6300
+ 1241              	.LASF38:
+ 1242 0026 63686172 		.ascii	"charO\000"
+ 1242      4F00
+ 1243              	.LASF34:
+ 1244 002c 73746174 		.ascii	"state\000"
+ 1244      6500
+ 1245              	.LASF48:
+ 1246 0032 69646C65 		.ascii	"idle\000"
+ 1246      00
+ 1247              	.LASF29:
+ 1248 0037 68696768 		.ascii	"high\000"
+ 1248      00
+ 1249              	.LASF5:
+ 1250 003c 5F5F696E 		.ascii	"__int32_t\000"
+ 1250      7433325F 
+ 1250      7400
+ 1251              	.LASF44:
+ 1252 0046 4C45445F 		.ascii	"LED_red_Write\000"
+ 1252      7265645F 
+ 1252      57726974 
+ 1252      6500
+ 1253              	.LASF17:
+ 1254 0054 646F7562 		.ascii	"double\000"
+ 1254      6C6500
+ 1255              	.LASF47:
+ 1256 005b 433A5C55 		.ascii	"C:\\Users\\Mateo C. Querol\\Desktop\\speed_sensor.c"
+ 1256      73657273 
+ 1256      5C4D6174 
+ 1256      656F2043 
+ 1256      2E205175 
+ 1257 008a 7964736E 		.ascii	"ydsn\000"
+ 1257      00
+ 1258              	.LASF16:
+ 1259 008f 666C6F61 		.ascii	"float\000"
+ 1259      7400
+ 1260              	.LASF13:
+ 1261 0095 75696E74 		.ascii	"uint8\000"
+ 1261      3800
+ 1262              	.LASF23:
+ 1263 009b 53544154 		.ascii	"STATE_UART_TRANSFER\000"
+ 1263      455F5541 
+ 1263      52545F54 
+ 1263      52414E53 
+ 1263      46455200 
+ 1264              	.LASF1:
+ 1265 00af 756E7369 		.ascii	"unsigned char\000"
+ 1265      676E6564 
+ 1265      20636861 
+ 1265      7200
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 26
+
+
+ 1266              	.LASF45:
+ 1267 00bd 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1267      43313120 
+ 1267      352E342E 
+ 1267      31203230 
+ 1267      31363036 
+ 1268 00f0 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 1268      20726576 
+ 1268      6973696F 
+ 1268      6E203233 
+ 1268      37373135 
+ 1269 0123 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1269      66756E63 
+ 1269      74696F6E 
+ 1269      2D736563 
+ 1269      74696F6E 
+ 1270              	.LASF21:
+ 1271 014b 53544154 		.ascii	"STATE_IDLE\000"
+ 1271      455F4944 
+ 1271      4C4500
+ 1272              	.LASF28:
+ 1273 0156 636F756E 		.ascii	"count_send\000"
+ 1273      745F7365 
+ 1273      6E6400
+ 1274              	.LASF36:
+ 1275 0161 4F757450 		.ascii	"OutPut_mv\000"
+ 1275      75745F6D 
+ 1275      7600
+ 1276              	.LASF25:
+ 1277 016b 73616D70 		.ascii	"sampling\000"
+ 1277      6C696E67 
+ 1277      00
+ 1278              	.LASF3:
+ 1279 0174 73686F72 		.ascii	"short unsigned int\000"
+ 1279      7420756E 
+ 1279      7369676E 
+ 1279      65642069 
+ 1279      6E7400
+ 1280              	.LASF31:
+ 1281 0187 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1281      52784275 
+ 1281      66666572 
+ 1281      00
+ 1282              	.LASF4:
+ 1283 0194 5F5F7569 		.ascii	"__uint16_t\000"
+ 1283      6E743136 
+ 1283      5F7400
+ 1284              	.LASF30:
+ 1285 019f 73746174 		.ascii	"stateMachine\000"
+ 1285      654D6163 
+ 1285      68696E65 
+ 1285      00
+ 1286              	.LASF27:
+ 1287 01ac 636F756E 		.ascii	"count_sample\000"
+ 1287      745F7361 
+ 1287      6D706C65 
+ 1287      00
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 27
+
+
+ 1288              	.LASF2:
+ 1289 01b9 73686F72 		.ascii	"short int\000"
+ 1289      7420696E 
+ 1289      7400
+ 1290              	.LASF14:
+ 1291 01c3 75696E74 		.ascii	"uint16\000"
+ 1291      313600
+ 1292              	.LASF15:
+ 1293 01ca 75696E74 		.ascii	"uint32\000"
+ 1293      333200
+ 1294              	.LASF37:
+ 1295 01d1 63686172 		.ascii	"charS\000"
+ 1295      5300
+ 1296              	.LASF7:
+ 1297 01d7 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1297      20756E73 
+ 1297      69676E65 
+ 1297      6420696E 
+ 1297      7400
+ 1298              	.LASF10:
+ 1299 01e9 756E7369 		.ascii	"unsigned int\000"
+ 1299      676E6564 
+ 1299      20696E74 
+ 1299      00
+ 1300              	.LASF9:
+ 1301 01f6 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1301      206C6F6E 
+ 1301      6720756E 
+ 1301      7369676E 
+ 1301      65642069 
+ 1302              	.LASF22:
+ 1303 020d 53544154 		.ascii	"STATE_SAMPLING\000"
+ 1303      455F5341 
+ 1303      4D504C49 
+ 1303      4E4700
+ 1304              	.LASF42:
+ 1305 021c 4C45445F 		.ascii	"LED_yellow_Write\000"
+ 1305      79656C6C 
+ 1305      6F775F57 
+ 1305      72697465 
+ 1305      00
+ 1306              	.LASF35:
+ 1307 022d 4F757450 		.ascii	"OutPut\000"
+ 1307      757400
+ 1308              	.LASF12:
+ 1309 0234 696E7433 		.ascii	"int32_t\000"
+ 1309      325F7400 
+ 1310              	.LASF41:
+ 1311 023c 55415254 		.ascii	"UART_PutChar\000"
+ 1311      5F507574 
+ 1311      43686172 
+ 1311      00
+ 1312              	.LASF39:
+ 1313 0249 4144435F 		.ascii	"ADC_Read32\000"
+ 1313      52656164 
+ 1313      333200
+ 1314              	.LASF20:
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccp2E1IX.s 			page 28
+
+
+ 1315 0254 73697A65 		.ascii	"sizetype\000"
+ 1315      74797065 
+ 1315      00
+ 1316              	.LASF8:
+ 1317 025d 6C6F6E67 		.ascii	"long long int\000"
+ 1317      206C6F6E 
+ 1317      6720696E 
+ 1317      7400
+ 1318              	.LASF18:
+ 1319 026b 63686172 		.ascii	"char\000"
+ 1319      00
+ 1320              	.LASF32:
+ 1321 0270 636F756E 		.ascii	"count\000"
+ 1321      7400
+ 1322              	.LASF24:
+ 1323 0276 53544154 		.ascii	"STATE_t\000"
+ 1323      455F7400 
+ 1324              	.LASF11:
+ 1325 027e 75696E74 		.ascii	"uint16_t\000"
+ 1325      31365F74 
+ 1325      00
+ 1326              	.LASF26:
+ 1327 0287 75617274 		.ascii	"uartTransfer\000"
+ 1327      5472616E 
+ 1327      73666572 
+ 1327      00
+ 1328              	.LASF6:
+ 1329 0294 6C6F6E67 		.ascii	"long int\000"
+ 1329      20696E74 
+ 1329      00
+ 1330              	.LASF19:
+ 1331 029d 6C6F6E67 		.ascii	"long double\000"
+ 1331      20646F75 
+ 1331      626C6500 
+ 1332              	.LASF0:
+ 1333 02a9 7369676E 		.ascii	"signed char\000"
+ 1333      65642063 
+ 1333      68617200 
+ 1334              	.LASF40:
+ 1335 02b5 55415254 		.ascii	"UART_GetChar\000"
+ 1335      5F476574 
+ 1335      43686172 
+ 1335      00
+ 1336              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

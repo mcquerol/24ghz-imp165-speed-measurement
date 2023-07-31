@@ -1,0 +1,3325 @@
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"DAC.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.DAC_Enable,"ax",%progbits
+  20              		.align	2
+  21              		.global	DAC_Enable
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	DAC_Enable, %function
+  25              	DAC_Enable:
+  26              	.LFB1:
+  27              		.file 1 "Generated_Source\\PSoC5\\DAC.c"
+   1:Generated_Source\PSoC5/DAC.c **** /*******************************************************************************
+   2:Generated_Source\PSoC5/DAC.c **** * File Name: DAC.c
+   3:Generated_Source\PSoC5/DAC.c **** * Version 2.10
+   4:Generated_Source\PSoC5/DAC.c **** *
+   5:Generated_Source\PSoC5/DAC.c **** * Description:
+   6:Generated_Source\PSoC5/DAC.c **** *  This file provides the source code for the 8-bit Waveform DAC 
+   7:Generated_Source\PSoC5/DAC.c **** *  (WaveDAC8) Component.
+   8:Generated_Source\PSoC5/DAC.c **** *
+   9:Generated_Source\PSoC5/DAC.c **** ********************************************************************************
+  10:Generated_Source\PSoC5/DAC.c **** * Copyright 2013, Cypress Semiconductor Corporation.  All rights reserved.
+  11:Generated_Source\PSoC5/DAC.c **** * You may use this file only in accordance with the license, terms, conditions,
+  12:Generated_Source\PSoC5/DAC.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  13:Generated_Source\PSoC5/DAC.c **** * the software package with which this file was provided.
+  14:Generated_Source\PSoC5/DAC.c **** *******************************************************************************/
+  15:Generated_Source\PSoC5/DAC.c **** 
+  16:Generated_Source\PSoC5/DAC.c **** #include "DAC.h"
+  17:Generated_Source\PSoC5/DAC.c **** 
+  18:Generated_Source\PSoC5/DAC.c **** uint8  DAC_initVar = 0u;
+  19:Generated_Source\PSoC5/DAC.c **** 
+  20:Generated_Source\PSoC5/DAC.c **** const uint8 CYCODE DAC_wave1[DAC_WAVE1_LENGTH] = { 128u,128u,129u,129u,130u,130u,131u,132u,132u,133
+  21:Generated_Source\PSoC5/DAC.c **** const uint8 CYCODE DAC_wave2[DAC_WAVE2_LENGTH] = { 128u,132u,138u,143u,148u,152u,158u,162u,168u,172
+  22:Generated_Source\PSoC5/DAC.c **** 
+  23:Generated_Source\PSoC5/DAC.c **** static uint8  DAC_Wave1Chan;
+  24:Generated_Source\PSoC5/DAC.c **** static uint8  DAC_Wave2Chan;
+  25:Generated_Source\PSoC5/DAC.c **** static uint8  DAC_Wave1TD;
+  26:Generated_Source\PSoC5/DAC.c **** static uint8  DAC_Wave2TD;
+  27:Generated_Source\PSoC5/DAC.c **** 
+  28:Generated_Source\PSoC5/DAC.c **** 
+  29:Generated_Source\PSoC5/DAC.c **** /*******************************************************************************
+  30:Generated_Source\PSoC5/DAC.c **** * Function Name: DAC_Init
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 2
+
+
+  31:Generated_Source\PSoC5/DAC.c **** ********************************************************************************
+  32:Generated_Source\PSoC5/DAC.c **** *
+  33:Generated_Source\PSoC5/DAC.c **** * Summary:
+  34:Generated_Source\PSoC5/DAC.c **** *  Initializes component with parameters set in the customizer.
+  35:Generated_Source\PSoC5/DAC.c **** *
+  36:Generated_Source\PSoC5/DAC.c **** * Parameters:  
+  37:Generated_Source\PSoC5/DAC.c **** *  None
+  38:Generated_Source\PSoC5/DAC.c **** *
+  39:Generated_Source\PSoC5/DAC.c **** * Return: 
+  40:Generated_Source\PSoC5/DAC.c **** *  None
+  41:Generated_Source\PSoC5/DAC.c **** *
+  42:Generated_Source\PSoC5/DAC.c **** *******************************************************************************/
+  43:Generated_Source\PSoC5/DAC.c **** void DAC_Init(void) 
+  44:Generated_Source\PSoC5/DAC.c **** {
+  45:Generated_Source\PSoC5/DAC.c **** 	DAC_VDAC8_Init();
+  46:Generated_Source\PSoC5/DAC.c **** 	DAC_VDAC8_SetSpeed(DAC_HIGHSPEED);
+  47:Generated_Source\PSoC5/DAC.c **** 	DAC_VDAC8_SetRange(DAC_DAC_RANGE);
+  48:Generated_Source\PSoC5/DAC.c **** 
+  49:Generated_Source\PSoC5/DAC.c **** 	#if(DAC_DAC_MODE == DAC_CURRENT_MODE)
+  50:Generated_Source\PSoC5/DAC.c **** 		DAC_IDAC8_SetPolarity(DAC_DAC_POL);
+  51:Generated_Source\PSoC5/DAC.c **** 	#endif /* DAC_DAC_MODE == DAC_CURRENT_MODE */
+  52:Generated_Source\PSoC5/DAC.c **** 
+  53:Generated_Source\PSoC5/DAC.c **** 	#if(DAC_OUT_MODE == DAC_BUFFER_MODE)
+  54:Generated_Source\PSoC5/DAC.c **** 	   DAC_BuffAmp_Init();
+  55:Generated_Source\PSoC5/DAC.c **** 	#endif /* DAC_OUT_MODE == DAC_BUFFER_MODE */
+  56:Generated_Source\PSoC5/DAC.c **** 
+  57:Generated_Source\PSoC5/DAC.c **** 	/* Get the TD Number for the DMA channel 1 and 2   */
+  58:Generated_Source\PSoC5/DAC.c **** 	DAC_Wave1TD = CyDmaTdAllocate();
+  59:Generated_Source\PSoC5/DAC.c **** 	DAC_Wave2TD = CyDmaTdAllocate();
+  60:Generated_Source\PSoC5/DAC.c **** 	
+  61:Generated_Source\PSoC5/DAC.c **** 	/* Initialize waveform pointers  */
+  62:Generated_Source\PSoC5/DAC.c **** 	DAC_Wave1Setup(DAC_wave1, DAC_WAVE1_LENGTH) ;
+  63:Generated_Source\PSoC5/DAC.c **** 	DAC_Wave2Setup(DAC_wave2, DAC_WAVE2_LENGTH) ;
+  64:Generated_Source\PSoC5/DAC.c **** 	
+  65:Generated_Source\PSoC5/DAC.c **** 	/* Initialize the internal clock if one present  */
+  66:Generated_Source\PSoC5/DAC.c **** 	#if defined(DAC_DacClk_PHASE)
+  67:Generated_Source\PSoC5/DAC.c **** 	   DAC_DacClk_SetPhase(DAC_CLK_PHASE_0nS);
+  68:Generated_Source\PSoC5/DAC.c **** 	#endif /* defined(DAC_DacClk_PHASE) */
+  69:Generated_Source\PSoC5/DAC.c **** }
+  70:Generated_Source\PSoC5/DAC.c **** 
+  71:Generated_Source\PSoC5/DAC.c **** 
+  72:Generated_Source\PSoC5/DAC.c **** /*******************************************************************************
+  73:Generated_Source\PSoC5/DAC.c **** * Function Name: DAC_Enable
+  74:Generated_Source\PSoC5/DAC.c **** ********************************************************************************
+  75:Generated_Source\PSoC5/DAC.c **** *  
+  76:Generated_Source\PSoC5/DAC.c **** * Summary: 
+  77:Generated_Source\PSoC5/DAC.c **** *  Enables the DAC block and DMA operation.
+  78:Generated_Source\PSoC5/DAC.c **** *
+  79:Generated_Source\PSoC5/DAC.c **** * Parameters:  
+  80:Generated_Source\PSoC5/DAC.c **** *  None
+  81:Generated_Source\PSoC5/DAC.c **** *
+  82:Generated_Source\PSoC5/DAC.c **** * Return: 
+  83:Generated_Source\PSoC5/DAC.c **** *  None
+  84:Generated_Source\PSoC5/DAC.c **** *
+  85:Generated_Source\PSoC5/DAC.c **** *******************************************************************************/
+  86:Generated_Source\PSoC5/DAC.c **** void DAC_Enable(void) 
+  87:Generated_Source\PSoC5/DAC.c **** {
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 3
+
+
+  28              		.loc 1 87 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 10B5     		push	{r4, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+  88:Generated_Source\PSoC5/DAC.c **** 	DAC_VDAC8_Enable();
+  36              		.loc 1 88 0
+  37 0002 FFF7FEFF 		bl	DAC_VDAC8_Enable
+  38              	.LVL0:
+  89:Generated_Source\PSoC5/DAC.c **** 
+  90:Generated_Source\PSoC5/DAC.c **** 	#if(DAC_OUT_MODE == DAC_BUFFER_MODE)
+  91:Generated_Source\PSoC5/DAC.c **** 	   DAC_BuffAmp_Enable();
+  92:Generated_Source\PSoC5/DAC.c **** 	#endif /* DAC_OUT_MODE == DAC_BUFFER_MODE */
+  93:Generated_Source\PSoC5/DAC.c **** 
+  94:Generated_Source\PSoC5/DAC.c **** 	/* 
+  95:Generated_Source\PSoC5/DAC.c **** 	* Enable the channel. It is configured to remember the TD value so that
+  96:Generated_Source\PSoC5/DAC.c **** 	* it can be restored from the place where it has been stopped.
+  97:Generated_Source\PSoC5/DAC.c **** 	*/
+  98:Generated_Source\PSoC5/DAC.c **** 	(void)CyDmaChEnable(DAC_Wave1Chan, 1u);
+  39              		.loc 1 98 0
+  40 0006 074C     		ldr	r4, .L3
+  41 0008 0121     		movs	r1, #1
+  42 000a 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+  43 000c FFF7FEFF 		bl	CyDmaChEnable
+  44              	.LVL1:
+  99:Generated_Source\PSoC5/DAC.c **** 	(void)CyDmaChEnable(DAC_Wave2Chan, 1u);
+  45              		.loc 1 99 0
+  46 0010 0121     		movs	r1, #1
+  47 0012 6078     		ldrb	r0, [r4, #1]	@ zero_extendqisi2
+  48 0014 FFF7FEFF 		bl	CyDmaChEnable
+  49              	.LVL2:
+ 100:Generated_Source\PSoC5/DAC.c **** 	
+ 101:Generated_Source\PSoC5/DAC.c **** 	/* set the initial value */
+ 102:Generated_Source\PSoC5/DAC.c **** 	DAC_SetValue(0u);
+  50              		.loc 1 102 0
+  51 0018 0020     		movs	r0, #0
+  52 001a FFF7FEFF 		bl	DAC_VDAC8_SetValue
+  53              	.LVL3:
+ 103:Generated_Source\PSoC5/DAC.c **** 	
+ 104:Generated_Source\PSoC5/DAC.c **** 	#if(DAC_CLOCK_SRC == DAC_CLOCK_INT)  	
+ 105:Generated_Source\PSoC5/DAC.c **** 	   DAC_DacClk_Start();
+  54              		.loc 1 105 0
+  55 001e FFF7FEFF 		bl	DAC_DacClk_Start
+  56              	.LVL4:
+  57 0022 10BD     		pop	{r4, pc}
+  58              	.L4:
+  59              		.align	2
+  60              	.L3:
+  61 0024 00000000 		.word	.LANCHOR0
+  62              		.cfi_endproc
+  63              	.LFE1:
+  64              		.size	DAC_Enable, .-DAC_Enable
+  65              		.section	.text.DAC_Stop,"ax",%progbits
+  66              		.align	2
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 4
+
+
+  67              		.global	DAC_Stop
+  68              		.thumb
+  69              		.thumb_func
+  70              		.type	DAC_Stop, %function
+  71              	DAC_Stop:
+  72              	.LFB4:
+ 106:Generated_Source\PSoC5/DAC.c **** 	#endif /* DAC_CLOCK_SRC == DAC_CLOCK_INT */
+ 107:Generated_Source\PSoC5/DAC.c **** }
+ 108:Generated_Source\PSoC5/DAC.c **** 
+ 109:Generated_Source\PSoC5/DAC.c **** 
+ 110:Generated_Source\PSoC5/DAC.c **** /*******************************************************************************
+ 111:Generated_Source\PSoC5/DAC.c **** * Function Name: DAC_Start
+ 112:Generated_Source\PSoC5/DAC.c **** ********************************************************************************
+ 113:Generated_Source\PSoC5/DAC.c **** *
+ 114:Generated_Source\PSoC5/DAC.c **** * Summary:
+ 115:Generated_Source\PSoC5/DAC.c **** *  The start function initializes the voltage DAC with the default values, 
+ 116:Generated_Source\PSoC5/DAC.c **** *  and sets the power to the given level.  A power level of 0, is the same as 
+ 117:Generated_Source\PSoC5/DAC.c **** *  executing the stop function.
+ 118:Generated_Source\PSoC5/DAC.c **** *
+ 119:Generated_Source\PSoC5/DAC.c **** * Parameters:  
+ 120:Generated_Source\PSoC5/DAC.c **** *  None
+ 121:Generated_Source\PSoC5/DAC.c **** *
+ 122:Generated_Source\PSoC5/DAC.c **** * Return: 
+ 123:Generated_Source\PSoC5/DAC.c **** *  None
+ 124:Generated_Source\PSoC5/DAC.c **** *
+ 125:Generated_Source\PSoC5/DAC.c **** * Reentrant:
+ 126:Generated_Source\PSoC5/DAC.c **** *  No
+ 127:Generated_Source\PSoC5/DAC.c **** *
+ 128:Generated_Source\PSoC5/DAC.c **** *******************************************************************************/
+ 129:Generated_Source\PSoC5/DAC.c **** void DAC_Start(void) 
+ 130:Generated_Source\PSoC5/DAC.c **** {
+ 131:Generated_Source\PSoC5/DAC.c **** 	/* If not Initialized then initialize all required hardware and software */
+ 132:Generated_Source\PSoC5/DAC.c **** 	if(DAC_initVar == 0u)
+ 133:Generated_Source\PSoC5/DAC.c **** 	{
+ 134:Generated_Source\PSoC5/DAC.c **** 		DAC_Init();
+ 135:Generated_Source\PSoC5/DAC.c **** 		DAC_initVar = 1u;
+ 136:Generated_Source\PSoC5/DAC.c **** 	}
+ 137:Generated_Source\PSoC5/DAC.c **** 	
+ 138:Generated_Source\PSoC5/DAC.c **** 	DAC_Enable();
+ 139:Generated_Source\PSoC5/DAC.c **** }
+ 140:Generated_Source\PSoC5/DAC.c **** 
+ 141:Generated_Source\PSoC5/DAC.c **** 
+ 142:Generated_Source\PSoC5/DAC.c **** /*******************************************************************************
+ 143:Generated_Source\PSoC5/DAC.c **** * Function Name: DAC_StartEx
+ 144:Generated_Source\PSoC5/DAC.c **** ********************************************************************************
+ 145:Generated_Source\PSoC5/DAC.c **** *
+ 146:Generated_Source\PSoC5/DAC.c **** * Summary:
+ 147:Generated_Source\PSoC5/DAC.c **** *  The StartEx function sets pointers and sizes for both waveforms
+ 148:Generated_Source\PSoC5/DAC.c **** *  and then starts the component.
+ 149:Generated_Source\PSoC5/DAC.c **** *
+ 150:Generated_Source\PSoC5/DAC.c **** * Parameters:  
+ 151:Generated_Source\PSoC5/DAC.c **** *   uint8 * wavePtr1:     Pointer to the waveform 1 array.
+ 152:Generated_Source\PSoC5/DAC.c **** *   uint16  sampleSize1:  The amount of samples in the waveform 1.
+ 153:Generated_Source\PSoC5/DAC.c **** *   uint8 * wavePtr2:     Pointer to the waveform 2 array.
+ 154:Generated_Source\PSoC5/DAC.c **** *   uint16  sampleSize2:  The amount of samples in the waveform 2.
+ 155:Generated_Source\PSoC5/DAC.c **** *
+ 156:Generated_Source\PSoC5/DAC.c **** * Return: 
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 5
+
+
+ 157:Generated_Source\PSoC5/DAC.c **** *  None
+ 158:Generated_Source\PSoC5/DAC.c **** *
+ 159:Generated_Source\PSoC5/DAC.c **** * Reentrant:
+ 160:Generated_Source\PSoC5/DAC.c **** *  No
+ 161:Generated_Source\PSoC5/DAC.c **** *
+ 162:Generated_Source\PSoC5/DAC.c **** *******************************************************************************/
+ 163:Generated_Source\PSoC5/DAC.c **** void DAC_StartEx(const uint8 * wavePtr1, uint16 sampleSize1, const uint8 * wavePtr2, uint16 sampleS
+ 164:Generated_Source\PSoC5/DAC.c **** 
+ 165:Generated_Source\PSoC5/DAC.c **** {
+ 166:Generated_Source\PSoC5/DAC.c **** 	DAC_Wave1Setup(wavePtr1, sampleSize1);
+ 167:Generated_Source\PSoC5/DAC.c **** 	DAC_Wave2Setup(wavePtr2, sampleSize2);
+ 168:Generated_Source\PSoC5/DAC.c **** 	DAC_Start();
+ 169:Generated_Source\PSoC5/DAC.c **** }
+ 170:Generated_Source\PSoC5/DAC.c **** 
+ 171:Generated_Source\PSoC5/DAC.c **** 
+ 172:Generated_Source\PSoC5/DAC.c **** /*******************************************************************************
+ 173:Generated_Source\PSoC5/DAC.c **** * Function Name: DAC_Stop
+ 174:Generated_Source\PSoC5/DAC.c **** ********************************************************************************
+ 175:Generated_Source\PSoC5/DAC.c **** *
+ 176:Generated_Source\PSoC5/DAC.c **** * Summary:
+ 177:Generated_Source\PSoC5/DAC.c **** *  Stops the clock (if internal), disables the DMA channels
+ 178:Generated_Source\PSoC5/DAC.c **** *  and powers down the DAC.
+ 179:Generated_Source\PSoC5/DAC.c **** *
+ 180:Generated_Source\PSoC5/DAC.c **** * Parameters:  
+ 181:Generated_Source\PSoC5/DAC.c **** *  None  
+ 182:Generated_Source\PSoC5/DAC.c **** *
+ 183:Generated_Source\PSoC5/DAC.c **** * Return: 
+ 184:Generated_Source\PSoC5/DAC.c **** *  None
+ 185:Generated_Source\PSoC5/DAC.c **** *
+ 186:Generated_Source\PSoC5/DAC.c **** *******************************************************************************/
+ 187:Generated_Source\PSoC5/DAC.c **** void DAC_Stop(void) 
+ 188:Generated_Source\PSoC5/DAC.c **** {
+  73              		.loc 1 188 0
+  74              		.cfi_startproc
+  75              		@ args = 0, pretend = 0, frame = 0
+  76              		@ frame_needed = 0, uses_anonymous_args = 0
+  77 0000 10B5     		push	{r4, lr}
+  78              		.cfi_def_cfa_offset 8
+  79              		.cfi_offset 4, -8
+  80              		.cfi_offset 14, -4
+ 189:Generated_Source\PSoC5/DAC.c **** 	/* Turn off internal clock, if one present */
+ 190:Generated_Source\PSoC5/DAC.c **** 	#if(DAC_CLOCK_SRC == DAC_CLOCK_INT)  	
+ 191:Generated_Source\PSoC5/DAC.c **** 	   DAC_DacClk_Stop();
+  81              		.loc 1 191 0
+  82 0002 FFF7FEFF 		bl	DAC_DacClk_Stop
+  83              	.LVL5:
+ 192:Generated_Source\PSoC5/DAC.c **** 	#endif /* DAC_CLOCK_SRC == DAC_CLOCK_INT */
+ 193:Generated_Source\PSoC5/DAC.c **** 	
+ 194:Generated_Source\PSoC5/DAC.c **** 	/* Disble DMA channels */
+ 195:Generated_Source\PSoC5/DAC.c **** 	(void)CyDmaChDisable(DAC_Wave1Chan);
+  84              		.loc 1 195 0
+  85 0006 054C     		ldr	r4, .L7
+  86 0008 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+  87 000a FFF7FEFF 		bl	CyDmaChDisable
+  88              	.LVL6:
+ 196:Generated_Source\PSoC5/DAC.c **** 	(void)CyDmaChDisable(DAC_Wave2Chan);
+  89              		.loc 1 196 0
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 6
+
+
+  90 000e 6078     		ldrb	r0, [r4, #1]	@ zero_extendqisi2
+  91 0010 FFF7FEFF 		bl	CyDmaChDisable
+  92              	.LVL7:
+ 197:Generated_Source\PSoC5/DAC.c **** 
+ 198:Generated_Source\PSoC5/DAC.c **** 	/* Disable power to DAC */
+ 199:Generated_Source\PSoC5/DAC.c **** 	DAC_VDAC8_Stop();
+  93              		.loc 1 199 0
+  94 0014 FFF7FEFF 		bl	DAC_VDAC8_Stop
+  95              	.LVL8:
+  96 0018 10BD     		pop	{r4, pc}
+  97              	.L8:
+  98 001a 00BF     		.align	2
+  99              	.L7:
+ 100 001c 00000000 		.word	.LANCHOR0
+ 101              		.cfi_endproc
+ 102              	.LFE4:
+ 103              		.size	DAC_Stop, .-DAC_Stop
+ 104              		.section	.text.DAC_Wave1Setup,"ax",%progbits
+ 105              		.align	2
+ 106              		.global	DAC_Wave1Setup
+ 107              		.thumb
+ 108              		.thumb_func
+ 109              		.type	DAC_Wave1Setup, %function
+ 110              	DAC_Wave1Setup:
+ 111              	.LFB5:
+ 200:Generated_Source\PSoC5/DAC.c **** }
+ 201:Generated_Source\PSoC5/DAC.c **** 
+ 202:Generated_Source\PSoC5/DAC.c **** 
+ 203:Generated_Source\PSoC5/DAC.c **** /*******************************************************************************
+ 204:Generated_Source\PSoC5/DAC.c **** * Function Name: DAC_Wave1Setup
+ 205:Generated_Source\PSoC5/DAC.c **** ********************************************************************************
+ 206:Generated_Source\PSoC5/DAC.c **** *
+ 207:Generated_Source\PSoC5/DAC.c **** * Summary:
+ 208:Generated_Source\PSoC5/DAC.c **** *  Sets pointer and size for waveform 1.                                    
+ 209:Generated_Source\PSoC5/DAC.c **** *
+ 210:Generated_Source\PSoC5/DAC.c **** * Parameters:  
+ 211:Generated_Source\PSoC5/DAC.c **** *  uint8 * WavePtr:     Pointer to the waveform array.
+ 212:Generated_Source\PSoC5/DAC.c **** *  uint16  SampleSize:  The amount of samples in the waveform.
+ 213:Generated_Source\PSoC5/DAC.c **** *
+ 214:Generated_Source\PSoC5/DAC.c **** * Return: 
+ 215:Generated_Source\PSoC5/DAC.c **** *  None 
+ 216:Generated_Source\PSoC5/DAC.c **** *
+ 217:Generated_Source\PSoC5/DAC.c **** *******************************************************************************/
+ 218:Generated_Source\PSoC5/DAC.c **** void DAC_Wave1Setup(const uint8 * wavePtr, uint16 sampleSize)
+ 219:Generated_Source\PSoC5/DAC.c **** 
+ 220:Generated_Source\PSoC5/DAC.c **** {
+ 112              		.loc 1 220 0
+ 113              		.cfi_startproc
+ 114              		@ args = 0, pretend = 0, frame = 0
+ 115              		@ frame_needed = 0, uses_anonymous_args = 0
+ 116              	.LVL9:
+ 117 0000 70B5     		push	{r4, r5, r6, lr}
+ 118              		.cfi_def_cfa_offset 16
+ 119              		.cfi_offset 4, -16
+ 120              		.cfi_offset 5, -12
+ 121              		.cfi_offset 6, -8
+ 122              		.cfi_offset 14, -4
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 7
+
+
+ 123 0002 0546     		mov	r5, r0
+ 124 0004 0E46     		mov	r6, r1
+ 221:Generated_Source\PSoC5/DAC.c **** 	#if (CY_PSOC3)
+ 222:Generated_Source\PSoC5/DAC.c **** 		uint16 memoryType; /* determining the source memory type */
+ 223:Generated_Source\PSoC5/DAC.c **** 		memoryType = (DAC_HI16FLASHPTR == HI16(wavePtr)) ? HI16(CYDEV_FLS_BASE) : HI16(CYDEV_SRAM_BASE);
+ 224:Generated_Source\PSoC5/DAC.c **** 		
+ 225:Generated_Source\PSoC5/DAC.c **** 		DAC_Wave1Chan = DAC_Wave1_DMA_DmaInitialize(
+ 226:Generated_Source\PSoC5/DAC.c **** 		DAC_Wave1_DMA_BYTES_PER_BURST, DAC_Wave1_DMA_REQUEST_PER_BURST,
+ 227:Generated_Source\PSoC5/DAC.c **** 		memoryType, HI16(CYDEV_PERIPH_BASE));
+ 228:Generated_Source\PSoC5/DAC.c **** 	#else /* PSoC 5 */
+ 229:Generated_Source\PSoC5/DAC.c **** 		DAC_Wave1Chan = DAC_Wave1_DMA_DmaInitialize(
+ 125              		.loc 1 229 0
+ 126 0006 4FF48043 		mov	r3, #16384
+ 127 000a 020C     		lsrs	r2, r0, #16
+ 128 000c 0121     		movs	r1, #1
+ 129              	.LVL10:
+ 130 000e 0846     		mov	r0, r1
+ 131              	.LVL11:
+ 132 0010 FFF7FEFF 		bl	DAC_Wave1_DMA_DmaInitialize
+ 133              	.LVL12:
+ 134 0014 094C     		ldr	r4, .L11
+ 135 0016 2070     		strb	r0, [r4]
+ 230:Generated_Source\PSoC5/DAC.c **** 		DAC_Wave1_DMA_BYTES_PER_BURST, DAC_Wave1_DMA_REQUEST_PER_BURST,
+ 231:Generated_Source\PSoC5/DAC.c **** 		HI16(wavePtr), HI16(DAC_DAC8__D));
+ 232:Generated_Source\PSoC5/DAC.c **** 	#endif /* CY_PSOC3 */
+ 233:Generated_Source\PSoC5/DAC.c **** 	
+ 234:Generated_Source\PSoC5/DAC.c **** 	/*
+ 235:Generated_Source\PSoC5/DAC.c **** 	* TD is looping on itself. 
+ 236:Generated_Source\PSoC5/DAC.c ****     * Increment the source address, but not the destination address. 
+ 237:Generated_Source\PSoC5/DAC.c **** 	*/
+ 238:Generated_Source\PSoC5/DAC.c **** 	(void)CyDmaTdSetConfiguration(DAC_Wave1TD, sampleSize, DAC_Wave1TD, 
+ 136              		.loc 1 238 0
+ 137 0018 A078     		ldrb	r0, [r4, #2]	@ zero_extendqisi2
+ 138 001a 0123     		movs	r3, #1
+ 139 001c 0246     		mov	r2, r0
+ 140 001e 3146     		mov	r1, r6
+ 141 0020 FFF7FEFF 		bl	CyDmaTdSetConfiguration
+ 142              	.LVL13:
+ 239:Generated_Source\PSoC5/DAC.c ****                                     (uint8)CY_DMA_TD_INC_SRC_ADR | (uint8)DAC_Wave1_DMA__TD_TERMOUT
+ 240:Generated_Source\PSoC5/DAC.c **** 	
+ 241:Generated_Source\PSoC5/DAC.c **** 	/* Set the TD source and destination address */
+ 242:Generated_Source\PSoC5/DAC.c **** 	(void)CyDmaTdSetAddress(DAC_Wave1TD, LO16((uint32)wavePtr), LO16(DAC_DAC8__D));
+ 143              		.loc 1 242 0
+ 144 0024 4FF4B742 		mov	r2, #23424
+ 145 0028 A9B2     		uxth	r1, r5
+ 146 002a A078     		ldrb	r0, [r4, #2]	@ zero_extendqisi2
+ 147 002c FFF7FEFF 		bl	CyDmaTdSetAddress
+ 148              	.LVL14:
+ 243:Generated_Source\PSoC5/DAC.c **** 	
+ 244:Generated_Source\PSoC5/DAC.c **** 	/* Associate the TD with the channel */
+ 245:Generated_Source\PSoC5/DAC.c **** 	(void)CyDmaChSetInitialTd(DAC_Wave1Chan, DAC_Wave1TD);
+ 149              		.loc 1 245 0
+ 150 0030 A178     		ldrb	r1, [r4, #2]	@ zero_extendqisi2
+ 151 0032 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 152 0034 FFF7FEFF 		bl	CyDmaChSetInitialTd
+ 153              	.LVL15:
+ 154 0038 70BD     		pop	{r4, r5, r6, pc}
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 8
+
+
+ 155              	.LVL16:
+ 156              	.L12:
+ 157 003a 00BF     		.align	2
+ 158              	.L11:
+ 159 003c 00000000 		.word	.LANCHOR0
+ 160              		.cfi_endproc
+ 161              	.LFE5:
+ 162              		.size	DAC_Wave1Setup, .-DAC_Wave1Setup
+ 163              		.section	.text.DAC_Wave2Setup,"ax",%progbits
+ 164              		.align	2
+ 165              		.global	DAC_Wave2Setup
+ 166              		.thumb
+ 167              		.thumb_func
+ 168              		.type	DAC_Wave2Setup, %function
+ 169              	DAC_Wave2Setup:
+ 170              	.LFB6:
+ 246:Generated_Source\PSoC5/DAC.c **** }
+ 247:Generated_Source\PSoC5/DAC.c **** 
+ 248:Generated_Source\PSoC5/DAC.c **** 
+ 249:Generated_Source\PSoC5/DAC.c **** /*******************************************************************************
+ 250:Generated_Source\PSoC5/DAC.c **** * Function Name: DAC_Wave2Setup
+ 251:Generated_Source\PSoC5/DAC.c **** ********************************************************************************
+ 252:Generated_Source\PSoC5/DAC.c **** *
+ 253:Generated_Source\PSoC5/DAC.c **** * Summary:
+ 254:Generated_Source\PSoC5/DAC.c **** *  Sets pointer and size for waveform 2.                                    
+ 255:Generated_Source\PSoC5/DAC.c **** *
+ 256:Generated_Source\PSoC5/DAC.c **** * Parameters:  
+ 257:Generated_Source\PSoC5/DAC.c **** *  uint8 * WavePtr:     Pointer to the waveform array.
+ 258:Generated_Source\PSoC5/DAC.c **** *  uint16  SampleSize:  The amount of samples in the waveform.
+ 259:Generated_Source\PSoC5/DAC.c **** *
+ 260:Generated_Source\PSoC5/DAC.c **** * Return: 
+ 261:Generated_Source\PSoC5/DAC.c **** *  None
+ 262:Generated_Source\PSoC5/DAC.c **** *
+ 263:Generated_Source\PSoC5/DAC.c **** *******************************************************************************/
+ 264:Generated_Source\PSoC5/DAC.c **** void DAC_Wave2Setup(const uint8 * wavePtr, uint16 sampleSize)
+ 265:Generated_Source\PSoC5/DAC.c ****  
+ 266:Generated_Source\PSoC5/DAC.c **** {
+ 171              		.loc 1 266 0
+ 172              		.cfi_startproc
+ 173              		@ args = 0, pretend = 0, frame = 0
+ 174              		@ frame_needed = 0, uses_anonymous_args = 0
+ 175              	.LVL17:
+ 176 0000 70B5     		push	{r4, r5, r6, lr}
+ 177              		.cfi_def_cfa_offset 16
+ 178              		.cfi_offset 4, -16
+ 179              		.cfi_offset 5, -12
+ 180              		.cfi_offset 6, -8
+ 181              		.cfi_offset 14, -4
+ 182 0002 0546     		mov	r5, r0
+ 183 0004 0E46     		mov	r6, r1
+ 267:Generated_Source\PSoC5/DAC.c **** 	#if (CY_PSOC3)
+ 268:Generated_Source\PSoC5/DAC.c **** 		uint16 memoryType; /* determining the source memory type */
+ 269:Generated_Source\PSoC5/DAC.c **** 		memoryType = (DAC_HI16FLASHPTR == HI16(wavePtr)) ? HI16(CYDEV_FLS_BASE) : HI16(CYDEV_SRAM_BASE);
+ 270:Generated_Source\PSoC5/DAC.c **** 			
+ 271:Generated_Source\PSoC5/DAC.c **** 		DAC_Wave2Chan = DAC_Wave2_DMA_DmaInitialize(
+ 272:Generated_Source\PSoC5/DAC.c **** 		DAC_Wave2_DMA_BYTES_PER_BURST, DAC_Wave2_DMA_REQUEST_PER_BURST,
+ 273:Generated_Source\PSoC5/DAC.c **** 		memoryType, HI16(CYDEV_PERIPH_BASE));
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 9
+
+
+ 274:Generated_Source\PSoC5/DAC.c **** 	#else /* PSoC 5 */
+ 275:Generated_Source\PSoC5/DAC.c **** 		DAC_Wave2Chan = DAC_Wave2_DMA_DmaInitialize(
+ 184              		.loc 1 275 0
+ 185 0006 4FF48043 		mov	r3, #16384
+ 186 000a 020C     		lsrs	r2, r0, #16
+ 187 000c 0121     		movs	r1, #1
+ 188              	.LVL18:
+ 189 000e 0846     		mov	r0, r1
+ 190              	.LVL19:
+ 191 0010 FFF7FEFF 		bl	DAC_Wave2_DMA_DmaInitialize
+ 192              	.LVL20:
+ 193 0014 094C     		ldr	r4, .L15
+ 194 0016 6070     		strb	r0, [r4, #1]
+ 276:Generated_Source\PSoC5/DAC.c **** 		DAC_Wave2_DMA_BYTES_PER_BURST, DAC_Wave2_DMA_REQUEST_PER_BURST,
+ 277:Generated_Source\PSoC5/DAC.c **** 		HI16(wavePtr), HI16(DAC_DAC8__D));
+ 278:Generated_Source\PSoC5/DAC.c **** 	#endif /* CY_PSOC3 */
+ 279:Generated_Source\PSoC5/DAC.c **** 	
+ 280:Generated_Source\PSoC5/DAC.c **** 	/*
+ 281:Generated_Source\PSoC5/DAC.c **** 	* TD is looping on itself. 
+ 282:Generated_Source\PSoC5/DAC.c **** 	* Increment the source address, but not the destination address. 
+ 283:Generated_Source\PSoC5/DAC.c **** 	*/
+ 284:Generated_Source\PSoC5/DAC.c **** 	(void)CyDmaTdSetConfiguration(DAC_Wave2TD, sampleSize, DAC_Wave2TD, 
+ 195              		.loc 1 284 0
+ 196 0018 E078     		ldrb	r0, [r4, #3]	@ zero_extendqisi2
+ 197 001a 0123     		movs	r3, #1
+ 198 001c 0246     		mov	r2, r0
+ 199 001e 3146     		mov	r1, r6
+ 200 0020 FFF7FEFF 		bl	CyDmaTdSetConfiguration
+ 201              	.LVL21:
+ 285:Generated_Source\PSoC5/DAC.c ****                                     (uint8)CY_DMA_TD_INC_SRC_ADR | (uint8)DAC_Wave2_DMA__TD_TERMOUT
+ 286:Generated_Source\PSoC5/DAC.c **** 	
+ 287:Generated_Source\PSoC5/DAC.c **** 	/* Set the TD source and destination address */
+ 288:Generated_Source\PSoC5/DAC.c **** 	(void)CyDmaTdSetAddress(DAC_Wave2TD, LO16((uint32)wavePtr), LO16(DAC_DAC8__D));
+ 202              		.loc 1 288 0
+ 203 0024 4FF4B742 		mov	r2, #23424
+ 204 0028 A9B2     		uxth	r1, r5
+ 205 002a E078     		ldrb	r0, [r4, #3]	@ zero_extendqisi2
+ 206 002c FFF7FEFF 		bl	CyDmaTdSetAddress
+ 207              	.LVL22:
+ 289:Generated_Source\PSoC5/DAC.c **** 	
+ 290:Generated_Source\PSoC5/DAC.c **** 	/* Associate the TD with the channel */
+ 291:Generated_Source\PSoC5/DAC.c **** 	(void)CyDmaChSetInitialTd(DAC_Wave2Chan, DAC_Wave2TD);
+ 208              		.loc 1 291 0
+ 209 0030 E178     		ldrb	r1, [r4, #3]	@ zero_extendqisi2
+ 210 0032 6078     		ldrb	r0, [r4, #1]	@ zero_extendqisi2
+ 211 0034 FFF7FEFF 		bl	CyDmaChSetInitialTd
+ 212              	.LVL23:
+ 213 0038 70BD     		pop	{r4, r5, r6, pc}
+ 214              	.LVL24:
+ 215              	.L16:
+ 216 003a 00BF     		.align	2
+ 217              	.L15:
+ 218 003c 00000000 		.word	.LANCHOR0
+ 219              		.cfi_endproc
+ 220              	.LFE6:
+ 221              		.size	DAC_Wave2Setup, .-DAC_Wave2Setup
+ 222              		.section	.text.DAC_Init,"ax",%progbits
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 10
+
+
+ 223              		.align	2
+ 224              		.global	DAC_Init
+ 225              		.thumb
+ 226              		.thumb_func
+ 227              		.type	DAC_Init, %function
+ 228              	DAC_Init:
+ 229              	.LFB0:
+  44:Generated_Source\PSoC5/DAC.c **** 	DAC_VDAC8_Init();
+ 230              		.loc 1 44 0
+ 231              		.cfi_startproc
+ 232              		@ args = 0, pretend = 0, frame = 0
+ 233              		@ frame_needed = 0, uses_anonymous_args = 0
+ 234 0000 10B5     		push	{r4, lr}
+ 235              		.cfi_def_cfa_offset 8
+ 236              		.cfi_offset 4, -8
+ 237              		.cfi_offset 14, -4
+  45:Generated_Source\PSoC5/DAC.c **** 	DAC_VDAC8_SetSpeed(DAC_HIGHSPEED);
+ 238              		.loc 1 45 0
+ 239 0002 FFF7FEFF 		bl	DAC_VDAC8_Init
+ 240              	.LVL25:
+  46:Generated_Source\PSoC5/DAC.c **** 	DAC_VDAC8_SetRange(DAC_DAC_RANGE);
+ 241              		.loc 1 46 0
+ 242 0006 0220     		movs	r0, #2
+ 243 0008 FFF7FEFF 		bl	DAC_VDAC8_SetSpeed
+ 244              	.LVL26:
+  47:Generated_Source\PSoC5/DAC.c **** 
+ 245              		.loc 1 47 0
+ 246 000c 0420     		movs	r0, #4
+ 247 000e FFF7FEFF 		bl	DAC_VDAC8_SetRange
+ 248              	.LVL27:
+  58:Generated_Source\PSoC5/DAC.c **** 	DAC_Wave2TD = CyDmaTdAllocate();
+ 249              		.loc 1 58 0
+ 250 0012 FFF7FEFF 		bl	CyDmaTdAllocate
+ 251              	.LVL28:
+ 252 0016 084C     		ldr	r4, .L19
+ 253 0018 A070     		strb	r0, [r4, #2]
+  59:Generated_Source\PSoC5/DAC.c **** 	
+ 254              		.loc 1 59 0
+ 255 001a FFF7FEFF 		bl	CyDmaTdAllocate
+ 256              	.LVL29:
+ 257 001e E070     		strb	r0, [r4, #3]
+  62:Generated_Source\PSoC5/DAC.c **** 	DAC_Wave2Setup(DAC_wave2, DAC_WAVE2_LENGTH) ;
+ 258              		.loc 1 62 0
+ 259 0020 064C     		ldr	r4, .L19+4
+ 260 0022 4FF47A71 		mov	r1, #1000
+ 261 0026 2046     		mov	r0, r4
+ 262 0028 FFF7FEFF 		bl	DAC_Wave1Setup
+ 263              	.LVL30:
+  63:Generated_Source\PSoC5/DAC.c **** 	
+ 264              		.loc 1 63 0
+ 265 002c 6421     		movs	r1, #100
+ 266 002e 04F57A70 		add	r0, r4, #1000
+ 267 0032 FFF7FEFF 		bl	DAC_Wave2Setup
+ 268              	.LVL31:
+ 269 0036 10BD     		pop	{r4, pc}
+ 270              	.L20:
+ 271              		.align	2
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 11
+
+
+ 272              	.L19:
+ 273 0038 00000000 		.word	.LANCHOR0
+ 274 003c 00000000 		.word	.LANCHOR1
+ 275              		.cfi_endproc
+ 276              	.LFE0:
+ 277              		.size	DAC_Init, .-DAC_Init
+ 278              		.section	.text.DAC_Start,"ax",%progbits
+ 279              		.align	2
+ 280              		.global	DAC_Start
+ 281              		.thumb
+ 282              		.thumb_func
+ 283              		.type	DAC_Start, %function
+ 284              	DAC_Start:
+ 285              	.LFB2:
+ 130:Generated_Source\PSoC5/DAC.c **** 	/* If not Initialized then initialize all required hardware and software */
+ 286              		.loc 1 130 0
+ 287              		.cfi_startproc
+ 288              		@ args = 0, pretend = 0, frame = 0
+ 289              		@ frame_needed = 0, uses_anonymous_args = 0
+ 290 0000 08B5     		push	{r3, lr}
+ 291              		.cfi_def_cfa_offset 8
+ 292              		.cfi_offset 3, -8
+ 293              		.cfi_offset 14, -4
+ 132:Generated_Source\PSoC5/DAC.c **** 	{
+ 294              		.loc 1 132 0
+ 295 0002 054B     		ldr	r3, .L24
+ 296 0004 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 297 0006 23B9     		cbnz	r3, .L22
+ 134:Generated_Source\PSoC5/DAC.c **** 		DAC_initVar = 1u;
+ 298              		.loc 1 134 0
+ 299 0008 FFF7FEFF 		bl	DAC_Init
+ 300              	.LVL32:
+ 135:Generated_Source\PSoC5/DAC.c **** 	}
+ 301              		.loc 1 135 0
+ 302 000c 0122     		movs	r2, #1
+ 303 000e 024B     		ldr	r3, .L24
+ 304 0010 1A71     		strb	r2, [r3, #4]
+ 305              	.L22:
+ 138:Generated_Source\PSoC5/DAC.c **** }
+ 306              		.loc 1 138 0
+ 307 0012 FFF7FEFF 		bl	DAC_Enable
+ 308              	.LVL33:
+ 309 0016 08BD     		pop	{r3, pc}
+ 310              	.L25:
+ 311              		.align	2
+ 312              	.L24:
+ 313 0018 00000000 		.word	.LANCHOR0
+ 314              		.cfi_endproc
+ 315              	.LFE2:
+ 316              		.size	DAC_Start, .-DAC_Start
+ 317              		.section	.text.DAC_StartEx,"ax",%progbits
+ 318              		.align	2
+ 319              		.global	DAC_StartEx
+ 320              		.thumb
+ 321              		.thumb_func
+ 322              		.type	DAC_StartEx, %function
+ 323              	DAC_StartEx:
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 12
+
+
+ 324              	.LFB3:
+ 165:Generated_Source\PSoC5/DAC.c **** 	DAC_Wave1Setup(wavePtr1, sampleSize1);
+ 325              		.loc 1 165 0
+ 326              		.cfi_startproc
+ 327              		@ args = 0, pretend = 0, frame = 0
+ 328              		@ frame_needed = 0, uses_anonymous_args = 0
+ 329              	.LVL34:
+ 330 0000 38B5     		push	{r3, r4, r5, lr}
+ 331              		.cfi_def_cfa_offset 16
+ 332              		.cfi_offset 3, -16
+ 333              		.cfi_offset 4, -12
+ 334              		.cfi_offset 5, -8
+ 335              		.cfi_offset 14, -4
+ 336 0002 1446     		mov	r4, r2
+ 337 0004 1D46     		mov	r5, r3
+ 166:Generated_Source\PSoC5/DAC.c **** 	DAC_Wave2Setup(wavePtr2, sampleSize2);
+ 338              		.loc 1 166 0
+ 339 0006 FFF7FEFF 		bl	DAC_Wave1Setup
+ 340              	.LVL35:
+ 167:Generated_Source\PSoC5/DAC.c **** 	DAC_Start();
+ 341              		.loc 1 167 0
+ 342 000a 2946     		mov	r1, r5
+ 343 000c 2046     		mov	r0, r4
+ 344 000e FFF7FEFF 		bl	DAC_Wave2Setup
+ 345              	.LVL36:
+ 168:Generated_Source\PSoC5/DAC.c **** }
+ 346              		.loc 1 168 0
+ 347 0012 FFF7FEFF 		bl	DAC_Start
+ 348              	.LVL37:
+ 349 0016 38BD     		pop	{r3, r4, r5, pc}
+ 350              		.cfi_endproc
+ 351              	.LFE3:
+ 352              		.size	DAC_StartEx, .-DAC_StartEx
+ 353              		.global	DAC_wave2
+ 354              		.global	DAC_wave1
+ 355              		.global	DAC_initVar
+ 356              		.section	.rodata
+ 357              		.align	2
+ 358              		.set	.LANCHOR1,. + 0
+ 359              		.type	DAC_wave1, %object
+ 360              		.size	DAC_wave1, 1000
+ 361              	DAC_wave1:
+ 362 0000 80       		.byte	-128
+ 363 0001 80       		.byte	-128
+ 364 0002 81       		.byte	-127
+ 365 0003 81       		.byte	-127
+ 366 0004 82       		.byte	-126
+ 367 0005 82       		.byte	-126
+ 368 0006 83       		.byte	-125
+ 369 0007 84       		.byte	-124
+ 370 0008 84       		.byte	-124
+ 371 0009 85       		.byte	-123
+ 372 000a 85       		.byte	-123
+ 373 000b 86       		.byte	-122
+ 374 000c 87       		.byte	-121
+ 375 000d 87       		.byte	-121
+ 376 000e 88       		.byte	-120
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 13
+
+
+ 377 000f 88       		.byte	-120
+ 378 0010 89       		.byte	-119
+ 379 0011 89       		.byte	-119
+ 380 0012 8A       		.byte	-118
+ 381 0013 8B       		.byte	-117
+ 382 0014 8B       		.byte	-117
+ 383 0015 8C       		.byte	-116
+ 384 0016 8C       		.byte	-116
+ 385 0017 8D       		.byte	-115
+ 386 0018 8E       		.byte	-114
+ 387 0019 8E       		.byte	-114
+ 388 001a 8F       		.byte	-113
+ 389 001b 8F       		.byte	-113
+ 390 001c 90       		.byte	-112
+ 391 001d 90       		.byte	-112
+ 392 001e 91       		.byte	-111
+ 393 001f 92       		.byte	-110
+ 394 0020 92       		.byte	-110
+ 395 0021 93       		.byte	-109
+ 396 0022 93       		.byte	-109
+ 397 0023 94       		.byte	-108
+ 398 0024 95       		.byte	-107
+ 399 0025 95       		.byte	-107
+ 400 0026 96       		.byte	-106
+ 401 0027 96       		.byte	-106
+ 402 0028 97       		.byte	-105
+ 403 0029 97       		.byte	-105
+ 404 002a 98       		.byte	-104
+ 405 002b 99       		.byte	-103
+ 406 002c 99       		.byte	-103
+ 407 002d 9A       		.byte	-102
+ 408 002e 9A       		.byte	-102
+ 409 002f 9B       		.byte	-101
+ 410 0030 9B       		.byte	-101
+ 411 0031 9C       		.byte	-100
+ 412 0032 9C       		.byte	-100
+ 413 0033 9D       		.byte	-99
+ 414 0034 9E       		.byte	-98
+ 415 0035 9E       		.byte	-98
+ 416 0036 9F       		.byte	-97
+ 417 0037 9F       		.byte	-97
+ 418 0038 A0       		.byte	-96
+ 419 0039 A0       		.byte	-96
+ 420 003a A1       		.byte	-95
+ 421 003b A1       		.byte	-95
+ 422 003c A2       		.byte	-94
+ 423 003d A3       		.byte	-93
+ 424 003e A3       		.byte	-93
+ 425 003f A4       		.byte	-92
+ 426 0040 A4       		.byte	-92
+ 427 0041 A5       		.byte	-91
+ 428 0042 A5       		.byte	-91
+ 429 0043 A6       		.byte	-90
+ 430 0044 A6       		.byte	-90
+ 431 0045 A7       		.byte	-89
+ 432 0046 A7       		.byte	-89
+ 433 0047 A8       		.byte	-88
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 14
+
+
+ 434 0048 A8       		.byte	-88
+ 435 0049 A9       		.byte	-87
+ 436 004a AA       		.byte	-86
+ 437 004b AA       		.byte	-86
+ 438 004c AB       		.byte	-85
+ 439 004d AB       		.byte	-85
+ 440 004e AC       		.byte	-84
+ 441 004f AC       		.byte	-84
+ 442 0050 AD       		.byte	-83
+ 443 0051 AD       		.byte	-83
+ 444 0052 AE       		.byte	-82
+ 445 0053 AE       		.byte	-82
+ 446 0054 AF       		.byte	-81
+ 447 0055 AF       		.byte	-81
+ 448 0056 B0       		.byte	-80
+ 449 0057 B0       		.byte	-80
+ 450 0058 B1       		.byte	-79
+ 451 0059 B1       		.byte	-79
+ 452 005a B2       		.byte	-78
+ 453 005b B2       		.byte	-78
+ 454 005c B3       		.byte	-77
+ 455 005d B3       		.byte	-77
+ 456 005e B4       		.byte	-76
+ 457 005f B4       		.byte	-76
+ 458 0060 B5       		.byte	-75
+ 459 0061 B5       		.byte	-75
+ 460 0062 B6       		.byte	-74
+ 461 0063 B6       		.byte	-74
+ 462 0064 B7       		.byte	-73
+ 463 0065 B7       		.byte	-73
+ 464 0066 B8       		.byte	-72
+ 465 0067 B8       		.byte	-72
+ 466 0068 B8       		.byte	-72
+ 467 0069 B9       		.byte	-71
+ 468 006a B9       		.byte	-71
+ 469 006b BA       		.byte	-70
+ 470 006c BA       		.byte	-70
+ 471 006d BB       		.byte	-69
+ 472 006e BB       		.byte	-69
+ 473 006f BC       		.byte	-68
+ 474 0070 BC       		.byte	-68
+ 475 0071 BD       		.byte	-67
+ 476 0072 BD       		.byte	-67
+ 477 0073 BD       		.byte	-67
+ 478 0074 BE       		.byte	-66
+ 479 0075 BE       		.byte	-66
+ 480 0076 BF       		.byte	-65
+ 481 0077 BF       		.byte	-65
+ 482 0078 C0       		.byte	-64
+ 483 0079 C0       		.byte	-64
+ 484 007a C1       		.byte	-63
+ 485 007b C1       		.byte	-63
+ 486 007c C1       		.byte	-63
+ 487 007d C2       		.byte	-62
+ 488 007e C2       		.byte	-62
+ 489 007f C3       		.byte	-61
+ 490 0080 C3       		.byte	-61
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 15
+
+
+ 491 0081 C3       		.byte	-61
+ 492 0082 C4       		.byte	-60
+ 493 0083 C4       		.byte	-60
+ 494 0084 C5       		.byte	-59
+ 495 0085 C5       		.byte	-59
+ 496 0086 C5       		.byte	-59
+ 497 0087 C6       		.byte	-58
+ 498 0088 C6       		.byte	-58
+ 499 0089 C7       		.byte	-57
+ 500 008a C7       		.byte	-57
+ 501 008b C7       		.byte	-57
+ 502 008c C8       		.byte	-56
+ 503 008d C8       		.byte	-56
+ 504 008e C8       		.byte	-56
+ 505 008f C9       		.byte	-55
+ 506 0090 C9       		.byte	-55
+ 507 0091 CA       		.byte	-54
+ 508 0092 CA       		.byte	-54
+ 509 0093 CA       		.byte	-54
+ 510 0094 CB       		.byte	-53
+ 511 0095 CB       		.byte	-53
+ 512 0096 CB       		.byte	-53
+ 513 0097 CC       		.byte	-52
+ 514 0098 CC       		.byte	-52
+ 515 0099 CC       		.byte	-52
+ 516 009a CD       		.byte	-51
+ 517 009b CD       		.byte	-51
+ 518 009c CD       		.byte	-51
+ 519 009d CE       		.byte	-50
+ 520 009e CE       		.byte	-50
+ 521 009f CE       		.byte	-50
+ 522 00a0 CF       		.byte	-49
+ 523 00a1 CF       		.byte	-49
+ 524 00a2 CF       		.byte	-49
+ 525 00a3 D0       		.byte	-48
+ 526 00a4 D0       		.byte	-48
+ 527 00a5 D0       		.byte	-48
+ 528 00a6 D0       		.byte	-48
+ 529 00a7 D1       		.byte	-47
+ 530 00a8 D1       		.byte	-47
+ 531 00a9 D1       		.byte	-47
+ 532 00aa D2       		.byte	-46
+ 533 00ab D2       		.byte	-46
+ 534 00ac D2       		.byte	-46
+ 535 00ad D2       		.byte	-46
+ 536 00ae D3       		.byte	-45
+ 537 00af D3       		.byte	-45
+ 538 00b0 D3       		.byte	-45
+ 539 00b1 D4       		.byte	-44
+ 540 00b2 D4       		.byte	-44
+ 541 00b3 D4       		.byte	-44
+ 542 00b4 D4       		.byte	-44
+ 543 00b5 D5       		.byte	-43
+ 544 00b6 D5       		.byte	-43
+ 545 00b7 D5       		.byte	-43
+ 546 00b8 D5       		.byte	-43
+ 547 00b9 D6       		.byte	-42
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 16
+
+
+ 548 00ba D6       		.byte	-42
+ 549 00bb D6       		.byte	-42
+ 550 00bc D6       		.byte	-42
+ 551 00bd D6       		.byte	-42
+ 552 00be D7       		.byte	-41
+ 553 00bf D7       		.byte	-41
+ 554 00c0 D7       		.byte	-41
+ 555 00c1 D7       		.byte	-41
+ 556 00c2 D8       		.byte	-40
+ 557 00c3 D8       		.byte	-40
+ 558 00c4 D8       		.byte	-40
+ 559 00c5 D8       		.byte	-40
+ 560 00c6 D8       		.byte	-40
+ 561 00c7 D8       		.byte	-40
+ 562 00c8 D9       		.byte	-39
+ 563 00c9 D9       		.byte	-39
+ 564 00ca D9       		.byte	-39
+ 565 00cb D9       		.byte	-39
+ 566 00cc D9       		.byte	-39
+ 567 00cd DA       		.byte	-38
+ 568 00ce DA       		.byte	-38
+ 569 00cf DA       		.byte	-38
+ 570 00d0 DA       		.byte	-38
+ 571 00d1 DA       		.byte	-38
+ 572 00d2 DA       		.byte	-38
+ 573 00d3 DA       		.byte	-38
+ 574 00d4 DB       		.byte	-37
+ 575 00d5 DB       		.byte	-37
+ 576 00d6 DB       		.byte	-37
+ 577 00d7 DB       		.byte	-37
+ 578 00d8 DB       		.byte	-37
+ 579 00d9 DB       		.byte	-37
+ 580 00da DB       		.byte	-37
+ 581 00db DB       		.byte	-37
+ 582 00dc DC       		.byte	-36
+ 583 00dd DC       		.byte	-36
+ 584 00de DC       		.byte	-36
+ 585 00df DC       		.byte	-36
+ 586 00e0 DC       		.byte	-36
+ 587 00e1 DC       		.byte	-36
+ 588 00e2 DC       		.byte	-36
+ 589 00e3 DC       		.byte	-36
+ 590 00e4 DC       		.byte	-36
+ 591 00e5 DC       		.byte	-36
+ 592 00e6 DD       		.byte	-35
+ 593 00e7 DD       		.byte	-35
+ 594 00e8 DD       		.byte	-35
+ 595 00e9 DD       		.byte	-35
+ 596 00ea DD       		.byte	-35
+ 597 00eb DD       		.byte	-35
+ 598 00ec DD       		.byte	-35
+ 599 00ed DD       		.byte	-35
+ 600 00ee DD       		.byte	-35
+ 601 00ef DD       		.byte	-35
+ 602 00f0 DD       		.byte	-35
+ 603 00f1 DD       		.byte	-35
+ 604 00f2 DD       		.byte	-35
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 17
+
+
+ 605 00f3 DD       		.byte	-35
+ 606 00f4 DD       		.byte	-35
+ 607 00f5 DD       		.byte	-35
+ 608 00f6 DD       		.byte	-35
+ 609 00f7 DD       		.byte	-35
+ 610 00f8 DD       		.byte	-35
+ 611 00f9 DD       		.byte	-35
+ 612 00fa DD       		.byte	-35
+ 613 00fb DD       		.byte	-35
+ 614 00fc DD       		.byte	-35
+ 615 00fd DD       		.byte	-35
+ 616 00fe DD       		.byte	-35
+ 617 00ff DD       		.byte	-35
+ 618 0100 DD       		.byte	-35
+ 619 0101 DD       		.byte	-35
+ 620 0102 DD       		.byte	-35
+ 621 0103 DD       		.byte	-35
+ 622 0104 DD       		.byte	-35
+ 623 0105 DD       		.byte	-35
+ 624 0106 DD       		.byte	-35
+ 625 0107 DD       		.byte	-35
+ 626 0108 DD       		.byte	-35
+ 627 0109 DD       		.byte	-35
+ 628 010a DD       		.byte	-35
+ 629 010b DD       		.byte	-35
+ 630 010c DD       		.byte	-35
+ 631 010d DD       		.byte	-35
+ 632 010e DD       		.byte	-35
+ 633 010f DC       		.byte	-36
+ 634 0110 DC       		.byte	-36
+ 635 0111 DC       		.byte	-36
+ 636 0112 DC       		.byte	-36
+ 637 0113 DC       		.byte	-36
+ 638 0114 DC       		.byte	-36
+ 639 0115 DC       		.byte	-36
+ 640 0116 DC       		.byte	-36
+ 641 0117 DC       		.byte	-36
+ 642 0118 DC       		.byte	-36
+ 643 0119 DB       		.byte	-37
+ 644 011a DB       		.byte	-37
+ 645 011b DB       		.byte	-37
+ 646 011c DB       		.byte	-37
+ 647 011d DB       		.byte	-37
+ 648 011e DB       		.byte	-37
+ 649 011f DB       		.byte	-37
+ 650 0120 DB       		.byte	-37
+ 651 0121 DA       		.byte	-38
+ 652 0122 DA       		.byte	-38
+ 653 0123 DA       		.byte	-38
+ 654 0124 DA       		.byte	-38
+ 655 0125 DA       		.byte	-38
+ 656 0126 DA       		.byte	-38
+ 657 0127 DA       		.byte	-38
+ 658 0128 D9       		.byte	-39
+ 659 0129 D9       		.byte	-39
+ 660 012a D9       		.byte	-39
+ 661 012b D9       		.byte	-39
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 18
+
+
+ 662 012c D9       		.byte	-39
+ 663 012d D8       		.byte	-40
+ 664 012e D8       		.byte	-40
+ 665 012f D8       		.byte	-40
+ 666 0130 D8       		.byte	-40
+ 667 0131 D8       		.byte	-40
+ 668 0132 D8       		.byte	-40
+ 669 0133 D7       		.byte	-41
+ 670 0134 D7       		.byte	-41
+ 671 0135 D7       		.byte	-41
+ 672 0136 D7       		.byte	-41
+ 673 0137 D6       		.byte	-42
+ 674 0138 D6       		.byte	-42
+ 675 0139 D6       		.byte	-42
+ 676 013a D6       		.byte	-42
+ 677 013b D6       		.byte	-42
+ 678 013c D5       		.byte	-43
+ 679 013d D5       		.byte	-43
+ 680 013e D5       		.byte	-43
+ 681 013f D5       		.byte	-43
+ 682 0140 D4       		.byte	-44
+ 683 0141 D4       		.byte	-44
+ 684 0142 D4       		.byte	-44
+ 685 0143 D4       		.byte	-44
+ 686 0144 D3       		.byte	-45
+ 687 0145 D3       		.byte	-45
+ 688 0146 D3       		.byte	-45
+ 689 0147 D2       		.byte	-46
+ 690 0148 D2       		.byte	-46
+ 691 0149 D2       		.byte	-46
+ 692 014a D2       		.byte	-46
+ 693 014b D1       		.byte	-47
+ 694 014c D1       		.byte	-47
+ 695 014d D1       		.byte	-47
+ 696 014e D0       		.byte	-48
+ 697 014f D0       		.byte	-48
+ 698 0150 D0       		.byte	-48
+ 699 0151 D0       		.byte	-48
+ 700 0152 CF       		.byte	-49
+ 701 0153 CF       		.byte	-49
+ 702 0154 CF       		.byte	-49
+ 703 0155 CE       		.byte	-50
+ 704 0156 CE       		.byte	-50
+ 705 0157 CE       		.byte	-50
+ 706 0158 CD       		.byte	-51
+ 707 0159 CD       		.byte	-51
+ 708 015a CD       		.byte	-51
+ 709 015b CC       		.byte	-52
+ 710 015c CC       		.byte	-52
+ 711 015d CC       		.byte	-52
+ 712 015e CB       		.byte	-53
+ 713 015f CB       		.byte	-53
+ 714 0160 CB       		.byte	-53
+ 715 0161 CA       		.byte	-54
+ 716 0162 CA       		.byte	-54
+ 717 0163 CA       		.byte	-54
+ 718 0164 C9       		.byte	-55
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 19
+
+
+ 719 0165 C9       		.byte	-55
+ 720 0166 C8       		.byte	-56
+ 721 0167 C8       		.byte	-56
+ 722 0168 C8       		.byte	-56
+ 723 0169 C7       		.byte	-57
+ 724 016a C7       		.byte	-57
+ 725 016b C7       		.byte	-57
+ 726 016c C6       		.byte	-58
+ 727 016d C6       		.byte	-58
+ 728 016e C5       		.byte	-59
+ 729 016f C5       		.byte	-59
+ 730 0170 C5       		.byte	-59
+ 731 0171 C4       		.byte	-60
+ 732 0172 C4       		.byte	-60
+ 733 0173 C3       		.byte	-61
+ 734 0174 C3       		.byte	-61
+ 735 0175 C3       		.byte	-61
+ 736 0176 C2       		.byte	-62
+ 737 0177 C2       		.byte	-62
+ 738 0178 C1       		.byte	-63
+ 739 0179 C1       		.byte	-63
+ 740 017a C1       		.byte	-63
+ 741 017b C0       		.byte	-64
+ 742 017c C0       		.byte	-64
+ 743 017d BF       		.byte	-65
+ 744 017e BF       		.byte	-65
+ 745 017f BE       		.byte	-66
+ 746 0180 BE       		.byte	-66
+ 747 0181 BD       		.byte	-67
+ 748 0182 BD       		.byte	-67
+ 749 0183 BD       		.byte	-67
+ 750 0184 BC       		.byte	-68
+ 751 0185 BC       		.byte	-68
+ 752 0186 BB       		.byte	-69
+ 753 0187 BB       		.byte	-69
+ 754 0188 BA       		.byte	-70
+ 755 0189 BA       		.byte	-70
+ 756 018a B9       		.byte	-71
+ 757 018b B9       		.byte	-71
+ 758 018c B8       		.byte	-72
+ 759 018d B8       		.byte	-72
+ 760 018e B8       		.byte	-72
+ 761 018f B7       		.byte	-73
+ 762 0190 B7       		.byte	-73
+ 763 0191 B6       		.byte	-74
+ 764 0192 B6       		.byte	-74
+ 765 0193 B5       		.byte	-75
+ 766 0194 B5       		.byte	-75
+ 767 0195 B4       		.byte	-76
+ 768 0196 B4       		.byte	-76
+ 769 0197 B3       		.byte	-77
+ 770 0198 B3       		.byte	-77
+ 771 0199 B2       		.byte	-78
+ 772 019a B2       		.byte	-78
+ 773 019b B1       		.byte	-79
+ 774 019c B1       		.byte	-79
+ 775 019d B0       		.byte	-80
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 20
+
+
+ 776 019e B0       		.byte	-80
+ 777 019f AF       		.byte	-81
+ 778 01a0 AF       		.byte	-81
+ 779 01a1 AE       		.byte	-82
+ 780 01a2 AE       		.byte	-82
+ 781 01a3 AD       		.byte	-83
+ 782 01a4 AD       		.byte	-83
+ 783 01a5 AC       		.byte	-84
+ 784 01a6 AC       		.byte	-84
+ 785 01a7 AB       		.byte	-85
+ 786 01a8 AB       		.byte	-85
+ 787 01a9 AA       		.byte	-86
+ 788 01aa AA       		.byte	-86
+ 789 01ab A9       		.byte	-87
+ 790 01ac A8       		.byte	-88
+ 791 01ad A8       		.byte	-88
+ 792 01ae A7       		.byte	-89
+ 793 01af A7       		.byte	-89
+ 794 01b0 A6       		.byte	-90
+ 795 01b1 A6       		.byte	-90
+ 796 01b2 A5       		.byte	-91
+ 797 01b3 A5       		.byte	-91
+ 798 01b4 A4       		.byte	-92
+ 799 01b5 A4       		.byte	-92
+ 800 01b6 A3       		.byte	-93
+ 801 01b7 A3       		.byte	-93
+ 802 01b8 A2       		.byte	-94
+ 803 01b9 A1       		.byte	-95
+ 804 01ba A1       		.byte	-95
+ 805 01bb A0       		.byte	-96
+ 806 01bc A0       		.byte	-96
+ 807 01bd 9F       		.byte	-97
+ 808 01be 9F       		.byte	-97
+ 809 01bf 9E       		.byte	-98
+ 810 01c0 9E       		.byte	-98
+ 811 01c1 9D       		.byte	-99
+ 812 01c2 9C       		.byte	-100
+ 813 01c3 9C       		.byte	-100
+ 814 01c4 9B       		.byte	-101
+ 815 01c5 9B       		.byte	-101
+ 816 01c6 9A       		.byte	-102
+ 817 01c7 9A       		.byte	-102
+ 818 01c8 99       		.byte	-103
+ 819 01c9 99       		.byte	-103
+ 820 01ca 98       		.byte	-104
+ 821 01cb 97       		.byte	-105
+ 822 01cc 97       		.byte	-105
+ 823 01cd 96       		.byte	-106
+ 824 01ce 96       		.byte	-106
+ 825 01cf 95       		.byte	-107
+ 826 01d0 95       		.byte	-107
+ 827 01d1 94       		.byte	-108
+ 828 01d2 93       		.byte	-109
+ 829 01d3 93       		.byte	-109
+ 830 01d4 92       		.byte	-110
+ 831 01d5 92       		.byte	-110
+ 832 01d6 91       		.byte	-111
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 21
+
+
+ 833 01d7 90       		.byte	-112
+ 834 01d8 90       		.byte	-112
+ 835 01d9 8F       		.byte	-113
+ 836 01da 8F       		.byte	-113
+ 837 01db 8E       		.byte	-114
+ 838 01dc 8E       		.byte	-114
+ 839 01dd 8D       		.byte	-115
+ 840 01de 8C       		.byte	-116
+ 841 01df 8C       		.byte	-116
+ 842 01e0 8B       		.byte	-117
+ 843 01e1 8B       		.byte	-117
+ 844 01e2 8A       		.byte	-118
+ 845 01e3 89       		.byte	-119
+ 846 01e4 89       		.byte	-119
+ 847 01e5 88       		.byte	-120
+ 848 01e6 88       		.byte	-120
+ 849 01e7 87       		.byte	-121
+ 850 01e8 87       		.byte	-121
+ 851 01e9 86       		.byte	-122
+ 852 01ea 85       		.byte	-123
+ 853 01eb 85       		.byte	-123
+ 854 01ec 84       		.byte	-124
+ 855 01ed 84       		.byte	-124
+ 856 01ee 83       		.byte	-125
+ 857 01ef 82       		.byte	-126
+ 858 01f0 82       		.byte	-126
+ 859 01f1 81       		.byte	-127
+ 860 01f2 81       		.byte	-127
+ 861 01f3 80       		.byte	-128
+ 862 01f4 80       		.byte	-128
+ 863 01f5 7F       		.byte	127
+ 864 01f6 7E       		.byte	126
+ 865 01f7 7E       		.byte	126
+ 866 01f8 7D       		.byte	125
+ 867 01f9 7D       		.byte	125
+ 868 01fa 7C       		.byte	124
+ 869 01fb 7B       		.byte	123
+ 870 01fc 7B       		.byte	123
+ 871 01fd 7A       		.byte	122
+ 872 01fe 7A       		.byte	122
+ 873 01ff 79       		.byte	121
+ 874 0200 78       		.byte	120
+ 875 0201 78       		.byte	120
+ 876 0202 77       		.byte	119
+ 877 0203 77       		.byte	119
+ 878 0204 76       		.byte	118
+ 879 0205 76       		.byte	118
+ 880 0206 75       		.byte	117
+ 881 0207 74       		.byte	116
+ 882 0208 74       		.byte	116
+ 883 0209 73       		.byte	115
+ 884 020a 73       		.byte	115
+ 885 020b 72       		.byte	114
+ 886 020c 71       		.byte	113
+ 887 020d 71       		.byte	113
+ 888 020e 70       		.byte	112
+ 889 020f 70       		.byte	112
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 22
+
+
+ 890 0210 6F       		.byte	111
+ 891 0211 6F       		.byte	111
+ 892 0212 6E       		.byte	110
+ 893 0213 6D       		.byte	109
+ 894 0214 6D       		.byte	109
+ 895 0215 6C       		.byte	108
+ 896 0216 6C       		.byte	108
+ 897 0217 6B       		.byte	107
+ 898 0218 6A       		.byte	106
+ 899 0219 6A       		.byte	106
+ 900 021a 69       		.byte	105
+ 901 021b 69       		.byte	105
+ 902 021c 68       		.byte	104
+ 903 021d 68       		.byte	104
+ 904 021e 67       		.byte	103
+ 905 021f 66       		.byte	102
+ 906 0220 66       		.byte	102
+ 907 0221 65       		.byte	101
+ 908 0222 65       		.byte	101
+ 909 0223 64       		.byte	100
+ 910 0224 64       		.byte	100
+ 911 0225 63       		.byte	99
+ 912 0226 63       		.byte	99
+ 913 0227 62       		.byte	98
+ 914 0228 61       		.byte	97
+ 915 0229 61       		.byte	97
+ 916 022a 60       		.byte	96
+ 917 022b 60       		.byte	96
+ 918 022c 5F       		.byte	95
+ 919 022d 5F       		.byte	95
+ 920 022e 5E       		.byte	94
+ 921 022f 5E       		.byte	94
+ 922 0230 5D       		.byte	93
+ 923 0231 5C       		.byte	92
+ 924 0232 5C       		.byte	92
+ 925 0233 5B       		.byte	91
+ 926 0234 5B       		.byte	91
+ 927 0235 5A       		.byte	90
+ 928 0236 5A       		.byte	90
+ 929 0237 59       		.byte	89
+ 930 0238 59       		.byte	89
+ 931 0239 58       		.byte	88
+ 932 023a 58       		.byte	88
+ 933 023b 57       		.byte	87
+ 934 023c 57       		.byte	87
+ 935 023d 56       		.byte	86
+ 936 023e 55       		.byte	85
+ 937 023f 55       		.byte	85
+ 938 0240 54       		.byte	84
+ 939 0241 54       		.byte	84
+ 940 0242 53       		.byte	83
+ 941 0243 53       		.byte	83
+ 942 0244 52       		.byte	82
+ 943 0245 52       		.byte	82
+ 944 0246 51       		.byte	81
+ 945 0247 51       		.byte	81
+ 946 0248 50       		.byte	80
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 23
+
+
+ 947 0249 50       		.byte	80
+ 948 024a 4F       		.byte	79
+ 949 024b 4F       		.byte	79
+ 950 024c 4E       		.byte	78
+ 951 024d 4E       		.byte	78
+ 952 024e 4D       		.byte	77
+ 953 024f 4D       		.byte	77
+ 954 0250 4C       		.byte	76
+ 955 0251 4C       		.byte	76
+ 956 0252 4B       		.byte	75
+ 957 0253 4B       		.byte	75
+ 958 0254 4A       		.byte	74
+ 959 0255 4A       		.byte	74
+ 960 0256 49       		.byte	73
+ 961 0257 49       		.byte	73
+ 962 0258 48       		.byte	72
+ 963 0259 48       		.byte	72
+ 964 025a 47       		.byte	71
+ 965 025b 47       		.byte	71
+ 966 025c 47       		.byte	71
+ 967 025d 46       		.byte	70
+ 968 025e 46       		.byte	70
+ 969 025f 45       		.byte	69
+ 970 0260 45       		.byte	69
+ 971 0261 44       		.byte	68
+ 972 0262 44       		.byte	68
+ 973 0263 43       		.byte	67
+ 974 0264 43       		.byte	67
+ 975 0265 42       		.byte	66
+ 976 0266 42       		.byte	66
+ 977 0267 42       		.byte	66
+ 978 0268 41       		.byte	65
+ 979 0269 41       		.byte	65
+ 980 026a 40       		.byte	64
+ 981 026b 40       		.byte	64
+ 982 026c 3F       		.byte	63
+ 983 026d 3F       		.byte	63
+ 984 026e 3E       		.byte	62
+ 985 026f 3E       		.byte	62
+ 986 0270 3E       		.byte	62
+ 987 0271 3D       		.byte	61
+ 988 0272 3D       		.byte	61
+ 989 0273 3C       		.byte	60
+ 990 0274 3C       		.byte	60
+ 991 0275 3C       		.byte	60
+ 992 0276 3B       		.byte	59
+ 993 0277 3B       		.byte	59
+ 994 0278 3A       		.byte	58
+ 995 0279 3A       		.byte	58
+ 996 027a 3A       		.byte	58
+ 997 027b 39       		.byte	57
+ 998 027c 39       		.byte	57
+ 999 027d 38       		.byte	56
+ 1000 027e 38       		.byte	56
+ 1001 027f 38       		.byte	56
+ 1002 0280 37       		.byte	55
+ 1003 0281 37       		.byte	55
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 24
+
+
+ 1004 0282 37       		.byte	55
+ 1005 0283 36       		.byte	54
+ 1006 0284 36       		.byte	54
+ 1007 0285 35       		.byte	53
+ 1008 0286 35       		.byte	53
+ 1009 0287 35       		.byte	53
+ 1010 0288 34       		.byte	52
+ 1011 0289 34       		.byte	52
+ 1012 028a 34       		.byte	52
+ 1013 028b 33       		.byte	51
+ 1014 028c 33       		.byte	51
+ 1015 028d 33       		.byte	51
+ 1016 028e 32       		.byte	50
+ 1017 028f 32       		.byte	50
+ 1018 0290 32       		.byte	50
+ 1019 0291 31       		.byte	49
+ 1020 0292 31       		.byte	49
+ 1021 0293 31       		.byte	49
+ 1022 0294 30       		.byte	48
+ 1023 0295 30       		.byte	48
+ 1024 0296 30       		.byte	48
+ 1025 0297 2F       		.byte	47
+ 1026 0298 2F       		.byte	47
+ 1027 0299 2F       		.byte	47
+ 1028 029a 2F       		.byte	47
+ 1029 029b 2E       		.byte	46
+ 1030 029c 2E       		.byte	46
+ 1031 029d 2E       		.byte	46
+ 1032 029e 2D       		.byte	45
+ 1033 029f 2D       		.byte	45
+ 1034 02a0 2D       		.byte	45
+ 1035 02a1 2D       		.byte	45
+ 1036 02a2 2C       		.byte	44
+ 1037 02a3 2C       		.byte	44
+ 1038 02a4 2C       		.byte	44
+ 1039 02a5 2B       		.byte	43
+ 1040 02a6 2B       		.byte	43
+ 1041 02a7 2B       		.byte	43
+ 1042 02a8 2B       		.byte	43
+ 1043 02a9 2A       		.byte	42
+ 1044 02aa 2A       		.byte	42
+ 1045 02ab 2A       		.byte	42
+ 1046 02ac 2A       		.byte	42
+ 1047 02ad 29       		.byte	41
+ 1048 02ae 29       		.byte	41
+ 1049 02af 29       		.byte	41
+ 1050 02b0 29       		.byte	41
+ 1051 02b1 29       		.byte	41
+ 1052 02b2 28       		.byte	40
+ 1053 02b3 28       		.byte	40
+ 1054 02b4 28       		.byte	40
+ 1055 02b5 28       		.byte	40
+ 1056 02b6 27       		.byte	39
+ 1057 02b7 27       		.byte	39
+ 1058 02b8 27       		.byte	39
+ 1059 02b9 27       		.byte	39
+ 1060 02ba 27       		.byte	39
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 25
+
+
+ 1061 02bb 27       		.byte	39
+ 1062 02bc 26       		.byte	38
+ 1063 02bd 26       		.byte	38
+ 1064 02be 26       		.byte	38
+ 1065 02bf 26       		.byte	38
+ 1066 02c0 26       		.byte	38
+ 1067 02c1 25       		.byte	37
+ 1068 02c2 25       		.byte	37
+ 1069 02c3 25       		.byte	37
+ 1070 02c4 25       		.byte	37
+ 1071 02c5 25       		.byte	37
+ 1072 02c6 25       		.byte	37
+ 1073 02c7 25       		.byte	37
+ 1074 02c8 24       		.byte	36
+ 1075 02c9 24       		.byte	36
+ 1076 02ca 24       		.byte	36
+ 1077 02cb 24       		.byte	36
+ 1078 02cc 24       		.byte	36
+ 1079 02cd 24       		.byte	36
+ 1080 02ce 24       		.byte	36
+ 1081 02cf 24       		.byte	36
+ 1082 02d0 23       		.byte	35
+ 1083 02d1 23       		.byte	35
+ 1084 02d2 23       		.byte	35
+ 1085 02d3 23       		.byte	35
+ 1086 02d4 23       		.byte	35
+ 1087 02d5 23       		.byte	35
+ 1088 02d6 23       		.byte	35
+ 1089 02d7 23       		.byte	35
+ 1090 02d8 23       		.byte	35
+ 1091 02d9 23       		.byte	35
+ 1092 02da 22       		.byte	34
+ 1093 02db 22       		.byte	34
+ 1094 02dc 22       		.byte	34
+ 1095 02dd 22       		.byte	34
+ 1096 02de 22       		.byte	34
+ 1097 02df 22       		.byte	34
+ 1098 02e0 22       		.byte	34
+ 1099 02e1 22       		.byte	34
+ 1100 02e2 22       		.byte	34
+ 1101 02e3 22       		.byte	34
+ 1102 02e4 22       		.byte	34
+ 1103 02e5 22       		.byte	34
+ 1104 02e6 22       		.byte	34
+ 1105 02e7 22       		.byte	34
+ 1106 02e8 22       		.byte	34
+ 1107 02e9 22       		.byte	34
+ 1108 02ea 22       		.byte	34
+ 1109 02eb 22       		.byte	34
+ 1110 02ec 22       		.byte	34
+ 1111 02ed 22       		.byte	34
+ 1112 02ee 22       		.byte	34
+ 1113 02ef 22       		.byte	34
+ 1114 02f0 22       		.byte	34
+ 1115 02f1 22       		.byte	34
+ 1116 02f2 22       		.byte	34
+ 1117 02f3 22       		.byte	34
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 26
+
+
+ 1118 02f4 22       		.byte	34
+ 1119 02f5 22       		.byte	34
+ 1120 02f6 22       		.byte	34
+ 1121 02f7 22       		.byte	34
+ 1122 02f8 22       		.byte	34
+ 1123 02f9 22       		.byte	34
+ 1124 02fa 22       		.byte	34
+ 1125 02fb 22       		.byte	34
+ 1126 02fc 22       		.byte	34
+ 1127 02fd 22       		.byte	34
+ 1128 02fe 22       		.byte	34
+ 1129 02ff 22       		.byte	34
+ 1130 0300 22       		.byte	34
+ 1131 0301 22       		.byte	34
+ 1132 0302 22       		.byte	34
+ 1133 0303 23       		.byte	35
+ 1134 0304 23       		.byte	35
+ 1135 0305 23       		.byte	35
+ 1136 0306 23       		.byte	35
+ 1137 0307 23       		.byte	35
+ 1138 0308 23       		.byte	35
+ 1139 0309 23       		.byte	35
+ 1140 030a 23       		.byte	35
+ 1141 030b 23       		.byte	35
+ 1142 030c 23       		.byte	35
+ 1143 030d 24       		.byte	36
+ 1144 030e 24       		.byte	36
+ 1145 030f 24       		.byte	36
+ 1146 0310 24       		.byte	36
+ 1147 0311 24       		.byte	36
+ 1148 0312 24       		.byte	36
+ 1149 0313 24       		.byte	36
+ 1150 0314 24       		.byte	36
+ 1151 0315 25       		.byte	37
+ 1152 0316 25       		.byte	37
+ 1153 0317 25       		.byte	37
+ 1154 0318 25       		.byte	37
+ 1155 0319 25       		.byte	37
+ 1156 031a 25       		.byte	37
+ 1157 031b 25       		.byte	37
+ 1158 031c 26       		.byte	38
+ 1159 031d 26       		.byte	38
+ 1160 031e 26       		.byte	38
+ 1161 031f 26       		.byte	38
+ 1162 0320 26       		.byte	38
+ 1163 0321 27       		.byte	39
+ 1164 0322 27       		.byte	39
+ 1165 0323 27       		.byte	39
+ 1166 0324 27       		.byte	39
+ 1167 0325 27       		.byte	39
+ 1168 0326 27       		.byte	39
+ 1169 0327 28       		.byte	40
+ 1170 0328 28       		.byte	40
+ 1171 0329 28       		.byte	40
+ 1172 032a 28       		.byte	40
+ 1173 032b 29       		.byte	41
+ 1174 032c 29       		.byte	41
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 27
+
+
+ 1175 032d 29       		.byte	41
+ 1176 032e 29       		.byte	41
+ 1177 032f 29       		.byte	41
+ 1178 0330 2A       		.byte	42
+ 1179 0331 2A       		.byte	42
+ 1180 0332 2A       		.byte	42
+ 1181 0333 2A       		.byte	42
+ 1182 0334 2B       		.byte	43
+ 1183 0335 2B       		.byte	43
+ 1184 0336 2B       		.byte	43
+ 1185 0337 2B       		.byte	43
+ 1186 0338 2C       		.byte	44
+ 1187 0339 2C       		.byte	44
+ 1188 033a 2C       		.byte	44
+ 1189 033b 2D       		.byte	45
+ 1190 033c 2D       		.byte	45
+ 1191 033d 2D       		.byte	45
+ 1192 033e 2D       		.byte	45
+ 1193 033f 2E       		.byte	46
+ 1194 0340 2E       		.byte	46
+ 1195 0341 2E       		.byte	46
+ 1196 0342 2F       		.byte	47
+ 1197 0343 2F       		.byte	47
+ 1198 0344 2F       		.byte	47
+ 1199 0345 2F       		.byte	47
+ 1200 0346 30       		.byte	48
+ 1201 0347 30       		.byte	48
+ 1202 0348 30       		.byte	48
+ 1203 0349 31       		.byte	49
+ 1204 034a 31       		.byte	49
+ 1205 034b 31       		.byte	49
+ 1206 034c 32       		.byte	50
+ 1207 034d 32       		.byte	50
+ 1208 034e 32       		.byte	50
+ 1209 034f 33       		.byte	51
+ 1210 0350 33       		.byte	51
+ 1211 0351 33       		.byte	51
+ 1212 0352 34       		.byte	52
+ 1213 0353 34       		.byte	52
+ 1214 0354 34       		.byte	52
+ 1215 0355 35       		.byte	53
+ 1216 0356 35       		.byte	53
+ 1217 0357 35       		.byte	53
+ 1218 0358 36       		.byte	54
+ 1219 0359 36       		.byte	54
+ 1220 035a 37       		.byte	55
+ 1221 035b 37       		.byte	55
+ 1222 035c 37       		.byte	55
+ 1223 035d 38       		.byte	56
+ 1224 035e 38       		.byte	56
+ 1225 035f 38       		.byte	56
+ 1226 0360 39       		.byte	57
+ 1227 0361 39       		.byte	57
+ 1228 0362 3A       		.byte	58
+ 1229 0363 3A       		.byte	58
+ 1230 0364 3A       		.byte	58
+ 1231 0365 3B       		.byte	59
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 28
+
+
+ 1232 0366 3B       		.byte	59
+ 1233 0367 3C       		.byte	60
+ 1234 0368 3C       		.byte	60
+ 1235 0369 3C       		.byte	60
+ 1236 036a 3D       		.byte	61
+ 1237 036b 3D       		.byte	61
+ 1238 036c 3E       		.byte	62
+ 1239 036d 3E       		.byte	62
+ 1240 036e 3E       		.byte	62
+ 1241 036f 3F       		.byte	63
+ 1242 0370 3F       		.byte	63
+ 1243 0371 40       		.byte	64
+ 1244 0372 40       		.byte	64
+ 1245 0373 41       		.byte	65
+ 1246 0374 41       		.byte	65
+ 1247 0375 42       		.byte	66
+ 1248 0376 42       		.byte	66
+ 1249 0377 42       		.byte	66
+ 1250 0378 43       		.byte	67
+ 1251 0379 43       		.byte	67
+ 1252 037a 44       		.byte	68
+ 1253 037b 44       		.byte	68
+ 1254 037c 45       		.byte	69
+ 1255 037d 45       		.byte	69
+ 1256 037e 46       		.byte	70
+ 1257 037f 46       		.byte	70
+ 1258 0380 47       		.byte	71
+ 1259 0381 47       		.byte	71
+ 1260 0382 47       		.byte	71
+ 1261 0383 48       		.byte	72
+ 1262 0384 48       		.byte	72
+ 1263 0385 49       		.byte	73
+ 1264 0386 49       		.byte	73
+ 1265 0387 4A       		.byte	74
+ 1266 0388 4A       		.byte	74
+ 1267 0389 4B       		.byte	75
+ 1268 038a 4B       		.byte	75
+ 1269 038b 4C       		.byte	76
+ 1270 038c 4C       		.byte	76
+ 1271 038d 4D       		.byte	77
+ 1272 038e 4D       		.byte	77
+ 1273 038f 4E       		.byte	78
+ 1274 0390 4E       		.byte	78
+ 1275 0391 4F       		.byte	79
+ 1276 0392 4F       		.byte	79
+ 1277 0393 50       		.byte	80
+ 1278 0394 50       		.byte	80
+ 1279 0395 51       		.byte	81
+ 1280 0396 51       		.byte	81
+ 1281 0397 52       		.byte	82
+ 1282 0398 52       		.byte	82
+ 1283 0399 53       		.byte	83
+ 1284 039a 53       		.byte	83
+ 1285 039b 54       		.byte	84
+ 1286 039c 54       		.byte	84
+ 1287 039d 55       		.byte	85
+ 1288 039e 55       		.byte	85
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 29
+
+
+ 1289 039f 56       		.byte	86
+ 1290 03a0 57       		.byte	87
+ 1291 03a1 57       		.byte	87
+ 1292 03a2 58       		.byte	88
+ 1293 03a3 58       		.byte	88
+ 1294 03a4 59       		.byte	89
+ 1295 03a5 59       		.byte	89
+ 1296 03a6 5A       		.byte	90
+ 1297 03a7 5A       		.byte	90
+ 1298 03a8 5B       		.byte	91
+ 1299 03a9 5B       		.byte	91
+ 1300 03aa 5C       		.byte	92
+ 1301 03ab 5C       		.byte	92
+ 1302 03ac 5D       		.byte	93
+ 1303 03ad 5E       		.byte	94
+ 1304 03ae 5E       		.byte	94
+ 1305 03af 5F       		.byte	95
+ 1306 03b0 5F       		.byte	95
+ 1307 03b1 60       		.byte	96
+ 1308 03b2 60       		.byte	96
+ 1309 03b3 61       		.byte	97
+ 1310 03b4 61       		.byte	97
+ 1311 03b5 62       		.byte	98
+ 1312 03b6 63       		.byte	99
+ 1313 03b7 63       		.byte	99
+ 1314 03b8 64       		.byte	100
+ 1315 03b9 64       		.byte	100
+ 1316 03ba 65       		.byte	101
+ 1317 03bb 65       		.byte	101
+ 1318 03bc 66       		.byte	102
+ 1319 03bd 66       		.byte	102
+ 1320 03be 67       		.byte	103
+ 1321 03bf 68       		.byte	104
+ 1322 03c0 68       		.byte	104
+ 1323 03c1 69       		.byte	105
+ 1324 03c2 69       		.byte	105
+ 1325 03c3 6A       		.byte	106
+ 1326 03c4 6A       		.byte	106
+ 1327 03c5 6B       		.byte	107
+ 1328 03c6 6C       		.byte	108
+ 1329 03c7 6C       		.byte	108
+ 1330 03c8 6D       		.byte	109
+ 1331 03c9 6D       		.byte	109
+ 1332 03ca 6E       		.byte	110
+ 1333 03cb 6F       		.byte	111
+ 1334 03cc 6F       		.byte	111
+ 1335 03cd 70       		.byte	112
+ 1336 03ce 70       		.byte	112
+ 1337 03cf 71       		.byte	113
+ 1338 03d0 71       		.byte	113
+ 1339 03d1 72       		.byte	114
+ 1340 03d2 73       		.byte	115
+ 1341 03d3 73       		.byte	115
+ 1342 03d4 74       		.byte	116
+ 1343 03d5 74       		.byte	116
+ 1344 03d6 75       		.byte	117
+ 1345 03d7 76       		.byte	118
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 30
+
+
+ 1346 03d8 76       		.byte	118
+ 1347 03d9 77       		.byte	119
+ 1348 03da 77       		.byte	119
+ 1349 03db 78       		.byte	120
+ 1350 03dc 78       		.byte	120
+ 1351 03dd 79       		.byte	121
+ 1352 03de 7A       		.byte	122
+ 1353 03df 7A       		.byte	122
+ 1354 03e0 7B       		.byte	123
+ 1355 03e1 7B       		.byte	123
+ 1356 03e2 7C       		.byte	124
+ 1357 03e3 7D       		.byte	125
+ 1358 03e4 7D       		.byte	125
+ 1359 03e5 7E       		.byte	126
+ 1360 03e6 7E       		.byte	126
+ 1361 03e7 7F       		.byte	127
+ 1362              		.type	DAC_wave2, %object
+ 1363              		.size	DAC_wave2, 100
+ 1364              	DAC_wave2:
+ 1365 03e8 80       		.byte	-128
+ 1366 03e9 84       		.byte	-124
+ 1367 03ea 8A       		.byte	-118
+ 1368 03eb 8F       		.byte	-113
+ 1369 03ec 94       		.byte	-108
+ 1370 03ed 98       		.byte	-104
+ 1371 03ee 9E       		.byte	-98
+ 1372 03ef A2       		.byte	-94
+ 1373 03f0 A8       		.byte	-88
+ 1374 03f1 AC       		.byte	-84
+ 1375 03f2 B2       		.byte	-78
+ 1376 03f3 B6       		.byte	-74
+ 1377 03f4 BC       		.byte	-68
+ 1378 03f5 C0       		.byte	-64
+ 1379 03f6 C6       		.byte	-58
+ 1380 03f7 CA       		.byte	-54
+ 1381 03f8 D0       		.byte	-48
+ 1382 03f9 D5       		.byte	-43
+ 1383 03fa DA       		.byte	-38
+ 1384 03fb DE       		.byte	-34
+ 1385 03fc E4       		.byte	-28
+ 1386 03fd E8       		.byte	-24
+ 1387 03fe EE       		.byte	-18
+ 1388 03ff F2       		.byte	-14
+ 1389 0400 F8       		.byte	-8
+ 1390 0401 FC       		.byte	-4
+ 1391 0402 F8       		.byte	-8
+ 1392 0403 F2       		.byte	-14
+ 1393 0404 EE       		.byte	-18
+ 1394 0405 E8       		.byte	-24
+ 1395 0406 E4       		.byte	-28
+ 1396 0407 DE       		.byte	-34
+ 1397 0408 DA       		.byte	-38
+ 1398 0409 D4       		.byte	-44
+ 1399 040a D0       		.byte	-48
+ 1400 040b CA       		.byte	-54
+ 1401 040c C6       		.byte	-58
+ 1402 040d C0       		.byte	-64
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 31
+
+
+ 1403 040e BC       		.byte	-68
+ 1404 040f B6       		.byte	-74
+ 1405 0410 B2       		.byte	-78
+ 1406 0411 AD       		.byte	-83
+ 1407 0412 A8       		.byte	-88
+ 1408 0413 A2       		.byte	-94
+ 1409 0414 9E       		.byte	-98
+ 1410 0415 98       		.byte	-104
+ 1411 0416 94       		.byte	-108
+ 1412 0417 8F       		.byte	-113
+ 1413 0418 8A       		.byte	-118
+ 1414 0419 84       		.byte	-124
+ 1415 041a 80       		.byte	-128
+ 1416 041b 7A       		.byte	122
+ 1417 041c 76       		.byte	118
+ 1418 041d 70       		.byte	112
+ 1419 041e 6B       		.byte	107
+ 1420 041f 66       		.byte	102
+ 1421 0420 61       		.byte	97
+ 1422 0421 5D       		.byte	93
+ 1423 0422 58       		.byte	88
+ 1424 0423 53       		.byte	83
+ 1425 0424 4E       		.byte	78
+ 1426 0425 49       		.byte	73
+ 1427 0426 44       		.byte	68
+ 1428 0427 3E       		.byte	62
+ 1429 0428 39       		.byte	57
+ 1430 0429 34       		.byte	52
+ 1431 042a 2F       		.byte	47
+ 1432 042b 2A       		.byte	42
+ 1433 042c 25       		.byte	37
+ 1434 042d 21       		.byte	33
+ 1435 042e 1C       		.byte	28
+ 1436 042f 17       		.byte	23
+ 1437 0430 12       		.byte	18
+ 1438 0431 0D       		.byte	13
+ 1439 0432 08       		.byte	8
+ 1440 0433 03       		.byte	3
+ 1441 0434 08       		.byte	8
+ 1442 0435 0D       		.byte	13
+ 1443 0436 12       		.byte	18
+ 1444 0437 17       		.byte	23
+ 1445 0438 1C       		.byte	28
+ 1446 0439 21       		.byte	33
+ 1447 043a 25       		.byte	37
+ 1448 043b 2A       		.byte	42
+ 1449 043c 2F       		.byte	47
+ 1450 043d 34       		.byte	52
+ 1451 043e 39       		.byte	57
+ 1452 043f 3E       		.byte	62
+ 1453 0440 44       		.byte	68
+ 1454 0441 49       		.byte	73
+ 1455 0442 4E       		.byte	78
+ 1456 0443 53       		.byte	83
+ 1457 0444 58       		.byte	88
+ 1458 0445 5D       		.byte	93
+ 1459 0446 61       		.byte	97
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 32
+
+
+ 1460 0447 66       		.byte	102
+ 1461 0448 6B       		.byte	107
+ 1462 0449 70       		.byte	112
+ 1463 044a 76       		.byte	118
+ 1464 044b 7A       		.byte	122
+ 1465              		.bss
+ 1466              		.set	.LANCHOR0,. + 0
+ 1467              		.type	DAC_Wave1Chan, %object
+ 1468              		.size	DAC_Wave1Chan, 1
+ 1469              	DAC_Wave1Chan:
+ 1470 0000 00       		.space	1
+ 1471              		.type	DAC_Wave2Chan, %object
+ 1472              		.size	DAC_Wave2Chan, 1
+ 1473              	DAC_Wave2Chan:
+ 1474 0001 00       		.space	1
+ 1475              		.type	DAC_Wave1TD, %object
+ 1476              		.size	DAC_Wave1TD, 1
+ 1477              	DAC_Wave1TD:
+ 1478 0002 00       		.space	1
+ 1479              		.type	DAC_Wave2TD, %object
+ 1480              		.size	DAC_Wave2TD, 1
+ 1481              	DAC_Wave2TD:
+ 1482 0003 00       		.space	1
+ 1483              		.type	DAC_initVar, %object
+ 1484              		.size	DAC_initVar, 1
+ 1485              	DAC_initVar:
+ 1486 0004 00       		.space	1
+ 1487              		.text
+ 1488              	.Letext0:
+ 1489              		.file 2 "Generated_Source\\PSoC5\\cytypes.h"
+ 1490              		.file 3 "Generated_Source\\PSoC5/DAC_VDAC8.h"
+ 1491              		.file 4 "Generated_Source\\PSoC5/CYDMAC.H"
+ 1492              		.file 5 "Generated_Source\\PSoC5/DAC_DacClk.h"
+ 1493              		.file 6 "Generated_Source\\PSoC5/DAC_Wave1_DMA_dma.h"
+ 1494              		.file 7 "Generated_Source\\PSoC5/DAC_Wave2_DMA_dma.h"
+ 1495              		.section	.debug_info,"",%progbits
+ 1496              	.Ldebug_info0:
+ 1497 0000 15050000 		.4byte	0x515
+ 1498 0004 0400     		.2byte	0x4
+ 1499 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1500 000a 04       		.byte	0x4
+ 1501 000b 01       		.uleb128 0x1
+ 1502 000c 09010000 		.4byte	.LASF53
+ 1503 0010 0C       		.byte	0xc
+ 1504 0011 F3010000 		.4byte	.LASF54
+ 1505 0015 80000000 		.4byte	.LASF55
+ 1506 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 1507 001d 00000000 		.4byte	0
+ 1508 0021 00000000 		.4byte	.Ldebug_line0
+ 1509 0025 02       		.uleb128 0x2
+ 1510 0026 01       		.byte	0x1
+ 1511 0027 06       		.byte	0x6
+ 1512 0028 86030000 		.4byte	.LASF0
+ 1513 002c 02       		.uleb128 0x2
+ 1514 002d 01       		.byte	0x1
+ 1515 002e 08       		.byte	0x8
+ 1516 002f 10020000 		.4byte	.LASF1
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 33
+
+
+ 1517 0033 02       		.uleb128 0x2
+ 1518 0034 02       		.byte	0x2
+ 1519 0035 05       		.byte	0x5
+ 1520 0036 54030000 		.4byte	.LASF2
+ 1521 003a 02       		.uleb128 0x2
+ 1522 003b 02       		.byte	0x2
+ 1523 003c 07       		.byte	0x7
+ 1524 003d 59000000 		.4byte	.LASF3
+ 1525 0041 02       		.uleb128 0x2
+ 1526 0042 04       		.byte	0x4
+ 1527 0043 05       		.byte	0x5
+ 1528 0044 5E030000 		.4byte	.LASF4
+ 1529 0048 02       		.uleb128 0x2
+ 1530 0049 04       		.byte	0x4
+ 1531 004a 07       		.byte	0x7
+ 1532 004b BB010000 		.4byte	.LASF5
+ 1533 004f 02       		.uleb128 0x2
+ 1534 0050 08       		.byte	0x8
+ 1535 0051 05       		.byte	0x5
+ 1536 0052 14030000 		.4byte	.LASF6
+ 1537 0056 02       		.uleb128 0x2
+ 1538 0057 08       		.byte	0x8
+ 1539 0058 07       		.byte	0x7
+ 1540 0059 A1020000 		.4byte	.LASF7
+ 1541 005d 03       		.uleb128 0x3
+ 1542 005e 04       		.byte	0x4
+ 1543 005f 05       		.byte	0x5
+ 1544 0060 696E7400 		.ascii	"int\000"
+ 1545 0064 02       		.uleb128 0x2
+ 1546 0065 04       		.byte	0x4
+ 1547 0066 07       		.byte	0x7
+ 1548 0067 8B020000 		.4byte	.LASF8
+ 1549 006b 04       		.uleb128 0x4
+ 1550 006c D5010000 		.4byte	.LASF9
+ 1551 0070 02       		.byte	0x2
+ 1552 0071 E801     		.2byte	0x1e8
+ 1553 0073 2C000000 		.4byte	0x2c
+ 1554 0077 04       		.uleb128 0x4
+ 1555 0078 50020000 		.4byte	.LASF10
+ 1556 007c 02       		.byte	0x2
+ 1557 007d E901     		.2byte	0x1e9
+ 1558 007f 3A000000 		.4byte	0x3a
+ 1559 0083 04       		.uleb128 0x4
+ 1560 0084 68020000 		.4byte	.LASF11
+ 1561 0088 02       		.byte	0x2
+ 1562 0089 EA01     		.2byte	0x1ea
+ 1563 008b 48000000 		.4byte	0x48
+ 1564 008f 02       		.uleb128 0x2
+ 1565 0090 04       		.byte	0x4
+ 1566 0091 04       		.byte	0x4
+ 1567 0092 F8000000 		.4byte	.LASF12
+ 1568 0096 02       		.uleb128 0x2
+ 1569 0097 08       		.byte	0x8
+ 1570 0098 04       		.byte	0x4
+ 1571 0099 28020000 		.4byte	.LASF13
+ 1572 009d 02       		.uleb128 0x2
+ 1573 009e 01       		.byte	0x1
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 34
+
+
+ 1574 009f 08       		.byte	0x8
+ 1575 00a0 32030000 		.4byte	.LASF14
+ 1576 00a4 02       		.uleb128 0x2
+ 1577 00a5 08       		.byte	0x8
+ 1578 00a6 04       		.byte	0x4
+ 1579 00a7 67030000 		.4byte	.LASF15
+ 1580 00ab 02       		.uleb128 0x2
+ 1581 00ac 04       		.byte	0x4
+ 1582 00ad 07       		.byte	0x7
+ 1583 00ae E3020000 		.4byte	.LASF16
+ 1584 00b2 05       		.uleb128 0x5
+ 1585 00b3 A1030000 		.4byte	.LASF17
+ 1586 00b7 01       		.byte	0x1
+ 1587 00b8 56       		.byte	0x56
+ 1588 00b9 00000000 		.4byte	.LFB1
+ 1589 00bd 28000000 		.4byte	.LFE1-.LFB1
+ 1590 00c1 01       		.uleb128 0x1
+ 1591 00c2 9C       		.byte	0x9c
+ 1592 00c3 13010000 		.4byte	0x113
+ 1593 00c7 06       		.uleb128 0x6
+ 1594 00c8 06000000 		.4byte	.LVL0
+ 1595 00cc 68040000 		.4byte	0x468
+ 1596 00d0 07       		.uleb128 0x7
+ 1597 00d1 10000000 		.4byte	.LVL1
+ 1598 00d5 73040000 		.4byte	0x473
+ 1599 00d9 E3000000 		.4byte	0xe3
+ 1600 00dd 08       		.uleb128 0x8
+ 1601 00de 01       		.uleb128 0x1
+ 1602 00df 51       		.byte	0x51
+ 1603 00e0 01       		.uleb128 0x1
+ 1604 00e1 31       		.byte	0x31
+ 1605 00e2 00       		.byte	0
+ 1606 00e3 07       		.uleb128 0x7
+ 1607 00e4 18000000 		.4byte	.LVL2
+ 1608 00e8 73040000 		.4byte	0x473
+ 1609 00ec F6000000 		.4byte	0xf6
+ 1610 00f0 08       		.uleb128 0x8
+ 1611 00f1 01       		.uleb128 0x1
+ 1612 00f2 51       		.byte	0x51
+ 1613 00f3 01       		.uleb128 0x1
+ 1614 00f4 31       		.byte	0x31
+ 1615 00f5 00       		.byte	0
+ 1616 00f6 07       		.uleb128 0x7
+ 1617 00f7 1E000000 		.4byte	.LVL3
+ 1618 00fb 7E040000 		.4byte	0x47e
+ 1619 00ff 09010000 		.4byte	0x109
+ 1620 0103 08       		.uleb128 0x8
+ 1621 0104 01       		.uleb128 0x1
+ 1622 0105 50       		.byte	0x50
+ 1623 0106 01       		.uleb128 0x1
+ 1624 0107 30       		.byte	0x30
+ 1625 0108 00       		.byte	0
+ 1626 0109 06       		.uleb128 0x6
+ 1627 010a 22000000 		.4byte	.LVL4
+ 1628 010e 89040000 		.4byte	0x489
+ 1629 0112 00       		.byte	0
+ 1630 0113 05       		.uleb128 0x5
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 35
+
+
+ 1631 0114 1B000000 		.4byte	.LASF18
+ 1632 0118 01       		.byte	0x1
+ 1633 0119 BB       		.byte	0xbb
+ 1634 011a 00000000 		.4byte	.LFB4
+ 1635 011e 20000000 		.4byte	.LFE4-.LFB4
+ 1636 0122 01       		.uleb128 0x1
+ 1637 0123 9C       		.byte	0x9c
+ 1638 0124 4D010000 		.4byte	0x14d
+ 1639 0128 06       		.uleb128 0x6
+ 1640 0129 06000000 		.4byte	.LVL5
+ 1641 012d 94040000 		.4byte	0x494
+ 1642 0131 06       		.uleb128 0x6
+ 1643 0132 0E000000 		.4byte	.LVL6
+ 1644 0136 9F040000 		.4byte	0x49f
+ 1645 013a 06       		.uleb128 0x6
+ 1646 013b 14000000 		.4byte	.LVL7
+ 1647 013f 9F040000 		.4byte	0x49f
+ 1648 0143 06       		.uleb128 0x6
+ 1649 0144 18000000 		.4byte	.LVL8
+ 1650 0148 AA040000 		.4byte	0x4aa
+ 1651 014c 00       		.byte	0
+ 1652 014d 05       		.uleb128 0x5
+ 1653 014e 00000000 		.4byte	.LASF19
+ 1654 0152 01       		.byte	0x1
+ 1655 0153 DA       		.byte	0xda
+ 1656 0154 00000000 		.4byte	.LFB5
+ 1657 0158 40000000 		.4byte	.LFE5-.LFB5
+ 1658 015c 01       		.uleb128 0x1
+ 1659 015d 9C       		.byte	0x9c
+ 1660 015e E5010000 		.4byte	0x1e5
+ 1661 0162 09       		.uleb128 0x9
+ 1662 0163 CD010000 		.4byte	.LASF20
+ 1663 0167 01       		.byte	0x1
+ 1664 0168 DA       		.byte	0xda
+ 1665 0169 E5010000 		.4byte	0x1e5
+ 1666 016d 00000000 		.4byte	.LLST0
+ 1667 0171 09       		.uleb128 0x9
+ 1668 0172 FE000000 		.4byte	.LASF21
+ 1669 0176 01       		.byte	0x1
+ 1670 0177 DA       		.byte	0xda
+ 1671 0178 77000000 		.4byte	0x77
+ 1672 017c 2C000000 		.4byte	.LLST1
+ 1673 0180 07       		.uleb128 0x7
+ 1674 0181 14000000 		.4byte	.LVL12
+ 1675 0185 B5040000 		.4byte	0x4b5
+ 1676 0189 A7010000 		.4byte	0x1a7
+ 1677 018d 08       		.uleb128 0x8
+ 1678 018e 01       		.uleb128 0x1
+ 1679 018f 50       		.byte	0x50
+ 1680 0190 01       		.uleb128 0x1
+ 1681 0191 31       		.byte	0x31
+ 1682 0192 08       		.uleb128 0x8
+ 1683 0193 01       		.uleb128 0x1
+ 1684 0194 51       		.byte	0x51
+ 1685 0195 01       		.uleb128 0x1
+ 1686 0196 31       		.byte	0x31
+ 1687 0197 08       		.uleb128 0x8
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 36
+
+
+ 1688 0198 01       		.uleb128 0x1
+ 1689 0199 52       		.byte	0x52
+ 1690 019a 04       		.uleb128 0x4
+ 1691 019b 75       		.byte	0x75
+ 1692 019c 00       		.sleb128 0
+ 1693 019d 40       		.byte	0x40
+ 1694 019e 25       		.byte	0x25
+ 1695 019f 08       		.uleb128 0x8
+ 1696 01a0 01       		.uleb128 0x1
+ 1697 01a1 53       		.byte	0x53
+ 1698 01a2 03       		.uleb128 0x3
+ 1699 01a3 0A       		.byte	0xa
+ 1700 01a4 0040     		.2byte	0x4000
+ 1701 01a6 00       		.byte	0
+ 1702 01a7 07       		.uleb128 0x7
+ 1703 01a8 24000000 		.4byte	.LVL13
+ 1704 01ac C0040000 		.4byte	0x4c0
+ 1705 01b0 C0010000 		.4byte	0x1c0
+ 1706 01b4 08       		.uleb128 0x8
+ 1707 01b5 01       		.uleb128 0x1
+ 1708 01b6 51       		.byte	0x51
+ 1709 01b7 02       		.uleb128 0x2
+ 1710 01b8 76       		.byte	0x76
+ 1711 01b9 00       		.sleb128 0
+ 1712 01ba 08       		.uleb128 0x8
+ 1713 01bb 01       		.uleb128 0x1
+ 1714 01bc 53       		.byte	0x53
+ 1715 01bd 01       		.uleb128 0x1
+ 1716 01be 31       		.byte	0x31
+ 1717 01bf 00       		.byte	0
+ 1718 01c0 07       		.uleb128 0x7
+ 1719 01c1 30000000 		.4byte	.LVL14
+ 1720 01c5 CB040000 		.4byte	0x4cb
+ 1721 01c9 DB010000 		.4byte	0x1db
+ 1722 01cd 08       		.uleb128 0x8
+ 1723 01ce 01       		.uleb128 0x1
+ 1724 01cf 51       		.byte	0x51
+ 1725 01d0 02       		.uleb128 0x2
+ 1726 01d1 75       		.byte	0x75
+ 1727 01d2 00       		.sleb128 0
+ 1728 01d3 08       		.uleb128 0x8
+ 1729 01d4 01       		.uleb128 0x1
+ 1730 01d5 52       		.byte	0x52
+ 1731 01d6 03       		.uleb128 0x3
+ 1732 01d7 0A       		.byte	0xa
+ 1733 01d8 805B     		.2byte	0x5b80
+ 1734 01da 00       		.byte	0
+ 1735 01db 06       		.uleb128 0x6
+ 1736 01dc 38000000 		.4byte	.LVL15
+ 1737 01e0 D6040000 		.4byte	0x4d6
+ 1738 01e4 00       		.byte	0
+ 1739 01e5 0A       		.uleb128 0xa
+ 1740 01e6 04       		.byte	0x4
+ 1741 01e7 EB010000 		.4byte	0x1eb
+ 1742 01eb 0B       		.uleb128 0xb
+ 1743 01ec 6B000000 		.4byte	0x6b
+ 1744 01f0 0C       		.uleb128 0xc
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 37
+
+
+ 1745 01f1 E9000000 		.4byte	.LASF22
+ 1746 01f5 01       		.byte	0x1
+ 1747 01f6 0801     		.2byte	0x108
+ 1748 01f8 00000000 		.4byte	.LFB6
+ 1749 01fc 40000000 		.4byte	.LFE6-.LFB6
+ 1750 0200 01       		.uleb128 0x1
+ 1751 0201 9C       		.byte	0x9c
+ 1752 0202 8B020000 		.4byte	0x28b
+ 1753 0206 0D       		.uleb128 0xd
+ 1754 0207 CD010000 		.4byte	.LASF20
+ 1755 020b 01       		.byte	0x1
+ 1756 020c 0801     		.2byte	0x108
+ 1757 020e E5010000 		.4byte	0x1e5
+ 1758 0212 4D000000 		.4byte	.LLST2
+ 1759 0216 0D       		.uleb128 0xd
+ 1760 0217 FE000000 		.4byte	.LASF21
+ 1761 021b 01       		.byte	0x1
+ 1762 021c 0801     		.2byte	0x108
+ 1763 021e 77000000 		.4byte	0x77
+ 1764 0222 79000000 		.4byte	.LLST3
+ 1765 0226 07       		.uleb128 0x7
+ 1766 0227 14000000 		.4byte	.LVL20
+ 1767 022b E1040000 		.4byte	0x4e1
+ 1768 022f 4D020000 		.4byte	0x24d
+ 1769 0233 08       		.uleb128 0x8
+ 1770 0234 01       		.uleb128 0x1
+ 1771 0235 50       		.byte	0x50
+ 1772 0236 01       		.uleb128 0x1
+ 1773 0237 31       		.byte	0x31
+ 1774 0238 08       		.uleb128 0x8
+ 1775 0239 01       		.uleb128 0x1
+ 1776 023a 51       		.byte	0x51
+ 1777 023b 01       		.uleb128 0x1
+ 1778 023c 31       		.byte	0x31
+ 1779 023d 08       		.uleb128 0x8
+ 1780 023e 01       		.uleb128 0x1
+ 1781 023f 52       		.byte	0x52
+ 1782 0240 04       		.uleb128 0x4
+ 1783 0241 75       		.byte	0x75
+ 1784 0242 00       		.sleb128 0
+ 1785 0243 40       		.byte	0x40
+ 1786 0244 25       		.byte	0x25
+ 1787 0245 08       		.uleb128 0x8
+ 1788 0246 01       		.uleb128 0x1
+ 1789 0247 53       		.byte	0x53
+ 1790 0248 03       		.uleb128 0x3
+ 1791 0249 0A       		.byte	0xa
+ 1792 024a 0040     		.2byte	0x4000
+ 1793 024c 00       		.byte	0
+ 1794 024d 07       		.uleb128 0x7
+ 1795 024e 24000000 		.4byte	.LVL21
+ 1796 0252 C0040000 		.4byte	0x4c0
+ 1797 0256 66020000 		.4byte	0x266
+ 1798 025a 08       		.uleb128 0x8
+ 1799 025b 01       		.uleb128 0x1
+ 1800 025c 51       		.byte	0x51
+ 1801 025d 02       		.uleb128 0x2
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 38
+
+
+ 1802 025e 76       		.byte	0x76
+ 1803 025f 00       		.sleb128 0
+ 1804 0260 08       		.uleb128 0x8
+ 1805 0261 01       		.uleb128 0x1
+ 1806 0262 53       		.byte	0x53
+ 1807 0263 01       		.uleb128 0x1
+ 1808 0264 31       		.byte	0x31
+ 1809 0265 00       		.byte	0
+ 1810 0266 07       		.uleb128 0x7
+ 1811 0267 30000000 		.4byte	.LVL22
+ 1812 026b CB040000 		.4byte	0x4cb
+ 1813 026f 81020000 		.4byte	0x281
+ 1814 0273 08       		.uleb128 0x8
+ 1815 0274 01       		.uleb128 0x1
+ 1816 0275 51       		.byte	0x51
+ 1817 0276 02       		.uleb128 0x2
+ 1818 0277 75       		.byte	0x75
+ 1819 0278 00       		.sleb128 0
+ 1820 0279 08       		.uleb128 0x8
+ 1821 027a 01       		.uleb128 0x1
+ 1822 027b 52       		.byte	0x52
+ 1823 027c 03       		.uleb128 0x3
+ 1824 027d 0A       		.byte	0xa
+ 1825 027e 805B     		.2byte	0x5b80
+ 1826 0280 00       		.byte	0
+ 1827 0281 06       		.uleb128 0x6
+ 1828 0282 38000000 		.4byte	.LVL23
+ 1829 0286 D6040000 		.4byte	0x4d6
+ 1830 028a 00       		.byte	0
+ 1831 028b 05       		.uleb128 0x5
+ 1832 028c 98020000 		.4byte	.LASF23
+ 1833 0290 01       		.byte	0x1
+ 1834 0291 2B       		.byte	0x2b
+ 1835 0292 00000000 		.4byte	.LFB0
+ 1836 0296 40000000 		.4byte	.LFE0-.LFB0
+ 1837 029a 01       		.uleb128 0x1
+ 1838 029b 9C       		.byte	0x9c
+ 1839 029c 14030000 		.4byte	0x314
+ 1840 02a0 06       		.uleb128 0x6
+ 1841 02a1 06000000 		.4byte	.LVL25
+ 1842 02a5 EC040000 		.4byte	0x4ec
+ 1843 02a9 07       		.uleb128 0x7
+ 1844 02aa 0C000000 		.4byte	.LVL26
+ 1845 02ae F7040000 		.4byte	0x4f7
+ 1846 02b2 BC020000 		.4byte	0x2bc
+ 1847 02b6 08       		.uleb128 0x8
+ 1848 02b7 01       		.uleb128 0x1
+ 1849 02b8 50       		.byte	0x50
+ 1850 02b9 01       		.uleb128 0x1
+ 1851 02ba 32       		.byte	0x32
+ 1852 02bb 00       		.byte	0
+ 1853 02bc 07       		.uleb128 0x7
+ 1854 02bd 12000000 		.4byte	.LVL27
+ 1855 02c1 02050000 		.4byte	0x502
+ 1856 02c5 CF020000 		.4byte	0x2cf
+ 1857 02c9 08       		.uleb128 0x8
+ 1858 02ca 01       		.uleb128 0x1
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 39
+
+
+ 1859 02cb 50       		.byte	0x50
+ 1860 02cc 01       		.uleb128 0x1
+ 1861 02cd 34       		.byte	0x34
+ 1862 02ce 00       		.byte	0
+ 1863 02cf 06       		.uleb128 0x6
+ 1864 02d0 16000000 		.4byte	.LVL28
+ 1865 02d4 0D050000 		.4byte	0x50d
+ 1866 02d8 06       		.uleb128 0x6
+ 1867 02d9 1E000000 		.4byte	.LVL29
+ 1868 02dd 0D050000 		.4byte	0x50d
+ 1869 02e1 07       		.uleb128 0x7
+ 1870 02e2 2C000000 		.4byte	.LVL30
+ 1871 02e6 4D010000 		.4byte	0x14d
+ 1872 02ea FC020000 		.4byte	0x2fc
+ 1873 02ee 08       		.uleb128 0x8
+ 1874 02ef 01       		.uleb128 0x1
+ 1875 02f0 50       		.byte	0x50
+ 1876 02f1 02       		.uleb128 0x2
+ 1877 02f2 74       		.byte	0x74
+ 1878 02f3 00       		.sleb128 0
+ 1879 02f4 08       		.uleb128 0x8
+ 1880 02f5 01       		.uleb128 0x1
+ 1881 02f6 51       		.byte	0x51
+ 1882 02f7 03       		.uleb128 0x3
+ 1883 02f8 0A       		.byte	0xa
+ 1884 02f9 E803     		.2byte	0x3e8
+ 1885 02fb 00       		.byte	0
+ 1886 02fc 0E       		.uleb128 0xe
+ 1887 02fd 36000000 		.4byte	.LVL31
+ 1888 0301 F0010000 		.4byte	0x1f0
+ 1889 0305 08       		.uleb128 0x8
+ 1890 0306 01       		.uleb128 0x1
+ 1891 0307 50       		.byte	0x50
+ 1892 0308 03       		.uleb128 0x3
+ 1893 0309 74       		.byte	0x74
+ 1894 030a E807     		.sleb128 1000
+ 1895 030c 08       		.uleb128 0x8
+ 1896 030d 01       		.uleb128 0x1
+ 1897 030e 51       		.byte	0x51
+ 1898 030f 02       		.uleb128 0x2
+ 1899 0310 08       		.byte	0x8
+ 1900 0311 64       		.byte	0x64
+ 1901 0312 00       		.byte	0
+ 1902 0313 00       		.byte	0
+ 1903 0314 05       		.uleb128 0x5
+ 1904 0315 1E020000 		.4byte	.LASF24
+ 1905 0319 01       		.byte	0x1
+ 1906 031a 81       		.byte	0x81
+ 1907 031b 00000000 		.4byte	.LFB2
+ 1908 031f 1C000000 		.4byte	.LFE2-.LFB2
+ 1909 0323 01       		.uleb128 0x1
+ 1910 0324 9C       		.byte	0x9c
+ 1911 0325 3C030000 		.4byte	0x33c
+ 1912 0329 06       		.uleb128 0x6
+ 1913 032a 0C000000 		.4byte	.LVL32
+ 1914 032e 8B020000 		.4byte	0x28b
+ 1915 0332 06       		.uleb128 0x6
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 40
+
+
+ 1916 0333 16000000 		.4byte	.LVL33
+ 1917 0337 B2000000 		.4byte	0xb2
+ 1918 033b 00       		.byte	0
+ 1919 033c 05       		.uleb128 0x5
+ 1920 033d C6020000 		.4byte	.LASF25
+ 1921 0341 01       		.byte	0x1
+ 1922 0342 A3       		.byte	0xa3
+ 1923 0343 00000000 		.4byte	.LFB3
+ 1924 0347 18000000 		.4byte	.LFE3-.LFB3
+ 1925 034b 01       		.uleb128 0x1
+ 1926 034c 9C       		.byte	0x9c
+ 1927 034d C6030000 		.4byte	0x3c6
+ 1928 0351 09       		.uleb128 0x9
+ 1929 0352 B4000000 		.4byte	.LASF26
+ 1930 0356 01       		.byte	0x1
+ 1931 0357 A3       		.byte	0xa3
+ 1932 0358 E5010000 		.4byte	0x1e5
+ 1933 035c 9A000000 		.4byte	.LLST4
+ 1934 0360 09       		.uleb128 0x9
+ 1935 0361 DB010000 		.4byte	.LASF27
+ 1936 0365 01       		.byte	0x1
+ 1937 0366 A3       		.byte	0xa3
+ 1938 0367 77000000 		.4byte	0x77
+ 1939 036b BB000000 		.4byte	.LLST5
+ 1940 036f 09       		.uleb128 0x9
+ 1941 0370 BD000000 		.4byte	.LASF28
+ 1942 0374 01       		.byte	0x1
+ 1943 0375 A3       		.byte	0xa3
+ 1944 0376 E5010000 		.4byte	0x1e5
+ 1945 037a DC000000 		.4byte	.LLST6
+ 1946 037e 09       		.uleb128 0x9
+ 1947 037f E7010000 		.4byte	.LASF29
+ 1948 0383 01       		.byte	0x1
+ 1949 0384 A3       		.byte	0xa3
+ 1950 0385 77000000 		.4byte	0x77
+ 1951 0389 FA000000 		.4byte	.LLST7
+ 1952 038d 07       		.uleb128 0x7
+ 1953 038e 0A000000 		.4byte	.LVL35
+ 1954 0392 4D010000 		.4byte	0x14d
+ 1955 0396 A2030000 		.4byte	0x3a2
+ 1956 039a 08       		.uleb128 0x8
+ 1957 039b 01       		.uleb128 0x1
+ 1958 039c 50       		.byte	0x50
+ 1959 039d 03       		.uleb128 0x3
+ 1960 039e F3       		.byte	0xf3
+ 1961 039f 01       		.uleb128 0x1
+ 1962 03a0 50       		.byte	0x50
+ 1963 03a1 00       		.byte	0
+ 1964 03a2 07       		.uleb128 0x7
+ 1965 03a3 12000000 		.4byte	.LVL36
+ 1966 03a7 F0010000 		.4byte	0x1f0
+ 1967 03ab BC030000 		.4byte	0x3bc
+ 1968 03af 08       		.uleb128 0x8
+ 1969 03b0 01       		.uleb128 0x1
+ 1970 03b1 50       		.byte	0x50
+ 1971 03b2 02       		.uleb128 0x2
+ 1972 03b3 74       		.byte	0x74
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 41
+
+
+ 1973 03b4 00       		.sleb128 0
+ 1974 03b5 08       		.uleb128 0x8
+ 1975 03b6 01       		.uleb128 0x1
+ 1976 03b7 51       		.byte	0x51
+ 1977 03b8 02       		.uleb128 0x2
+ 1978 03b9 75       		.byte	0x75
+ 1979 03ba 00       		.sleb128 0
+ 1980 03bb 00       		.byte	0
+ 1981 03bc 06       		.uleb128 0x6
+ 1982 03bd 16000000 		.4byte	.LVL37
+ 1983 03c1 14030000 		.4byte	0x314
+ 1984 03c5 00       		.byte	0
+ 1985 03c6 0F       		.uleb128 0xf
+ 1986 03c7 B8020000 		.4byte	.LASF30
+ 1987 03cb 01       		.byte	0x1
+ 1988 03cc 17       		.byte	0x17
+ 1989 03cd 6B000000 		.4byte	0x6b
+ 1990 03d1 05       		.uleb128 0x5
+ 1991 03d2 03       		.byte	0x3
+ 1992 03d3 00000000 		.4byte	DAC_Wave1Chan
+ 1993 03d7 0F       		.uleb128 0xf
+ 1994 03d8 37030000 		.4byte	.LASF31
+ 1995 03dc 01       		.byte	0x1
+ 1996 03dd 18       		.byte	0x18
+ 1997 03de 6B000000 		.4byte	0x6b
+ 1998 03e2 05       		.uleb128 0x5
+ 1999 03e3 03       		.byte	0x3
+ 2000 03e4 01000000 		.4byte	DAC_Wave2Chan
+ 2001 03e8 0F       		.uleb128 0xf
+ 2002 03e9 08030000 		.4byte	.LASF32
+ 2003 03ed 01       		.byte	0x1
+ 2004 03ee 19       		.byte	0x19
+ 2005 03ef 6B000000 		.4byte	0x6b
+ 2006 03f3 05       		.uleb128 0x5
+ 2007 03f4 03       		.byte	0x3
+ 2008 03f5 02000000 		.4byte	DAC_Wave1TD
+ 2009 03f9 0F       		.uleb128 0xf
+ 2010 03fa 0F000000 		.4byte	.LASF33
+ 2011 03fe 01       		.byte	0x1
+ 2012 03ff 1A       		.byte	0x1a
+ 2013 0400 6B000000 		.4byte	0x6b
+ 2014 0404 05       		.uleb128 0x5
+ 2015 0405 03       		.byte	0x3
+ 2016 0406 03000000 		.4byte	DAC_Wave2TD
+ 2017 040a 10       		.uleb128 0x10
+ 2018 040b 97010000 		.4byte	.LASF34
+ 2019 040f 01       		.byte	0x1
+ 2020 0410 12       		.byte	0x12
+ 2021 0411 6B000000 		.4byte	0x6b
+ 2022 0415 05       		.uleb128 0x5
+ 2023 0416 03       		.byte	0x3
+ 2024 0417 00000000 		.4byte	DAC_initVar
+ 2025 041b 11       		.uleb128 0x11
+ 2026 041c EB010000 		.4byte	0x1eb
+ 2027 0420 2C040000 		.4byte	0x42c
+ 2028 0424 12       		.uleb128 0x12
+ 2029 0425 AB000000 		.4byte	0xab
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 42
+
+
+ 2030 0429 E703     		.2byte	0x3e7
+ 2031 042b 00       		.byte	0
+ 2032 042c 10       		.uleb128 0x10
+ 2033 042d 24000000 		.4byte	.LASF35
+ 2034 0431 01       		.byte	0x1
+ 2035 0432 14       		.byte	0x14
+ 2036 0433 3D040000 		.4byte	0x43d
+ 2037 0437 05       		.uleb128 0x5
+ 2038 0438 03       		.byte	0x3
+ 2039 0439 00000000 		.4byte	DAC_wave1
+ 2040 043d 0B       		.uleb128 0xb
+ 2041 043e 1B040000 		.4byte	0x41b
+ 2042 0442 11       		.uleb128 0x11
+ 2043 0443 EB010000 		.4byte	0x1eb
+ 2044 0447 52040000 		.4byte	0x452
+ 2045 044b 13       		.uleb128 0x13
+ 2046 044c AB000000 		.4byte	0xab
+ 2047 0450 63       		.byte	0x63
+ 2048 0451 00       		.byte	0
+ 2049 0452 10       		.uleb128 0x10
+ 2050 0453 2E000000 		.4byte	.LASF36
+ 2051 0457 01       		.byte	0x1
+ 2052 0458 15       		.byte	0x15
+ 2053 0459 63040000 		.4byte	0x463
+ 2054 045d 05       		.uleb128 0x5
+ 2055 045e 03       		.byte	0x3
+ 2056 045f 00000000 		.4byte	DAC_wave2
+ 2057 0463 0B       		.uleb128 0xb
+ 2058 0464 42040000 		.4byte	0x442
+ 2059 0468 14       		.uleb128 0x14
+ 2060 0469 57020000 		.4byte	.LASF37
+ 2061 046d 57020000 		.4byte	.LASF37
+ 2062 0471 03       		.byte	0x3
+ 2063 0472 3A       		.byte	0x3a
+ 2064 0473 14       		.uleb128 0x14
+ 2065 0474 42020000 		.4byte	.LASF38
+ 2066 0478 42020000 		.4byte	.LASF38
+ 2067 047c 04       		.byte	0x4
+ 2068 047d 29       		.byte	0x29
+ 2069 047e 14       		.uleb128 0x14
+ 2070 047f 73030000 		.4byte	.LASF39
+ 2071 0483 73030000 		.4byte	.LASF39
+ 2072 0487 03       		.byte	0x3
+ 2073 0488 37       		.byte	0x37
+ 2074 0489 14       		.uleb128 0x14
+ 2075 048a D2020000 		.4byte	.LASF40
+ 2076 048e D2020000 		.4byte	.LASF40
+ 2077 0492 05       		.byte	0x5
+ 2078 0493 27       		.byte	0x27
+ 2079 0494 14       		.uleb128 0x14
+ 2080 0495 22030000 		.4byte	.LASF41
+ 2081 0499 22030000 		.4byte	.LASF41
+ 2082 049d 05       		.byte	0x5
+ 2083 049e 28       		.byte	0x28
+ 2084 049f 14       		.uleb128 0x14
+ 2085 04a0 92030000 		.4byte	.LASF42
+ 2086 04a4 92030000 		.4byte	.LASF42
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 43
+
+
+ 2087 04a8 04       		.byte	0x4
+ 2088 04a9 2A       		.byte	0x2a
+ 2089 04aa 14       		.uleb128 0x14
+ 2090 04ab 4A000000 		.4byte	.LASF43
+ 2091 04af 4A000000 		.4byte	.LASF43
+ 2092 04b3 03       		.byte	0x3
+ 2093 04b4 34       		.byte	0x34
+ 2094 04b5 14       		.uleb128 0x14
+ 2095 04b6 EC020000 		.4byte	.LASF44
+ 2096 04ba EC020000 		.4byte	.LASF44
+ 2097 04be 06       		.byte	0x6
+ 2098 04bf 1E       		.byte	0x1e
+ 2099 04c0 14       		.uleb128 0x14
+ 2100 04c1 A3010000 		.4byte	.LASF45
+ 2101 04c5 A3010000 		.4byte	.LASF45
+ 2102 04c9 04       		.byte	0x4
+ 2103 04ca 3B       		.byte	0x3b
+ 2104 04cb 14       		.uleb128 0x14
+ 2105 04cc 38000000 		.4byte	.LASF46
+ 2106 04d0 38000000 		.4byte	.LASF46
+ 2107 04d4 04       		.byte	0x4
+ 2108 04d5 3F       		.byte	0x3f
+ 2109 04d6 14       		.uleb128 0x14
+ 2110 04d7 6C000000 		.4byte	.LASF47
+ 2111 04db 6C000000 		.4byte	.LASF47
+ 2112 04df 04       		.byte	0x4
+ 2113 04e0 2F       		.byte	0x2f
+ 2114 04e1 14       		.uleb128 0x14
+ 2115 04e2 6F020000 		.4byte	.LASF48
+ 2116 04e6 6F020000 		.4byte	.LASF48
+ 2117 04ea 07       		.byte	0x7
+ 2118 04eb 1E       		.byte	0x1e
+ 2119 04ec 14       		.uleb128 0x14
+ 2120 04ed 45030000 		.4byte	.LASF49
+ 2121 04f1 45030000 		.4byte	.LASF49
+ 2122 04f5 03       		.byte	0x3
+ 2123 04f6 39       		.byte	0x39
+ 2124 04f7 14       		.uleb128 0x14
+ 2125 04f8 2F020000 		.4byte	.LASF50
+ 2126 04fc 2F020000 		.4byte	.LASF50
+ 2127 0500 03       		.byte	0x3
+ 2128 0501 35       		.byte	0x35
+ 2129 0502 14       		.uleb128 0x14
+ 2130 0503 C6000000 		.4byte	.LASF51
+ 2131 0507 C6000000 		.4byte	.LASF51
+ 2132 050b 03       		.byte	0x3
+ 2133 050c 36       		.byte	0x36
+ 2134 050d 14       		.uleb128 0x14
+ 2135 050e D9000000 		.4byte	.LASF52
+ 2136 0512 D9000000 		.4byte	.LASF52
+ 2137 0516 04       		.byte	0x4
+ 2138 0517 38       		.byte	0x38
+ 2139 0518 00       		.byte	0
+ 2140              		.section	.debug_abbrev,"",%progbits
+ 2141              	.Ldebug_abbrev0:
+ 2142 0000 01       		.uleb128 0x1
+ 2143 0001 11       		.uleb128 0x11
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 44
+
+
+ 2144 0002 01       		.byte	0x1
+ 2145 0003 25       		.uleb128 0x25
+ 2146 0004 0E       		.uleb128 0xe
+ 2147 0005 13       		.uleb128 0x13
+ 2148 0006 0B       		.uleb128 0xb
+ 2149 0007 03       		.uleb128 0x3
+ 2150 0008 0E       		.uleb128 0xe
+ 2151 0009 1B       		.uleb128 0x1b
+ 2152 000a 0E       		.uleb128 0xe
+ 2153 000b 55       		.uleb128 0x55
+ 2154 000c 17       		.uleb128 0x17
+ 2155 000d 11       		.uleb128 0x11
+ 2156 000e 01       		.uleb128 0x1
+ 2157 000f 10       		.uleb128 0x10
+ 2158 0010 17       		.uleb128 0x17
+ 2159 0011 00       		.byte	0
+ 2160 0012 00       		.byte	0
+ 2161 0013 02       		.uleb128 0x2
+ 2162 0014 24       		.uleb128 0x24
+ 2163 0015 00       		.byte	0
+ 2164 0016 0B       		.uleb128 0xb
+ 2165 0017 0B       		.uleb128 0xb
+ 2166 0018 3E       		.uleb128 0x3e
+ 2167 0019 0B       		.uleb128 0xb
+ 2168 001a 03       		.uleb128 0x3
+ 2169 001b 0E       		.uleb128 0xe
+ 2170 001c 00       		.byte	0
+ 2171 001d 00       		.byte	0
+ 2172 001e 03       		.uleb128 0x3
+ 2173 001f 24       		.uleb128 0x24
+ 2174 0020 00       		.byte	0
+ 2175 0021 0B       		.uleb128 0xb
+ 2176 0022 0B       		.uleb128 0xb
+ 2177 0023 3E       		.uleb128 0x3e
+ 2178 0024 0B       		.uleb128 0xb
+ 2179 0025 03       		.uleb128 0x3
+ 2180 0026 08       		.uleb128 0x8
+ 2181 0027 00       		.byte	0
+ 2182 0028 00       		.byte	0
+ 2183 0029 04       		.uleb128 0x4
+ 2184 002a 16       		.uleb128 0x16
+ 2185 002b 00       		.byte	0
+ 2186 002c 03       		.uleb128 0x3
+ 2187 002d 0E       		.uleb128 0xe
+ 2188 002e 3A       		.uleb128 0x3a
+ 2189 002f 0B       		.uleb128 0xb
+ 2190 0030 3B       		.uleb128 0x3b
+ 2191 0031 05       		.uleb128 0x5
+ 2192 0032 49       		.uleb128 0x49
+ 2193 0033 13       		.uleb128 0x13
+ 2194 0034 00       		.byte	0
+ 2195 0035 00       		.byte	0
+ 2196 0036 05       		.uleb128 0x5
+ 2197 0037 2E       		.uleb128 0x2e
+ 2198 0038 01       		.byte	0x1
+ 2199 0039 3F       		.uleb128 0x3f
+ 2200 003a 19       		.uleb128 0x19
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 45
+
+
+ 2201 003b 03       		.uleb128 0x3
+ 2202 003c 0E       		.uleb128 0xe
+ 2203 003d 3A       		.uleb128 0x3a
+ 2204 003e 0B       		.uleb128 0xb
+ 2205 003f 3B       		.uleb128 0x3b
+ 2206 0040 0B       		.uleb128 0xb
+ 2207 0041 27       		.uleb128 0x27
+ 2208 0042 19       		.uleb128 0x19
+ 2209 0043 11       		.uleb128 0x11
+ 2210 0044 01       		.uleb128 0x1
+ 2211 0045 12       		.uleb128 0x12
+ 2212 0046 06       		.uleb128 0x6
+ 2213 0047 40       		.uleb128 0x40
+ 2214 0048 18       		.uleb128 0x18
+ 2215 0049 9742     		.uleb128 0x2117
+ 2216 004b 19       		.uleb128 0x19
+ 2217 004c 01       		.uleb128 0x1
+ 2218 004d 13       		.uleb128 0x13
+ 2219 004e 00       		.byte	0
+ 2220 004f 00       		.byte	0
+ 2221 0050 06       		.uleb128 0x6
+ 2222 0051 898201   		.uleb128 0x4109
+ 2223 0054 00       		.byte	0
+ 2224 0055 11       		.uleb128 0x11
+ 2225 0056 01       		.uleb128 0x1
+ 2226 0057 31       		.uleb128 0x31
+ 2227 0058 13       		.uleb128 0x13
+ 2228 0059 00       		.byte	0
+ 2229 005a 00       		.byte	0
+ 2230 005b 07       		.uleb128 0x7
+ 2231 005c 898201   		.uleb128 0x4109
+ 2232 005f 01       		.byte	0x1
+ 2233 0060 11       		.uleb128 0x11
+ 2234 0061 01       		.uleb128 0x1
+ 2235 0062 31       		.uleb128 0x31
+ 2236 0063 13       		.uleb128 0x13
+ 2237 0064 01       		.uleb128 0x1
+ 2238 0065 13       		.uleb128 0x13
+ 2239 0066 00       		.byte	0
+ 2240 0067 00       		.byte	0
+ 2241 0068 08       		.uleb128 0x8
+ 2242 0069 8A8201   		.uleb128 0x410a
+ 2243 006c 00       		.byte	0
+ 2244 006d 02       		.uleb128 0x2
+ 2245 006e 18       		.uleb128 0x18
+ 2246 006f 9142     		.uleb128 0x2111
+ 2247 0071 18       		.uleb128 0x18
+ 2248 0072 00       		.byte	0
+ 2249 0073 00       		.byte	0
+ 2250 0074 09       		.uleb128 0x9
+ 2251 0075 05       		.uleb128 0x5
+ 2252 0076 00       		.byte	0
+ 2253 0077 03       		.uleb128 0x3
+ 2254 0078 0E       		.uleb128 0xe
+ 2255 0079 3A       		.uleb128 0x3a
+ 2256 007a 0B       		.uleb128 0xb
+ 2257 007b 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 46
+
+
+ 2258 007c 0B       		.uleb128 0xb
+ 2259 007d 49       		.uleb128 0x49
+ 2260 007e 13       		.uleb128 0x13
+ 2261 007f 02       		.uleb128 0x2
+ 2262 0080 17       		.uleb128 0x17
+ 2263 0081 00       		.byte	0
+ 2264 0082 00       		.byte	0
+ 2265 0083 0A       		.uleb128 0xa
+ 2266 0084 0F       		.uleb128 0xf
+ 2267 0085 00       		.byte	0
+ 2268 0086 0B       		.uleb128 0xb
+ 2269 0087 0B       		.uleb128 0xb
+ 2270 0088 49       		.uleb128 0x49
+ 2271 0089 13       		.uleb128 0x13
+ 2272 008a 00       		.byte	0
+ 2273 008b 00       		.byte	0
+ 2274 008c 0B       		.uleb128 0xb
+ 2275 008d 26       		.uleb128 0x26
+ 2276 008e 00       		.byte	0
+ 2277 008f 49       		.uleb128 0x49
+ 2278 0090 13       		.uleb128 0x13
+ 2279 0091 00       		.byte	0
+ 2280 0092 00       		.byte	0
+ 2281 0093 0C       		.uleb128 0xc
+ 2282 0094 2E       		.uleb128 0x2e
+ 2283 0095 01       		.byte	0x1
+ 2284 0096 3F       		.uleb128 0x3f
+ 2285 0097 19       		.uleb128 0x19
+ 2286 0098 03       		.uleb128 0x3
+ 2287 0099 0E       		.uleb128 0xe
+ 2288 009a 3A       		.uleb128 0x3a
+ 2289 009b 0B       		.uleb128 0xb
+ 2290 009c 3B       		.uleb128 0x3b
+ 2291 009d 05       		.uleb128 0x5
+ 2292 009e 27       		.uleb128 0x27
+ 2293 009f 19       		.uleb128 0x19
+ 2294 00a0 11       		.uleb128 0x11
+ 2295 00a1 01       		.uleb128 0x1
+ 2296 00a2 12       		.uleb128 0x12
+ 2297 00a3 06       		.uleb128 0x6
+ 2298 00a4 40       		.uleb128 0x40
+ 2299 00a5 18       		.uleb128 0x18
+ 2300 00a6 9742     		.uleb128 0x2117
+ 2301 00a8 19       		.uleb128 0x19
+ 2302 00a9 01       		.uleb128 0x1
+ 2303 00aa 13       		.uleb128 0x13
+ 2304 00ab 00       		.byte	0
+ 2305 00ac 00       		.byte	0
+ 2306 00ad 0D       		.uleb128 0xd
+ 2307 00ae 05       		.uleb128 0x5
+ 2308 00af 00       		.byte	0
+ 2309 00b0 03       		.uleb128 0x3
+ 2310 00b1 0E       		.uleb128 0xe
+ 2311 00b2 3A       		.uleb128 0x3a
+ 2312 00b3 0B       		.uleb128 0xb
+ 2313 00b4 3B       		.uleb128 0x3b
+ 2314 00b5 05       		.uleb128 0x5
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 47
+
+
+ 2315 00b6 49       		.uleb128 0x49
+ 2316 00b7 13       		.uleb128 0x13
+ 2317 00b8 02       		.uleb128 0x2
+ 2318 00b9 17       		.uleb128 0x17
+ 2319 00ba 00       		.byte	0
+ 2320 00bb 00       		.byte	0
+ 2321 00bc 0E       		.uleb128 0xe
+ 2322 00bd 898201   		.uleb128 0x4109
+ 2323 00c0 01       		.byte	0x1
+ 2324 00c1 11       		.uleb128 0x11
+ 2325 00c2 01       		.uleb128 0x1
+ 2326 00c3 31       		.uleb128 0x31
+ 2327 00c4 13       		.uleb128 0x13
+ 2328 00c5 00       		.byte	0
+ 2329 00c6 00       		.byte	0
+ 2330 00c7 0F       		.uleb128 0xf
+ 2331 00c8 34       		.uleb128 0x34
+ 2332 00c9 00       		.byte	0
+ 2333 00ca 03       		.uleb128 0x3
+ 2334 00cb 0E       		.uleb128 0xe
+ 2335 00cc 3A       		.uleb128 0x3a
+ 2336 00cd 0B       		.uleb128 0xb
+ 2337 00ce 3B       		.uleb128 0x3b
+ 2338 00cf 0B       		.uleb128 0xb
+ 2339 00d0 49       		.uleb128 0x49
+ 2340 00d1 13       		.uleb128 0x13
+ 2341 00d2 02       		.uleb128 0x2
+ 2342 00d3 18       		.uleb128 0x18
+ 2343 00d4 00       		.byte	0
+ 2344 00d5 00       		.byte	0
+ 2345 00d6 10       		.uleb128 0x10
+ 2346 00d7 34       		.uleb128 0x34
+ 2347 00d8 00       		.byte	0
+ 2348 00d9 03       		.uleb128 0x3
+ 2349 00da 0E       		.uleb128 0xe
+ 2350 00db 3A       		.uleb128 0x3a
+ 2351 00dc 0B       		.uleb128 0xb
+ 2352 00dd 3B       		.uleb128 0x3b
+ 2353 00de 0B       		.uleb128 0xb
+ 2354 00df 49       		.uleb128 0x49
+ 2355 00e0 13       		.uleb128 0x13
+ 2356 00e1 3F       		.uleb128 0x3f
+ 2357 00e2 19       		.uleb128 0x19
+ 2358 00e3 02       		.uleb128 0x2
+ 2359 00e4 18       		.uleb128 0x18
+ 2360 00e5 00       		.byte	0
+ 2361 00e6 00       		.byte	0
+ 2362 00e7 11       		.uleb128 0x11
+ 2363 00e8 01       		.uleb128 0x1
+ 2364 00e9 01       		.byte	0x1
+ 2365 00ea 49       		.uleb128 0x49
+ 2366 00eb 13       		.uleb128 0x13
+ 2367 00ec 01       		.uleb128 0x1
+ 2368 00ed 13       		.uleb128 0x13
+ 2369 00ee 00       		.byte	0
+ 2370 00ef 00       		.byte	0
+ 2371 00f0 12       		.uleb128 0x12
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 48
+
+
+ 2372 00f1 21       		.uleb128 0x21
+ 2373 00f2 00       		.byte	0
+ 2374 00f3 49       		.uleb128 0x49
+ 2375 00f4 13       		.uleb128 0x13
+ 2376 00f5 2F       		.uleb128 0x2f
+ 2377 00f6 05       		.uleb128 0x5
+ 2378 00f7 00       		.byte	0
+ 2379 00f8 00       		.byte	0
+ 2380 00f9 13       		.uleb128 0x13
+ 2381 00fa 21       		.uleb128 0x21
+ 2382 00fb 00       		.byte	0
+ 2383 00fc 49       		.uleb128 0x49
+ 2384 00fd 13       		.uleb128 0x13
+ 2385 00fe 2F       		.uleb128 0x2f
+ 2386 00ff 0B       		.uleb128 0xb
+ 2387 0100 00       		.byte	0
+ 2388 0101 00       		.byte	0
+ 2389 0102 14       		.uleb128 0x14
+ 2390 0103 2E       		.uleb128 0x2e
+ 2391 0104 00       		.byte	0
+ 2392 0105 3F       		.uleb128 0x3f
+ 2393 0106 19       		.uleb128 0x19
+ 2394 0107 3C       		.uleb128 0x3c
+ 2395 0108 19       		.uleb128 0x19
+ 2396 0109 6E       		.uleb128 0x6e
+ 2397 010a 0E       		.uleb128 0xe
+ 2398 010b 03       		.uleb128 0x3
+ 2399 010c 0E       		.uleb128 0xe
+ 2400 010d 3A       		.uleb128 0x3a
+ 2401 010e 0B       		.uleb128 0xb
+ 2402 010f 3B       		.uleb128 0x3b
+ 2403 0110 0B       		.uleb128 0xb
+ 2404 0111 00       		.byte	0
+ 2405 0112 00       		.byte	0
+ 2406 0113 00       		.byte	0
+ 2407              		.section	.debug_loc,"",%progbits
+ 2408              	.Ldebug_loc0:
+ 2409              	.LLST0:
+ 2410 0000 00000000 		.4byte	.LVL9
+ 2411 0004 10000000 		.4byte	.LVL11
+ 2412 0008 0100     		.2byte	0x1
+ 2413 000a 50       		.byte	0x50
+ 2414 000b 10000000 		.4byte	.LVL11
+ 2415 000f 3A000000 		.4byte	.LVL16
+ 2416 0013 0100     		.2byte	0x1
+ 2417 0015 55       		.byte	0x55
+ 2418 0016 3A000000 		.4byte	.LVL16
+ 2419 001a 40000000 		.4byte	.LFE5
+ 2420 001e 0400     		.2byte	0x4
+ 2421 0020 F3       		.byte	0xf3
+ 2422 0021 01       		.uleb128 0x1
+ 2423 0022 50       		.byte	0x50
+ 2424 0023 9F       		.byte	0x9f
+ 2425 0024 00000000 		.4byte	0
+ 2426 0028 00000000 		.4byte	0
+ 2427              	.LLST1:
+ 2428 002c 00000000 		.4byte	.LVL9
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 49
+
+
+ 2429 0030 0E000000 		.4byte	.LVL10
+ 2430 0034 0100     		.2byte	0x1
+ 2431 0036 51       		.byte	0x51
+ 2432 0037 0E000000 		.4byte	.LVL10
+ 2433 003b 40000000 		.4byte	.LFE5
+ 2434 003f 0400     		.2byte	0x4
+ 2435 0041 F3       		.byte	0xf3
+ 2436 0042 01       		.uleb128 0x1
+ 2437 0043 51       		.byte	0x51
+ 2438 0044 9F       		.byte	0x9f
+ 2439 0045 00000000 		.4byte	0
+ 2440 0049 00000000 		.4byte	0
+ 2441              	.LLST2:
+ 2442 004d 00000000 		.4byte	.LVL17
+ 2443 0051 10000000 		.4byte	.LVL19
+ 2444 0055 0100     		.2byte	0x1
+ 2445 0057 50       		.byte	0x50
+ 2446 0058 10000000 		.4byte	.LVL19
+ 2447 005c 3A000000 		.4byte	.LVL24
+ 2448 0060 0100     		.2byte	0x1
+ 2449 0062 55       		.byte	0x55
+ 2450 0063 3A000000 		.4byte	.LVL24
+ 2451 0067 40000000 		.4byte	.LFE6
+ 2452 006b 0400     		.2byte	0x4
+ 2453 006d F3       		.byte	0xf3
+ 2454 006e 01       		.uleb128 0x1
+ 2455 006f 50       		.byte	0x50
+ 2456 0070 9F       		.byte	0x9f
+ 2457 0071 00000000 		.4byte	0
+ 2458 0075 00000000 		.4byte	0
+ 2459              	.LLST3:
+ 2460 0079 00000000 		.4byte	.LVL17
+ 2461 007d 0E000000 		.4byte	.LVL18
+ 2462 0081 0100     		.2byte	0x1
+ 2463 0083 51       		.byte	0x51
+ 2464 0084 0E000000 		.4byte	.LVL18
+ 2465 0088 40000000 		.4byte	.LFE6
+ 2466 008c 0400     		.2byte	0x4
+ 2467 008e F3       		.byte	0xf3
+ 2468 008f 01       		.uleb128 0x1
+ 2469 0090 51       		.byte	0x51
+ 2470 0091 9F       		.byte	0x9f
+ 2471 0092 00000000 		.4byte	0
+ 2472 0096 00000000 		.4byte	0
+ 2473              	.LLST4:
+ 2474 009a 00000000 		.4byte	.LVL34
+ 2475 009e 09000000 		.4byte	.LVL35-1
+ 2476 00a2 0100     		.2byte	0x1
+ 2477 00a4 50       		.byte	0x50
+ 2478 00a5 09000000 		.4byte	.LVL35-1
+ 2479 00a9 18000000 		.4byte	.LFE3
+ 2480 00ad 0400     		.2byte	0x4
+ 2481 00af F3       		.byte	0xf3
+ 2482 00b0 01       		.uleb128 0x1
+ 2483 00b1 50       		.byte	0x50
+ 2484 00b2 9F       		.byte	0x9f
+ 2485 00b3 00000000 		.4byte	0
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 50
+
+
+ 2486 00b7 00000000 		.4byte	0
+ 2487              	.LLST5:
+ 2488 00bb 00000000 		.4byte	.LVL34
+ 2489 00bf 09000000 		.4byte	.LVL35-1
+ 2490 00c3 0100     		.2byte	0x1
+ 2491 00c5 51       		.byte	0x51
+ 2492 00c6 09000000 		.4byte	.LVL35-1
+ 2493 00ca 18000000 		.4byte	.LFE3
+ 2494 00ce 0400     		.2byte	0x4
+ 2495 00d0 F3       		.byte	0xf3
+ 2496 00d1 01       		.uleb128 0x1
+ 2497 00d2 51       		.byte	0x51
+ 2498 00d3 9F       		.byte	0x9f
+ 2499 00d4 00000000 		.4byte	0
+ 2500 00d8 00000000 		.4byte	0
+ 2501              	.LLST6:
+ 2502 00dc 00000000 		.4byte	.LVL34
+ 2503 00e0 09000000 		.4byte	.LVL35-1
+ 2504 00e4 0100     		.2byte	0x1
+ 2505 00e6 52       		.byte	0x52
+ 2506 00e7 09000000 		.4byte	.LVL35-1
+ 2507 00eb 18000000 		.4byte	.LFE3
+ 2508 00ef 0100     		.2byte	0x1
+ 2509 00f1 54       		.byte	0x54
+ 2510 00f2 00000000 		.4byte	0
+ 2511 00f6 00000000 		.4byte	0
+ 2512              	.LLST7:
+ 2513 00fa 00000000 		.4byte	.LVL34
+ 2514 00fe 09000000 		.4byte	.LVL35-1
+ 2515 0102 0100     		.2byte	0x1
+ 2516 0104 53       		.byte	0x53
+ 2517 0105 09000000 		.4byte	.LVL35-1
+ 2518 0109 18000000 		.4byte	.LFE3
+ 2519 010d 0400     		.2byte	0x4
+ 2520 010f F3       		.byte	0xf3
+ 2521 0110 01       		.uleb128 0x1
+ 2522 0111 53       		.byte	0x53
+ 2523 0112 9F       		.byte	0x9f
+ 2524 0113 00000000 		.4byte	0
+ 2525 0117 00000000 		.4byte	0
+ 2526              		.section	.debug_aranges,"",%progbits
+ 2527 0000 4C000000 		.4byte	0x4c
+ 2528 0004 0200     		.2byte	0x2
+ 2529 0006 00000000 		.4byte	.Ldebug_info0
+ 2530 000a 04       		.byte	0x4
+ 2531 000b 00       		.byte	0
+ 2532 000c 0000     		.2byte	0
+ 2533 000e 0000     		.2byte	0
+ 2534 0010 00000000 		.4byte	.LFB1
+ 2535 0014 28000000 		.4byte	.LFE1-.LFB1
+ 2536 0018 00000000 		.4byte	.LFB4
+ 2537 001c 20000000 		.4byte	.LFE4-.LFB4
+ 2538 0020 00000000 		.4byte	.LFB5
+ 2539 0024 40000000 		.4byte	.LFE5-.LFB5
+ 2540 0028 00000000 		.4byte	.LFB6
+ 2541 002c 40000000 		.4byte	.LFE6-.LFB6
+ 2542 0030 00000000 		.4byte	.LFB0
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 51
+
+
+ 2543 0034 40000000 		.4byte	.LFE0-.LFB0
+ 2544 0038 00000000 		.4byte	.LFB2
+ 2545 003c 1C000000 		.4byte	.LFE2-.LFB2
+ 2546 0040 00000000 		.4byte	.LFB3
+ 2547 0044 18000000 		.4byte	.LFE3-.LFB3
+ 2548 0048 00000000 		.4byte	0
+ 2549 004c 00000000 		.4byte	0
+ 2550              		.section	.debug_ranges,"",%progbits
+ 2551              	.Ldebug_ranges0:
+ 2552 0000 00000000 		.4byte	.LFB1
+ 2553 0004 28000000 		.4byte	.LFE1
+ 2554 0008 00000000 		.4byte	.LFB4
+ 2555 000c 20000000 		.4byte	.LFE4
+ 2556 0010 00000000 		.4byte	.LFB5
+ 2557 0014 40000000 		.4byte	.LFE5
+ 2558 0018 00000000 		.4byte	.LFB6
+ 2559 001c 40000000 		.4byte	.LFE6
+ 2560 0020 00000000 		.4byte	.LFB0
+ 2561 0024 40000000 		.4byte	.LFE0
+ 2562 0028 00000000 		.4byte	.LFB2
+ 2563 002c 1C000000 		.4byte	.LFE2
+ 2564 0030 00000000 		.4byte	.LFB3
+ 2565 0034 18000000 		.4byte	.LFE3
+ 2566 0038 00000000 		.4byte	0
+ 2567 003c 00000000 		.4byte	0
+ 2568              		.section	.debug_line,"",%progbits
+ 2569              	.Ldebug_line0:
+ 2570 0000 39010000 		.section	.debug_str,"MS",%progbits,1
+ 2570      02009900 
+ 2570      00000201 
+ 2570      FB0E0D00 
+ 2570      01010101 
+ 2571              	.LASF19:
+ 2572 0000 4441435F 		.ascii	"DAC_Wave1Setup\000"
+ 2572      57617665 
+ 2572      31536574 
+ 2572      757000
+ 2573              	.LASF33:
+ 2574 000f 4441435F 		.ascii	"DAC_Wave2TD\000"
+ 2574      57617665 
+ 2574      32544400 
+ 2575              	.LASF18:
+ 2576 001b 4441435F 		.ascii	"DAC_Stop\000"
+ 2576      53746F70 
+ 2576      00
+ 2577              	.LASF35:
+ 2578 0024 4441435F 		.ascii	"DAC_wave1\000"
+ 2578      77617665 
+ 2578      3100
+ 2579              	.LASF36:
+ 2580 002e 4441435F 		.ascii	"DAC_wave2\000"
+ 2580      77617665 
+ 2580      3200
+ 2581              	.LASF46:
+ 2582 0038 4379446D 		.ascii	"CyDmaTdSetAddress\000"
+ 2582      61546453 
+ 2582      65744164 
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 52
+
+
+ 2582      64726573 
+ 2582      7300
+ 2583              	.LASF43:
+ 2584 004a 4441435F 		.ascii	"DAC_VDAC8_Stop\000"
+ 2584      56444143 
+ 2584      385F5374 
+ 2584      6F7000
+ 2585              	.LASF3:
+ 2586 0059 73686F72 		.ascii	"short unsigned int\000"
+ 2586      7420756E 
+ 2586      7369676E 
+ 2586      65642069 
+ 2586      6E7400
+ 2587              	.LASF47:
+ 2588 006c 4379446D 		.ascii	"CyDmaChSetInitialTd\000"
+ 2588      61436853 
+ 2588      6574496E 
+ 2588      69746961 
+ 2588      6C546400 
+ 2589              	.LASF55:
+ 2590 0080 433A5C55 		.ascii	"C:\\Users\\Mateo C. Querol\\Desktop\\speed_sensor.c"
+ 2590      73657273 
+ 2590      5C4D6174 
+ 2590      656F2043 
+ 2590      2E205175 
+ 2591 00af 7964736E 		.ascii	"ydsn\000"
+ 2591      00
+ 2592              	.LASF26:
+ 2593 00b4 77617665 		.ascii	"wavePtr1\000"
+ 2593      50747231 
+ 2593      00
+ 2594              	.LASF28:
+ 2595 00bd 77617665 		.ascii	"wavePtr2\000"
+ 2595      50747232 
+ 2595      00
+ 2596              	.LASF51:
+ 2597 00c6 4441435F 		.ascii	"DAC_VDAC8_SetRange\000"
+ 2597      56444143 
+ 2597      385F5365 
+ 2597      7452616E 
+ 2597      676500
+ 2598              	.LASF52:
+ 2599 00d9 4379446D 		.ascii	"CyDmaTdAllocate\000"
+ 2599      61546441 
+ 2599      6C6C6F63 
+ 2599      61746500 
+ 2600              	.LASF22:
+ 2601 00e9 4441435F 		.ascii	"DAC_Wave2Setup\000"
+ 2601      57617665 
+ 2601      32536574 
+ 2601      757000
+ 2602              	.LASF12:
+ 2603 00f8 666C6F61 		.ascii	"float\000"
+ 2603      7400
+ 2604              	.LASF21:
+ 2605 00fe 73616D70 		.ascii	"sampleSize\000"
+ 2605      6C655369 
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 53
+
+
+ 2605      7A6500
+ 2606              	.LASF53:
+ 2607 0109 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 2607      43313120 
+ 2607      352E342E 
+ 2607      31203230 
+ 2607      31363036 
+ 2608 013c 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 2608      20726576 
+ 2608      6973696F 
+ 2608      6E203233 
+ 2608      37373135 
+ 2609 016f 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 2609      66756E63 
+ 2609      74696F6E 
+ 2609      2D736563 
+ 2609      74696F6E 
+ 2610              	.LASF34:
+ 2611 0197 4441435F 		.ascii	"DAC_initVar\000"
+ 2611      696E6974 
+ 2611      56617200 
+ 2612              	.LASF45:
+ 2613 01a3 4379446D 		.ascii	"CyDmaTdSetConfiguration\000"
+ 2613      61546453 
+ 2613      6574436F 
+ 2613      6E666967 
+ 2613      75726174 
+ 2614              	.LASF5:
+ 2615 01bb 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2615      20756E73 
+ 2615      69676E65 
+ 2615      6420696E 
+ 2615      7400
+ 2616              	.LASF20:
+ 2617 01cd 77617665 		.ascii	"wavePtr\000"
+ 2617      50747200 
+ 2618              	.LASF9:
+ 2619 01d5 75696E74 		.ascii	"uint8\000"
+ 2619      3800
+ 2620              	.LASF27:
+ 2621 01db 73616D70 		.ascii	"sampleSize1\000"
+ 2621      6C655369 
+ 2621      7A653100 
+ 2622              	.LASF29:
+ 2623 01e7 73616D70 		.ascii	"sampleSize2\000"
+ 2623      6C655369 
+ 2623      7A653200 
+ 2624              	.LASF54:
+ 2625 01f3 47656E65 		.ascii	"Generated_Source\\PSoC5\\DAC.c\000"
+ 2625      72617465 
+ 2625      645F536F 
+ 2625      75726365 
+ 2625      5C50536F 
+ 2626              	.LASF1:
+ 2627 0210 756E7369 		.ascii	"unsigned char\000"
+ 2627      676E6564 
+ 2627      20636861 
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 54
+
+
+ 2627      7200
+ 2628              	.LASF24:
+ 2629 021e 4441435F 		.ascii	"DAC_Start\000"
+ 2629      53746172 
+ 2629      7400
+ 2630              	.LASF13:
+ 2631 0228 646F7562 		.ascii	"double\000"
+ 2631      6C6500
+ 2632              	.LASF50:
+ 2633 022f 4441435F 		.ascii	"DAC_VDAC8_SetSpeed\000"
+ 2633      56444143 
+ 2633      385F5365 
+ 2633      74537065 
+ 2633      656400
+ 2634              	.LASF38:
+ 2635 0242 4379446D 		.ascii	"CyDmaChEnable\000"
+ 2635      61436845 
+ 2635      6E61626C 
+ 2635      6500
+ 2636              	.LASF10:
+ 2637 0250 75696E74 		.ascii	"uint16\000"
+ 2637      313600
+ 2638              	.LASF37:
+ 2639 0257 4441435F 		.ascii	"DAC_VDAC8_Enable\000"
+ 2639      56444143 
+ 2639      385F456E 
+ 2639      61626C65 
+ 2639      00
+ 2640              	.LASF11:
+ 2641 0268 75696E74 		.ascii	"uint32\000"
+ 2641      333200
+ 2642              	.LASF48:
+ 2643 026f 4441435F 		.ascii	"DAC_Wave2_DMA_DmaInitialize\000"
+ 2643      57617665 
+ 2643      325F444D 
+ 2643      415F446D 
+ 2643      61496E69 
+ 2644              	.LASF8:
+ 2645 028b 756E7369 		.ascii	"unsigned int\000"
+ 2645      676E6564 
+ 2645      20696E74 
+ 2645      00
+ 2646              	.LASF23:
+ 2647 0298 4441435F 		.ascii	"DAC_Init\000"
+ 2647      496E6974 
+ 2647      00
+ 2648              	.LASF7:
+ 2649 02a1 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2649      206C6F6E 
+ 2649      6720756E 
+ 2649      7369676E 
+ 2649      65642069 
+ 2650              	.LASF30:
+ 2651 02b8 4441435F 		.ascii	"DAC_Wave1Chan\000"
+ 2651      57617665 
+ 2651      31436861 
+ 2651      6E00
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 55
+
+
+ 2652              	.LASF25:
+ 2653 02c6 4441435F 		.ascii	"DAC_StartEx\000"
+ 2653      53746172 
+ 2653      74457800 
+ 2654              	.LASF40:
+ 2655 02d2 4441435F 		.ascii	"DAC_DacClk_Start\000"
+ 2655      44616343 
+ 2655      6C6B5F53 
+ 2655      74617274 
+ 2655      00
+ 2656              	.LASF16:
+ 2657 02e3 73697A65 		.ascii	"sizetype\000"
+ 2657      74797065 
+ 2657      00
+ 2658              	.LASF44:
+ 2659 02ec 4441435F 		.ascii	"DAC_Wave1_DMA_DmaInitialize\000"
+ 2659      57617665 
+ 2659      315F444D 
+ 2659      415F446D 
+ 2659      61496E69 
+ 2660              	.LASF32:
+ 2661 0308 4441435F 		.ascii	"DAC_Wave1TD\000"
+ 2661      57617665 
+ 2661      31544400 
+ 2662              	.LASF6:
+ 2663 0314 6C6F6E67 		.ascii	"long long int\000"
+ 2663      206C6F6E 
+ 2663      6720696E 
+ 2663      7400
+ 2664              	.LASF41:
+ 2665 0322 4441435F 		.ascii	"DAC_DacClk_Stop\000"
+ 2665      44616343 
+ 2665      6C6B5F53 
+ 2665      746F7000 
+ 2666              	.LASF14:
+ 2667 0332 63686172 		.ascii	"char\000"
+ 2667      00
+ 2668              	.LASF31:
+ 2669 0337 4441435F 		.ascii	"DAC_Wave2Chan\000"
+ 2669      57617665 
+ 2669      32436861 
+ 2669      6E00
+ 2670              	.LASF49:
+ 2671 0345 4441435F 		.ascii	"DAC_VDAC8_Init\000"
+ 2671      56444143 
+ 2671      385F496E 
+ 2671      697400
+ 2672              	.LASF2:
+ 2673 0354 73686F72 		.ascii	"short int\000"
+ 2673      7420696E 
+ 2673      7400
+ 2674              	.LASF4:
+ 2675 035e 6C6F6E67 		.ascii	"long int\000"
+ 2675      20696E74 
+ 2675      00
+ 2676              	.LASF15:
+ 2677 0367 6C6F6E67 		.ascii	"long double\000"
+ARM GAS  C:\Users\MATEOC~1.QUE\AppData\Local\Temp\ccJlQTIe.s 			page 56
+
+
+ 2677      20646F75 
+ 2677      626C6500 
+ 2678              	.LASF39:
+ 2679 0373 4441435F 		.ascii	"DAC_VDAC8_SetValue\000"
+ 2679      56444143 
+ 2679      385F5365 
+ 2679      7456616C 
+ 2679      756500
+ 2680              	.LASF0:
+ 2681 0386 7369676E 		.ascii	"signed char\000"
+ 2681      65642063 
+ 2681      68617200 
+ 2682              	.LASF42:
+ 2683 0392 4379446D 		.ascii	"CyDmaChDisable\000"
+ 2683      61436844 
+ 2683      69736162 
+ 2683      6C6500
+ 2684              	.LASF17:
+ 2685 03a1 4441435F 		.ascii	"DAC_Enable\000"
+ 2685      456E6162 
+ 2685      6C6500
+ 2686              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

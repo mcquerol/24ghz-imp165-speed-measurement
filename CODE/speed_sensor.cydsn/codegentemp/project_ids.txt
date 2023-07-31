@@ -1,0 +1,6 @@
+C:\Users\Mateo C. Querol\Desktop\speed_sensor.cydsn\speed_sensor.cyprj|3e5a7a81-88f7-4925-87b1-ed93e2d18316
+C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|fcb85e5d-af15-4ce6-8ae8-26fa08f782dc
+C:\Users\Mateo C. Querol\Documents\PSoC Creator\4.4\Downloads ( 4.4).cylib\Downloads ( 4.4).cyprj|58ce8505-40df-47b9-a91b-f67b67933638
+C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|36514106-3a40-425b-b4fb-caf8e6a57cf1
+C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|3f42d80b-918c-4178-a8bd-352c99e659bf
+C:\Program Files (x86)\Cypress\PSoC Creator\4.4\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|3ce7b0a5-2ed1-434e-bc94-30ce6cd7720c

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CyXmlSerializer>
+<!--This file is machine generated and read. It is not intended to be edited by hand.-->
+<!--Due to this, there is no schema for this file.-->
+<CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWrkspcCustomData" version="4">
+<CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997 type_name="CyDesigner.Common.Base.CyCustomData" version="2">
+<userData>
+<dataGuid v="5f2be1a5-0687-4501-bb8c-cf21cb8211bf">
+<CyGuid_5f2be1a5-0687-4501-bb8c-cf21cb8211bf type_name="CyDesigner.Common.ProjMgmt.GUI.CyBookmarkData" version="1">
+<indicators />
+</CyGuid_5f2be1a5-0687-4501-bb8c-cf21cb8211bf>
+</dataGuid>
+<dataGuid v="1b906a0f-a7b6-4e4d-a428-82f98b53cb35">
+<CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35 type_name="CyDesigner.Common.ProjMgmt.GUI.CyExplorerWindow+CyExplorerWindowState" version="3" SelectedTab="Source">
+<TreeKeys>
+<v>Source</v>
+<v>Components</v>
+<v>Output</v>
+</TreeKeys>
+<TreeStates>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>speed_sensor-000</v>
+<v>speed_sensor-000\speed_sensor</v>
+<v>speed_sensor-000\speed_sensor\TopDesign</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\Pins</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\Analog</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\Clocks</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\Interrupts</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\DMA</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\System</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\Directives</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\Flash Security</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\EEPROM</v>
+<v>speed_sensor-000\speed_sensor\Header Files</v>
+<v>speed_sensor-000\speed_sensor\Header Files\cyapicallbacks.h</v>
+<v>speed_sensor-000\speed_sensor\Source Files</v>
+<v>speed_sensor-000\speed_sensor\Source Files\main.c</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\DAC_out</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\isr_adc</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>speed_sensor-000</v>
+<v>speed_sensor-000\speed_sensor</v>
+<v>speed_sensor-000\speed_sensor\TopDesign</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\Pins</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\Analog</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\Clocks</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\Interrupts</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\DMA</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\System</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\Directives</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\Flash Security</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.cydwr\EEPROM</v>
+<v>speed_sensor-000\speed_sensor\Header Files</v>
+<v>speed_sensor-000\speed_sensor\Header Files\cyapicallbacks.h</v>
+<v>speed_sensor-000\speed_sensor\Source Files</v>
+<v>speed_sensor-000\speed_sensor\Source Files\main.c</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\ADC</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\ADC_AMux</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\ADC_Ext_CP_Clk</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\ADC_in</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\ADC_IRQ</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\ADC_theACLK</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\Btn_startSample</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\cy_boot</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\DAC</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\DAC_DacClk</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\DAC_out</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\DAC_out\DAC_out.c</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\DAC_out\DAC_out.h</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\DAC_out\DAC_out_aliases.h</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\DAC_VDAC8</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\DAC_Wave1_DMA</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\DAC_Wave2_DMA</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\Em_EEPROM_Dynamic</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\isr_adc</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\isr_adc\isr_adc.c</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\isr_adc\isr_adc.h</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\isr_btn</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\LED_green</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\LED_red</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\LED_yellow</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\UART</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\UART_IntClock</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\cycodeshareexport.ld</v>
+<v>speed_sensor-000\speed_sensor\Generated_Source\PSoC5\cycodeshareimport.ld</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>speed_sensor-000</v>
+<v>speed_sensor-000\speed_sensor</v>
+<v>speed_sensor-000\speed_sensor\TopDesign</v>
+<v>speed_sensor-000\speed_sensor\TopDesign\TopDesign.cysch</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>speed_sensor-000</v>
+<v>speed_sensor-000\speed_sensor</v>
+<v>speed_sensor-000\speed_sensor\TopDesign</v>
+<v>speed_sensor-000\speed_sensor\TopDesign\TopDesign.cysch</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>speed_sensor-000</v>
+<v>speed_sensor-000\speed_sensor</v>
+<v>speed_sensor-000\speed_sensor\CortexM3</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_AMux.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_Ext_CP_Clk.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_in.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_INT.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_IRQ.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_PM.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_theACLK.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\Btn_startSample.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\Cm3Start.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\cy_em_eeprom.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\CyDmac.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\cyfitter_cfg.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\CyFlash.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\CyLib.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\cymetadata.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\cyPm.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\CySpc.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\cyutils.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_DacClk.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_out.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_PM.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_VDAC8.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_VDAC8_PM.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_Wave1_DMA_dma.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_Wave2_DMA_dma.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\isr_adc.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\isr_btn.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\LED_green.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\LED_red.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\LED_yellow.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\UART.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_BOOT.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_INT.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_IntClock.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_PM.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\speed_sensor.elf</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\speed_sensor.hex</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\speed_sensor.map</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.gpdsc</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor.rpt</v>
+<v>speed_sensor-000\speed_sensor\speed_sensor_timing.html</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>speed_sensor-000</v>
+<v>speed_sensor-000\speed_sensor</v>
+<v>speed_sensor-000\speed_sensor\CortexM3</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_AMux.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_Ext_CP_Clk.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_in.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_INT.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_IRQ.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_PM.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\ADC_theACLK.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\Btn_startSample.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\Cm3Start.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\cy_em_eeprom.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\CyDmac.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\cyfitter_cfg.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\CyFlash.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\CyLib.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\cymetadata.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\cyPm.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\CySpc.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\cyutils.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_DacClk.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_out.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_PM.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_VDAC8.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_VDAC8_PM.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_Wave1_DMA_dma.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\DAC_Wave2_DMA_dma.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\isr_adc.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\isr_btn.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\LED_green.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\LED_red.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\LED_yellow.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\UART.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_BOOT.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_INT.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_IntClock.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_PM.lst</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\speed_sensor.elf</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\speed_sensor.hex</v>
+<v>speed_sensor-000\speed_sensor\CortexM3\ARM_GCC_541\Debug\speed_sensor.map</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStates>
+<TreeKeysV2>
+<v>Datasheet</v>
+</TreeKeysV2>
+<TreeStatesV2>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>speed_sensor-000</v>
+<v>speed_sensor-000\speed_sensor</v>
+<v>speed_sensor-000\speed_sensor\PSoC 5LP Architecture TRM</v>
+<v>speed_sensor-000\speed_sensor\CY8C58LP Family Datasheet</v>
+<v>speed_sensor-000\speed_sensor\System Reference Guides</v>
+<v>speed_sensor-000\speed_sensor\System Reference Guides\cy_boot_v6_0</v>
+<v>speed_sensor-000\speed_sensor\ADC_DelSig_v3_30.pdf</v>
+<v>speed_sensor-000\speed_sensor\cy_constant_v1_0.pdf</v>
+<v>speed_sensor-000\speed_sensor\cy_isr_v1_70</v>
+<v>speed_sensor-000\speed_sensor\cy_isr_v1_70\cy_isr_v1_70.pdf</v>
+<v>speed_sensor-000\speed_sensor\cy_pins_v2_20</v>
+<v>speed_sensor-000\speed_sensor\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>speed_sensor-000\speed_sensor\UART_v2_50.pdf</v>
+<v>speed_sensor-000\speed_sensor\WaveDAC8_v2_10.pdf</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>speed_sensor-000</v>
+<v>speed_sensor-000\speed_sensor</v>
+<v>speed_sensor-000\speed_sensor\PSoC 5LP Architecture TRM</v>
+<v>speed_sensor-000\speed_sensor\CY8C58LP Family Datasheet</v>
+<v>speed_sensor-000\speed_sensor\System Reference Guides</v>
+<v>speed_sensor-000\speed_sensor\System Reference Guides\cy_boot_v6_0</v>
+<v>speed_sensor-000\speed_sensor\ADC_DelSig_v3_30.pdf</v>
+<v>speed_sensor-000\speed_sensor\cy_constant_v1_0.pdf</v>
+<v>speed_sensor-000\speed_sensor\cy_isr_v1_70</v>
+<v>speed_sensor-000\speed_sensor\cy_isr_v1_70\cy_isr_v1_70.pdf</v>
+<v>speed_sensor-000\speed_sensor\cy_pins_v2_20</v>
+<v>speed_sensor-000\speed_sensor\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>speed_sensor-000\speed_sensor\UART_v2_50.pdf</v>
+<v>speed_sensor-000\speed_sensor\WaveDAC8_v2_10.pdf</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStatesV2>
+</CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35>
+</dataGuid>
+</userData>
+</CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
+<Unloaded />
+<OpenDocs>
+<name v=".\main.c" />
+<name v=".\TopDesign\TopDesign.cysch" />
+<name v=".\Generated_Source\PSoC5\isr_adc.c" />
+<name v=".\Generated_Source\PSoC5\ADC_INT.c" />
+<name v=".\Generated_Source\PSoC5\ADC.h" />
+<name v=".\Generated_Source\PSoC5\ADC.c" />
+<name v=".\speed_sensor.cydwr" />
+<name v=".\Generated_Source\PSoC5\DAC_out.c" />
+</OpenDocs>
+<OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
+
+  Actipro Docking/MDI for WinForms
+  Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
+  http://www.actiprosoftware.com
+
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1439, 711" SelectedTabbedMdiWindow="ecb2ca42-634c-4185-9671-f37f7fcc4551"><DocumentWindow Key="C:\Users\stmacebal\Desktop\speed_sensor.cydsn\main.c" Guid="ecb2ca42-634c-4185-9671-f37f7fcc4551" /><DocumentWindow Key="C:\Users\stmacebal\Desktop\speed_sensor.cydsn\TopDesign\TopDesign.cysch" Guid="ca10e794-1378-4e31-9ee1-4203c39c6cd6" /><DocumentWindow Key="C:\Users\stmacebal\Desktop\speed_sensor.cydsn\Generated_Source\PSoC5\isr_adc.c" Guid="17cdb0da-4779-4c44-a5b2-ccf3983aecbb" /><DocumentWindow Key="C:\Users\stmacebal\Desktop\speed_sensor.cydsn\Generated_Source\PSoC5\ADC_INT.c" Guid="4644d76c-8c2a-4c4c-8f49-1a8749ac882b" /><DocumentWindow Key="C:\Users\stmacebal\Desktop\speed_sensor.cydsn\Generated_Source\PSoC5\ADC.h" Guid="0b0c7683-ffe0-4f17-8898-10620a93a899" /><DocumentWindow Key="C:\Users\stmacebal\Desktop\speed_sensor.cydsn\Generated_Source\PSoC5\ADC.c" Guid="f134c5fc-bd86-4ac0-9686-3b037890af23" /><DocumentWindow Key="C:\Users\stmacebal\Desktop\speed_sensor.cydsn\speed_sensor.cydwr" Guid="d80714e2-8e8b-499f-a700-de179ebbc9eb" /><DocumentWindow Key="C:\Users\stmacebal\Desktop\speed_sensor.cydsn\Generated_Source\PSoC5\DAC_out.c" Guid="de79fa55-f989-4db7-a807-878c81b25e83" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="2b70fc7c-46c8-4d52-ae66-ad0ad6b27a12" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+<config v="" />
+<AutoUpdate v="true" />
+</CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
+</CyXmlSerializer>
