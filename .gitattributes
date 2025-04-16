@@ -1,3 +1,48 @@
-html/** linguist-documentation
-*.css linguist-documentation
+# Hide assembly files (unless you specifically wrote them)
+*.s linguist-vendored
+*.asm linguist-vendored
+
+# Hide C++
+*.cpp linguist-vendored
+*.hpp linguist-vendored
+*.cc linguist-vendored
+
+# Hide C#
+*.cs linguist-vendored
+
+# Hide Pawn (if you're not writing it by hand)
+*.pwn linguist-vendored
+*.amx linguist-vendored
+
+# Hide HTML and web stuff
+*.html linguist-vendored
+*.htm linguist-vendored
+*.css linguist-vendored
+*.js linguist-vendored
+
+# Hide others you don't want counted
+*.xml linguist-vendored
+*.json linguist-vendored
 *.md linguist-documentation
+*.svg linguist-vendored
+
+# Auto-generated folders
+CODE/speed_sensor.cydsn/Generated_Source/** linguist-generated
+CODE/speed_sensor.cydsn/codegentemp/** linguist-generated
+CODE/speed_sensor.cydsn/TopDesign/** linguist-generated
+CODE/speed_sensor.cydsn/CortexM3/** linguist-generated
+CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
+
+# Hide other noisy files
+*.cpp linguist-vendored
+*.hpp linguist-vendored
+*.s linguist-vendored
+*.asm linguist-vendored
+*.cs linguist-vendored
+*.html linguist-vendored
+*.css linguist-vendored
+*.xml linguist-generated
+*.json linguist-generated
+*.md linguist-documentation
+*.ml linguist-generated
+
