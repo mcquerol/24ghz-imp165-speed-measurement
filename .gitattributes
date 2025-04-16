@@ -46,3 +46,8 @@ CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
 *.md linguist-documentation
 *.ml linguist-generated
 
+*.kicad_pcb linguist-language=KiCad
+*.kicad_sch linguist-language=KiCad
+*.sch linguist-language=KiCad
+*.pro linguist-language=KiCad
+*.lib linguist-language=KiCad
