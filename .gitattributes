@@ -46,4 +46,12 @@ CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
 *.md linguist-documentation
 *.ml linguist-generated
 
+# Force GitHub to count KiCad properly
+*.kicad_pcb linguist-language=KiCad Layout
+*.kicad_sch linguist-language=KiCad Schematic
+*.sch        linguist-language=KiCad Schematic
+*.kicad_mod  linguist-language=KiCad Layout
+*.kicad_sym  linguist-language=KiCad Schematic
+fp-lib-table linguist-language=KiCad Layout
+
 PCB/** linguist-language=KiCad
