@@ -2,56 +2,41 @@
 *.s linguist-vendored
 *.asm linguist-vendored
 
-# Hide C++
+# Hide C++ files
 *.cpp linguist-vendored
 *.hpp linguist-vendored
 *.cc linguist-vendored
 
-# Hide C#
+# Hide C# files
 *.cs linguist-vendored
 
-# Hide Pawn (if you're not writing it by hand)
+# Hide Pawn files (unless handwritten)
 *.pwn linguist-vendored
 *.amx linguist-vendored
 
-# Hide HTML and web stuff
+# Hide HTML and web files
 *.html linguist-vendored
 *.htm linguist-vendored
 *.css linguist-vendored
 *.js linguist-vendored
 
-# Hide others you don't want counted
+# Hide other non-code or noisy files
 *.xml linguist-vendored
 *.json linguist-vendored
 *.md linguist-documentation
 *.svg linguist-vendored
 
-# Auto-generated folders
-# CODE/speed_sensor.cydsn/Generated_Source/** linguist-generated
+# Auto-generated folders marked as generated (ignored by Linguist)
 CODE/speed_sensor.cydsn/codegentemp/** linguist-generated
 CODE/speed_sensor.cydsn/TopDesign/** linguist-generated
 CODE/speed_sensor.cydsn/CortexM3/** linguist-generated
-CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
+# CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
 
-# Hide other noisy files
-*.cpp linguist-vendored
-*.hpp linguist-vendored
-*.s linguist-vendored
-*.asm linguist-vendored
-*.cs linguist-vendored
-*.html linguist-vendored
-*.css linguist-vendored
-*.xml linguist-generated
-*.json linguist-generated
-*.md linguist-documentation
-*.ml linguist-generated
-
-# Force github to detect kicad files
-# Include only the “core” KiCad files
+# Force detection only on core KiCad files
 *.kicad_pcb linguist-detectable=true
-*.kicad_sch linguist-detectable=true
+*.kicad_sch linguist-detectable=false  # exclude schematic as discussed
 
-# Exclude other KiCad files from stats
-*.kicad_mod linguist-detectable=true
-*.kicad_wks linguist-detectable=true
-*.kicad_sym linguist-detectable=true
+# Exclude other KiCad auxiliary files from stats
+*.kicad_mod linguist-detectable=false
+*.kicad_wks linguist-detectable=false
+*.kicad_sym linguist-detectable=false
