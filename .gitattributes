@@ -49,9 +49,9 @@ CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
 # Force github to detect kicad files
 # Include only the “core” KiCad files
 *.kicad_pcb linguist-detectable=true
-*.kicad_sch linguist-detectable=false
+*.kicad_sch linguist-vendored
 
 # Exclude other KiCad files from stats
-*.kicad_mod linguist-detectable=false
-*.kicad_wks linguist-detectable=false
-*.kicad_sym linguist-detectable=false
+*.kicad_mod linguist-vendored
+*.kicad_wks linguist-vendored
+*.kicad_sym linguist-vendored
