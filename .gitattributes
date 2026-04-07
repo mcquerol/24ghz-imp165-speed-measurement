@@ -33,8 +33,8 @@ CODE/speed_sensor.cydsn/CortexM3/** linguist-generated
 CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
 
 # Force detection only on core KiCad files
-*.kicad_pcb linguist-detectable=false
-*.kicad_sch linguist-detectable=false  # exclude schematic as discussed
+*.kicad_pcb linguist-detectable=true
+*.kicad_sch linguist-detectable=true
 
 # Exclude other KiCad auxiliary files from stats
 *.kicad_mod linguist-detectable=true
