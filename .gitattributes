@@ -30,7 +30,7 @@
 CODE/speed_sensor.cydsn/codegentemp/** linguist-generated
 CODE/speed_sensor.cydsn/TopDesign/** linguist-generated
 CODE/speed_sensor.cydsn/CortexM3/** linguist-generated
-# CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
+CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
 
 # Force detection only on core KiCad files
 *.kicad_pcb linguist-detectable=true
