@@ -27,7 +27,7 @@
 *.svg linguist-vendored
 
 # Auto-generated folders
-CODE/speed_sensor.cydsn/Generated_Source/** linguist-generated
+# CODE/speed_sensor.cydsn/Generated_Source/** linguist-generated
 CODE/speed_sensor.cydsn/codegentemp/** linguist-generated
 CODE/speed_sensor.cydsn/TopDesign/** linguist-generated
 CODE/speed_sensor.cydsn/CortexM3/** linguist-generated
@@ -49,9 +49,9 @@ CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
 # Force github to detect kicad files
 # Include only the “core” KiCad files
 *.kicad_pcb linguist-detectable=true
-*.kicad_sch linguist-vendored
+*.kicad_sch linguist-detectable=true
 
 # Exclude other KiCad files from stats
-*.kicad_mod linguist-vendored
-*.kicad_wks linguist-vendored
-*.kicad_sym linguist-vendored
+*.kicad_mod linguist-detectable=true
+*.kicad_wks linguist-detectable=true
+*.kicad_sym linguist-detectable=true
