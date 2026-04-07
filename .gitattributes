@@ -49,4 +49,4 @@ CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
 # Force github to detect kicad files
 *.kicad_pcb linguist-detectable=true
 *.kicad_sch linguist-detectable=true
-*.kicad_sym linguist-generated
+*.kicad_sym linguist-detectable=false
