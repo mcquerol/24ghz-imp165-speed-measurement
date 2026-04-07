@@ -54,6 +54,4 @@ CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
 # *.kicad_sym  linguist-language=KiCad Schematic
 # fp-lib-table linguist-language=KiCad Layout
 
-*.kicad_pcb linguist-detectable=true
-*.kicad_sch linguist-detectable=true
-*.kicad_sym linguist-detectable=true
+*.kicad_* linguist-language=KiCad\ Layout
