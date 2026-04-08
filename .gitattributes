@@ -27,10 +27,10 @@
 *.svg linguist-vendored
 
 # Auto-generated folders marked as generated (ignored by Linguist)
-CODE/speed_sensor.cydsn/codegentemp/** linguist-generated
-CODE/speed_sensor.cydsn/TopDesign/** linguist-generated
-CODE/speed_sensor.cydsn/CortexM3/** linguist-generated
-CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-generated
+CODE/speed_sensor.cydsn/codegentemp/** linguist-detectable=false
+CODE/speed_sensor.cydsn/TopDesign/** linguist-detectable=false
+CODE/speed_sensor.cydsn/CortexM3/** linguist-detectable=false
+CODE/speed_sensor.cydsn/ErikaOS_v2_5_3/** linguist-detectable=false
 
 # Force detection only on core KiCad files
 *.kicad_pcb linguist-detectable=true
