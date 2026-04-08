@@ -1,6 +1,6 @@
 # Hide assembly files (unless you specifically wrote them)
-*.s linguist-vendored
-*.asm linguist-vendored
+*.s linguist-detectable=false
+*.asm linguist-detectable=false
 
 # Hide C++ files
 *.cpp linguist-vendored
